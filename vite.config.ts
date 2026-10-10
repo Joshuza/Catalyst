@@ -14,7 +14,9 @@ export default defineConfig({
           fileName: 'precache.json',
           source: JSON.stringify(
             Object.keys(bundle)
-              .filter((name) => /\.(js|mjs|css|wasm|gz)$/.test(name))
+              .filter((name) =>
+                /\.(js|mjs|css|wasm|gz|png|webp|woff2|ttf)$/.test(name),
+              )
               .map((name) => `/${name}`),
           ),
         });

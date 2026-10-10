@@ -57,6 +57,23 @@ describe('UX-08 / UX-09 text token contrast', () => {
         });
       }
     }
+    for (const [foreground, background] of [
+      ['color-survey-ink', 'color-parchment'],
+      ['color-survey-muted', 'color-parchment'],
+      ['color-nectarine', 'color-parchment'],
+      ['color-survey-ink', 'color-nectarine-soft'],
+    ]) {
+      it(`${theme}: survey ${foreground} on ${background} reaches 4.5:1`, () => {
+        const fg = tokens[foreground!];
+        const bg = tokens[background!];
+        if (!fg || !bg) throw new Error('Missing survey contrast token.');
+        const a = luminance(fg),
+          b = luminance(bg);
+        expect(
+          (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
+        ).toBeGreaterThanOrEqual(4.5);
+      });
+    }
     it(`${theme}: selected control text on accent reaches 4.5:1`, () => {
       const fg = tokens['color-accent-text'];
       const bg = tokens['color-accent'];
