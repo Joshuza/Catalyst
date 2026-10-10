@@ -10,14 +10,14 @@ export const cipherSchema = z
     data: z
       .string()
       .regex(/^[A-Za-z0-9+/]+={0,2}$/)
-      .max(200000),
+      .max(40000000),
   })
   .strict();
 export type Cipher = z.infer<typeof cipherSchema>;
 export const encryptedSchema = z
   .object({
     ...baseShape,
-    kind: z.enum(['transaction', 'message']),
+    kind: z.enum(['transaction', 'message', 'module', 'settings']),
     storage: z.literal('encrypted'),
     fields: z.record(z.string(), cipherSchema),
   })
@@ -33,11 +33,23 @@ export const encryptedSchema = z
             'category',
             'receiptFile',
           ]
-        : ['title', 'body', 'sender', 'unread', 'date', 'stream'];
+        : record.kind === 'message'
+          ? ['title', 'body', 'sender', 'unread', 'date', 'stream']
+          : record.kind === 'settings'
+            ? ['title', 'locale', 'currency']
+            : ['title', 'data'];
+    const optional =
+      record.kind === 'transaction'
+        ? ['taxCents', 'regret', 'emotion']
+        : record.kind === 'message'
+          ? ['archived', 'taskId', 'replyNeeded']
+          : record.kind === 'settings'
+            ? ['profile']
+            : [];
     const keys = Object.keys(record.fields);
     return (
-      keys.length === expected.length &&
-      keys.every((key) => expected.includes(key))
+      expected.every((key) => keys.includes(key)) &&
+      keys.every((key) => expected.includes(key) || optional.includes(key))
     );
   }, 'Encrypted fields do not match the record type.');
 export const plainSchema = z
@@ -55,7 +67,8 @@ export const rowSchema = z
       row.id === record.id &&
       row.kind === record.kind &&
       (row.value.storage !== 'plain' ||
-        !['message', 'transaction'].includes(row.kind))
+        (!['message', 'transaction', 'module'].includes(row.kind) &&
+          !(row.value.record.kind === 'settings' && row.value.record.profile)))
     );
   }, 'Stored record identity or encryption does not match.');
 

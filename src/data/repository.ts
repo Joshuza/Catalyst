@@ -21,7 +21,9 @@ export class RecordRepository implements RecordStore {
   ) {}
   private async encode(input: UserRecord): Promise<Row> {
     const record = recordSchema.parse(input);
-    if (record.kind !== 'transaction' && record.kind !== 'message') {
+    if (
+      !['transaction', 'message', 'module', 'settings'].includes(record.kind)
+    ) {
       return rowSchema.parse({
         id: record.id,
         kind: record.kind,

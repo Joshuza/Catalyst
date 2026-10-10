@@ -5,7 +5,7 @@ import {
   type UserRecord,
 } from '../domain/records';
 
-export const MAX_BACKUP_BYTES = 20 * 1024 * 1024;
+export const MAX_BACKUP_BYTES = 128 * 1024 * 1024;
 export const backupSchema = z
   .object({
     format: z.literal('nexus-backup'),
@@ -36,12 +36,12 @@ export function exportBackup(
     2,
   );
   if (new TextEncoder().encode(result).length > MAX_BACKUP_BYTES)
-    throw new Error('The backup exceeds the 20 MB limit.');
+    throw new Error('The backup exceeds the 128 MB limit.');
   return result;
 }
 export function importBackup(text: string): Backup {
   if (new TextEncoder().encode(text).length > MAX_BACKUP_BYTES)
-    throw new Error('Choose a backup smaller than 20 MB.');
+    throw new Error('Choose a backup smaller than 128 MB.');
   try {
     return backupSchema.parse(JSON.parse(text) as unknown);
   } catch {

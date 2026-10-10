@@ -1,4 +1,10 @@
 import { z } from 'zod';
+import {
+  moduleSchema,
+  profileSchema,
+  taskDetailSchema,
+  recipeDetailSchema,
+} from './product/model';
 
 export const dateSchema = z
   .string()
@@ -33,6 +39,7 @@ export const recordSchema = z.discriminatedUnion('kind', [
       title,
       notes: text,
       completed: z.boolean(),
+      details: taskDetailSchema.optional(),
     })
     .strict(),
   z
@@ -45,6 +52,9 @@ export const recordSchema = z.discriminatedUnion('kind', [
       date: dateSchema,
       category: z.string().max(100),
       receiptFile: z.string().max(300).nullable(),
+      taxCents: centsSchema.optional(),
+      regret: z.number().int().min(1).max(5).optional(),
+      emotion: z.string().max(100).optional(),
     })
     .strict(),
   z
@@ -57,6 +67,9 @@ export const recordSchema = z.discriminatedUnion('kind', [
       unread: z.boolean(),
       date: dateSchema,
       stream: z.enum(['work', 'personal', 'promotional']),
+      archived: z.boolean().optional(),
+      taskId: z.string().max(100).optional(),
+      replyNeeded: z.boolean().optional(),
     })
     .strict(),
   z
@@ -65,6 +78,7 @@ export const recordSchema = z.discriminatedUnion('kind', [
       kind: z.literal('recipe'),
       title,
       ingredients: z.array(z.string().max(300)).max(200),
+      details: recipeDetailSchema.optional(),
     })
     .strict(),
   z
@@ -84,6 +98,15 @@ export const recordSchema = z.discriminatedUnion('kind', [
           }
         }),
       currency: z.string().regex(/^[A-Z]{3}$/),
+      profile: profileSchema.optional(),
+    })
+    .strict(),
+  z
+    .object({
+      ...baseShape,
+      kind: z.literal('module'),
+      title,
+      data: moduleSchema,
     })
     .strict(),
 ]);
@@ -105,7 +128,7 @@ export function recordText(record: UserRecord): string {
     case 'note':
       return record.body;
     case 'task':
-      return record.notes;
+      return `${record.notes} ${record.details?.rubric ?? ''} ${record.details?.resources.map((r) => `${r.title} ${r.url}`).join(' ') ?? ''}`;
     case 'message':
       return `${record.sender} ${record.body}`;
     case 'transaction':
@@ -114,5 +137,15 @@ export function recordText(record: UserRecord): string {
       return record.ingredients.join(' ');
     case 'settings':
       return `${record.locale} ${record.currency}`;
+    case 'module':
+      return record.data.type === 'receipt'
+        ? `${record.data.vendor} ${record.data.filename}`
+        : record.data.type === 'research'
+          ? `${record.data.body} ${record.data.tags.join(' ')} ${record.data.url} ${record.data.pros} ${record.data.cons}`
+          : record.data.type === 'audio'
+            ? `${record.data.tags.join(' ')} ${record.data.context}`
+            : record.data.type === 'health' || record.data.type === 'itinerary'
+              ? record.data.notes
+              : record.data.type;
   }
 }
