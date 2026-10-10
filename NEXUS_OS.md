@@ -1,49 +1,51 @@
-# Nexus OS foundation
+# Nexus OS: Phase 1
 
-Phase 0 only. The canvas contains three labeled Sample tiles with working expand, collapse, and dim controls. There are no user records, finance calculations, tickets, task groups, imports, adapters, or network integrations yet.
+The app now stores validated local records, encrypts transaction and message fields, supports undo and redo, and searches notes, tasks, transactions, messages and recipes. Spotlight opens with Cmd/Ctrl+K. The existing three Sample tiles remain part of the foundation canvas.
+
+Onboarding, finance projections, purchase receipts, the calendar, inbox classification, task decomposition and the remaining modules are scheduled for later phases. A transaction in this build is a local record; it does not process a payment or calculate a financial projection.
 
 ## Run locally
 
-Use Node 22.12 or newer and the pinned pnpm version in `package.json`.
+Use Node 22.12 or newer and pnpm 11.19.0, pinned in package.json. From an existing clone:
 
 ```sh
+git fetch origin
+git switch phase-1-data-search
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open the local URL printed by Vite. To test offline behavior, serve a production build, visit once, let the service worker finish installing, and then reload offline:
+For a new clone, use `git clone --branch phase-1-data-search https://github.com/Joshuza/Catalyst.git`, then `cd Catalyst` and the pnpm commands above. If pnpm is unavailable, install the pinned version with `npm install --global pnpm@11.19.0`.
+
+Open the URL printed by Vite, usually http://localhost:5173. To use the production build offline:
 
 ```sh
 pnpm build
 pnpm exec vite preview
 ```
 
-Service workers require HTTPS or localhost. Installing the PWA is browser-dependent. The manifest includes locally generated 192 and 512 pixel PNG icons; no external assets are fetched.
+Visit once online, wait for the service worker to install, then reload offline. Service workers and WebCrypto need HTTPS or localhost.
 
-## Checks
+## Try the new tools
 
-```sh
-pnpm typecheck
-pnpm lint
-pnpm test
-pnpm build
-pnpm e2e
-```
+- Scroll to Local records. Create a note or transaction, save it, then reload to confirm persistence.
+- Use Cmd/Ctrl+K or Search to open Spotlight. Enter opens the highlighted result; arrow keys choose another result; Tab reaches secondary actions. Escape closes and restores focus.
+- Expand Data and backups to load clearly labeled Sample records. Try `receipt`, `receipts over $100 in October`, or `unread from Maria`.
+- Search `new task` for a minimal task record or `export October` for a month-filtered JSON backup.
+- Edit a record, hold Enter/Space or the deletion button for 1.6 seconds, then undo. Early release or moving outside cancels the hold. Undo/redo history lasts for this visit; saved records survive reload.
+- Export a JSON backup or import and merge a validated backup. Import is atomic and undoable. Exported files contain readable personal data and deleted records; keep them private. Limits are 20 MiB and 50,000 records.
+- Remove sample data in one action. Your own records remain.
 
-For a machine with system Chromium, set `NEXUS_CHROMIUM_PATH` to its executable when running e2e. Otherwise install the matching browser using `pnpm exec playwright install chromium`. The cloud verification used `/usr/bin/chromium`. In this restricted workspace, pnpm's home and store were configured under `/workspace/work`; ordinary local development does not need these environment-specific paths.
+## Architecture and privacy
 
-## Architecture
+Dexie is the durable source of truth. Strict Zod schemas validate every core record read/write and portable backup. All record mutations go through the command bus and soft deletion. AES-GCM encrypts sensitive payload fields with a non-extractable device CryptoKey in IndexedDB. Routing metadata remains visible. This does not protect against malicious same-origin code or someone with access to an unlocked browser. A missing key is never silently replaced; unverifiable records remain untouched and are excluded from search with a visible notice.
 
-`src/domain` contains pure rules and utilities; `data` and `adapters` may import domain; `engine` may import domain; `ui` may import engine, data, and domain. ESLint enforces this direction, including literal dynamic imports and re-exports. Domain code cannot use React or browser storage. Every top-level source directory has its own README.
+MiniSearch indexes decrypted records in memory only. No search index or decrypted sensitive payload is persisted. No adapters, telemetry, remote fonts or runtime external requests are added. Theme remains the Phase 0 localStorage exception.
 
-Theme is the only persisted setting and uses localStorage. Sample tile presentation uses an ephemeral Zustand store. There is no database or encryption layer until Phase 1, and no sample records are silently seeded.
+## Checks and specifications
 
-The app has light, dark, and system themes, local system fonts, centralized design tokens, CSS modules, reduced-motion overrides, and a React error boundary. The service worker caches the shell, bundled JavaScript/CSS, icons, and manifest for offline reloads after the first completed visit.
+Run `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`, and `pnpm e2e`. Install Chromium with `pnpm exec playwright install chromium`, or set NEXUS_CHROMIUM_PATH to an existing executable. The cloud run used /usr/bin/chromium.
 
-## Specifications and later animations
+AGENTS.md, docs/REQUIREMENTS.md and docs/PHASE_PROMPTS.md are unchanged specifications. See docs/PROGRESS.md for the exact results and requirement map, and docs/DECISIONS.md for dependency sizes, encryption limits and animation adaptations. The visual PDF referenced by the specifications was absent from both ZIPs.
 
-`AGENTS.md`, `docs/REQUIREMENTS.md`, and `docs/PHASE_PROMPTS.md` are the supplied specifications, copied unchanged. The visual specification PDF mentioned by those files was not included in the ZIP.
-
-The user's six animation fragments are retained as an integration contract in `docs/DECISIONS.md`: ReceiptPrinter, Ticket, PlayingCard, DynamicButton, HoldToConfirmButton, and MagneticDropZone. They are scheduled for their relevant later phases. That contract records required React/Vite, plain CSS, local asset, accessibility, and finance-state adaptations. No animation library is installed or product animation claimed in Phase 0.
-
-Read `docs/PROGRESS.md` for actual checks, scope boundaries, and verification steps. The next build is Phase 1 after Phase 0 is reviewed and merged. No merge or remote push has been performed.
+Phase 1 adds the requested dynamic button and hold-to-delete interactions using React and token-based CSS. ReceiptPrinter, Ticket, PlayingCard and MagneticDropZone remain assigned to their relevant later phases. Review and merge Phase 1 before starting Phase 2.

@@ -2,6 +2,7 @@ import { Icon } from './icons';
 import { Tile } from './Tile';
 import { useTheme, type Theme } from './theme';
 import styles from './canvas.module.css';
+import { LocalWorkspace } from './local/LocalWorkspace';
 
 const themes: Theme[] = ['system', 'light', 'dark'];
 
@@ -65,7 +66,7 @@ export function App() {
             </h1>
           </div>
           <div className={styles.introAside}>
-            <span className={styles.phase}>PHASE 00 / FOUNDATION</span>
+            <span className={styles.phase}>LOCAL / PRIVATE</span>
             <p>
               One calm canvas.
               <br />
@@ -127,6 +128,7 @@ export function App() {
             </div>
           </Tile>
         </section>
+        <LocalWorkspace />
         {storageWarning && (
           <p role="status" className={styles.notice}>
             Your theme works for this visit. Browser storage is unavailable, so
@@ -138,8 +140,8 @@ export function App() {
             <span className={styles.statusDot} />
             Designed for local-first use
           </span>
-          <span>Nothing to catch up on. This is a fresh start.</span>
-          <span>NEXUS OS / 0.0</span>
+          <span>Your records stay on this device.</span>
+          <span>NEXUS OS / 0.1</span>
         </footer>
       </main>
     </div>

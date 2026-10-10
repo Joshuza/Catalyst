@@ -2,92 +2,92 @@
 
 ## Completed phases
 
-- Phase 0 Foundation: complete and locally verified. No later phase started.
+- Phase 0 Foundation: complete, published on main.
+- Phase 1 Data layer and search: complete on phase-1-data-search; awaiting review and merge.
 
 ## Current run
 
 ```text
-PHASE: 0 Foundation
-BRANCH: phase-0-foundation
-COMMITS: 1, foundation: build Nexus OS Phase 0 shell
+PHASE: 1 Data layer, command infrastructure, and global search
+BRANCH: phase-1-data-search
+COMMITS: 2; data: add encrypted storage, undo commands and local search; ui: add Spotlight, record tools and hold-to-delete
 
-STATUS: COMPLETE for Phase 0; product modules and hosted publication are not complete.
+STATUS: COMPLETE for Phase 1
 
-REQUIREMENTS COVERED: Phase 0 acceptance; UX-01, UX-07, UX-08, UX-09 shell portions only.
-REQUIREMENTS NOT COVERED: Full application requirements remain assigned to Phases 1 to 12. No finance, onboarding, search, calendar, inbox, tasks, recipes, transit, outdoors, pet, CRM, screen time, or review workflows are implemented.
+REQUIREMENTS COVERED: UX-04 (search), UX-05 (stored-record mutations), UX-07, SRCH-01 through SRCH-06.
+REQUIREMENTS NOT COVERED: None within Phase 1. Command-bar shortcuts and the remaining product modules belong to later phases.
 
-CHECKS (actual final results):
+CHECKS (actual results from this run):
   typecheck: PASS, zero errors
   lint: PASS, zero errors and zero warnings
-  unit tests: 50 passed, 0 failed, 0 skipped
-  build: PASS, strict TypeScript and Vite production build
-  e2e: 4 passed, 0 failed
+  unit tests: 71 passed, 0 failed, 0 skipped
+  build: PASS
+  e2e: 10 passed, 0 failed
 
 REQUIREMENT TO TEST MAP:
-  UX-01 (shell): App.test.tsx, three labeled Sample tiles; foundation.spec.ts, fresh canvas and expand/collapse.
-  UX-07 (shell): foundation.spec.ts, offline reload and no external-origin requests.
-  UX-08 (shell): App.test.tsx, theme persistence; foundation.spec.ts, dark theme and reduced motion; contrast.test.ts, both themes.
-  UX-09 (shell): foundation.spec.ts, keyboard controls and 360 px viewport; contrast.test.ts, 20 text-color pairs.
-  Foundation layers: layers.test.ts, 18 direction/purity cases; temporary violating source confirmed lint exit 1, then removed.
-  Foundation utilities: foundation.test.ts, 8 clock, ULID, Result, and NotImplementedError cases.
+  UX-04 / SRCH-01 / SRCH-03 / SRCH-06: e2e/data-search.spec.ts, "SRCH-01 to SRCH-06: keyboard Spotlight, required filters, secondary actions, focus and private storage".
+  UX-05: src/test/commands.test.ts, "undoes and redoes create, edit, and soft delete"; e2e/data-search.spec.ts, "UX-05: create, edit, hold-delete, undo and redo Note and Transaction with keyboard only".
+  UX-07: src/data/storage.test.ts, encrypted round-trip, missing-key, tamper and migration cases; e2e/data-search.spec.ts, "UX-07: durable data, atomic backups, sample removal and tamper error without a crash"; existing offline and external-origin foundation tests.
+  SRCH-02 / SRCH-04: src/engine/search.test.ts, "uses the required receipt and unread-sender sentences verbatim" and "searches all five kinds, excludes tombstones, groups results and offers actual quick actions".
+  SRCH-05: e2e/hold-actions.spec.ts, "SRCH-05: new task and month export verbs perform real local actions".
+  Additional contracts: money.test.ts (1,000 seeded property cases), backup.test.ts (all six record types and invalid files), storage.test.ts (plaintext/encrypted migrations), HoldToConfirmButton.test.tsx and hold-actions.spec.ts (cancellation and successful persistence before confirmation).
 
-FILES ADDED OR CHANGED OUTSIDE THE PHASE SCOPE: None. Original README files are preserved; supplied specifications are copied unchanged.
-DEPENDENCIES ADDED: React, React DOM, Zustand; Vite, TypeScript, ESLint, Vitest, Testing Library, Playwright, Prettier, their plugins and type packages. All 20 direct dependencies are pinned and individually documented in DECISIONS.md.
-DECISIONS MADE: Local-only foundation in this environment; ephemeral Zustand tile state; theme-only localStorage; injected clock/entropy; local layer rule; same-origin offline precache; immediate theme color changes; six animation integration contracts retained for later phases. Details and dependency licenses/sizes are in DECISIONS.md.
-DEFERRED: All later-phase product features and the six animations. Hosted publication is unavailable because the required Sites filesystem helpers are absent. Downloadable output creation is unavailable because the configured /codex parent is read-only. The specification PDF was not included.
-FOUND ISSUES IN EARLIER PHASES: None; no earlier application phases exist.
-PROPOSED ADDITIONS: None beyond the six user-requested later animation integrations.
-QUESTIONS FOR THE HUMAN: None blocking Phase 0. Review and merge this branch before Phase 1, as the supplied workflow requests.
+FILES ADDED OR CHANGED OUTSIDE THE PHASE SCOPE: None.
+DEPENDENCIES ADDED: dexie 4.2.1, zod 4.1.12, minisearch 7.2.0; development-only fast-check 4.3.0 and fake-indexeddb 6.2.4.
+DECISIONS MADE: Strict validated records; field-wise AES-GCM and honest vault limits; plaintext portable backups capped at 20 MiB; atomic merge/import and soft-delete inverse patches; session-only history; in-memory deterministic search; opt-in removable Sample data; CSS adaptations of DynamicButton and HoldToConfirmButton. All recorded in DECISIONS.md.
+DEFERRED: Phases 2 through 12, including ReceiptPrinter, Ticket, PlayingCard and MagneticDropZone integrations. Phase 1 awaits review and merge before Phase 2.
+FOUND ISSUES IN EARLIER PHASES: None.
+PROPOSED ADDITIONS: None.
+QUESTIONS FOR THE HUMAN: None blocking this phase. The visual PDF remains absent from the attachments.
 
 HOW TO VERIFY BY HAND:
-  1. In /workspace/Catalyst, run pnpm install --frozen-lockfile, then pnpm dev; open its printed URL.
-  2. Confirm exactly three tiles are labeled Sample.
-  3. Expand, collapse, dim, and restore a tile, using Tab and Enter or Space.
-  4. Switch among System, Light, and Dark; reload and confirm the theme remains.
-  5. Set the viewport to 360 px; confirm all tiles fit without horizontal scrolling.
-  6. Enable reduced motion in the browser or OS and verify transitions become instant.
-  7. Run pnpm build and pnpm exec vite preview; visit once, wait for service-worker installation, then reload offline.
-  8. Read docs/DECISIONS.md for the retained receipt, ticket, playing card, dynamic button, hold-delete, and drop-zone contracts.
+  1. Fetch origin, switch to phase-1-data-search, run pnpm install --frozen-lockfile and pnpm dev, and open the printed URL.
+  2. Create a note and a transaction; save, reload and reopen them.
+  3. Load Sample data under Data and backups. Open Cmd/Ctrl+K and try receipt, receipts over $100 in October, and unread from Maria.
+  4. Use arrows and Enter to open a result, Tab to reach Copy amount, and Escape to return focus to the canvas.
+  5. Edit a record, hold Enter/Space or the delete button for 1.6 seconds, then undo and redo. Early release cancels deletion.
+  6. Export and import a JSON backup, undo the import, and remove Sample data while keeping your own records.
+  7. Run pnpm build and pnpm exec vite preview. Visit once online, then reload offline. Check 360 px width, dark theme and reduced motion.
 ```
 
 ## Verification details
 
-- Final Vitest result: `Test Files 4 passed (4); Tests 50 passed (50)`.
-- Final Playwright result: `4 passed (7.4s)`. The server runs `pnpm build` before every browser verification, including the final source state.
-- Production assets: JavaScript 153,977 bytes, gzip 50,303 bytes; CSS 12,812 bytes, gzip 2,932 bytes, measured with Python gzip at level 9. These are bundle sizes, not performance-budget certification.
-- Domain utilities are deterministic and pure. Architecture rejection was also checked by creating a real forbidden domain-to-UI source, observing one lint error and exit 1, and removing it.
-- Browser flows start from fresh contexts, assert no page errors in the main journey, and verify there are no external-origin requests during the shell flow. There is no database in Phase 0, so a previous-phase database is not applicable.
-- Light, dark, and mobile appearance were visually inspected. A theme-transition contrast defect found during inspection was fixed and covered by the final browser test, which checks the rendered dark surface immediately after switching.
-- All application source files are below 400 lines. App and Tile render-function length exceptions are documented in DECISIONS.md.
-- Browser process startup emitted environment NO_COLOR/FORCE_COLOR warnings; these are not lint warnings or browser page errors.
-- All owned preview servers were stopped after verification.
-- No merge, push, or deployment was performed. No publishing credentials were requested or written.
+- Final unit output: `Test Files 10 passed (10); Tests 71 passed (71)`. No tests skipped.
+- Final typecheck and ESLint each exited 0; no compiler errors or lint warnings.
+- Search benchmark, 50,000 deterministic records: receipt 26.71 ms; receipts over $100 in October 9.96 ms; unread from Maria 14.39 ms; indexed item 49999 0.07 ms. Measurements are from this VM, not a certification of every query on all hardware. The limit stayed at 50 ms throughout development.
+- Final Playwright output: `10 passed (23.5s)`. Empty-profile browser load and search readiness measured 408.5 ms, below the unchanged 2,000 ms budget. Finance drag performance is not applicable until the finance engine exists.
+- Storage tests reopen the database, reject missing keys, detect tampered ciphertext and metadata, and migrate both plaintext and encrypted version-1 fixtures without losing the device key. Migration snapshots are written before transformations.
+- Browser tests start from fresh contexts and from the previous phase theme-only profile, assert no page errors on the core journeys, reload with real encrypted records, work offline, and verify no external-origin requests. They inspect IndexedDB stores and localStorage to confirm the index is not persisted.
+- Sample removal preserves a user-created task. Note and Transaction create/edit/delete each have browser undo/redo coverage. Pointer release, movement outside, keyboard release, blur, disable, unmount and failed persistence are covered by the hold-control tests.
+- Light desktop and dark mobile search layouts were visually inspected. Focus starts in the main field, wraps within the modal, and returns to the opener. The original four Phase 0 browser flows still pass.
+- All source and test files are below 400 lines. Long declarative React functions, fixture tables and sequential test journeys have recorded reasons in DECISIONS.md. The 18 original layer tests and 20 text-token contrast tests remain intact.
+- Final production assets: JavaScript 362,246 bytes (115,679 gzip at level 9), CSS 20,359 bytes (4,306 gzip). Compared with Phase 0, the combined feature and dependency growth is 208,269 JavaScript bytes (65,376 gzip).
+- Build scripts, generated assets, pnpm cache files, screenshots and test output are not committed. Owned preview servers were stopped. Browser setup emits NO_COLOR/FORCE_COLOR environment warnings, separate from lint and page errors.
 
-## Deferred requirement groups
+## Remaining phases
 
-| Group | Implementing phase | Status |
+| Phase | Scope | Status |
 | --- | --- | --- |
-| UX-04 search, UX-05 undo, SRCH-01 to SRCH-06 | 1 | Deferred |
-| ONB-01 to ONB-04, ONB-I-01 to ONB-I-07, ONB-II-01 to ONB-II-06, ONB-III-01 to ONB-III-04 | 2 | Deferred |
-| FIN-01 to FIN-13 | 3 | Deferred |
-| SUR-01 to SUR-07, RCP-01 to RCP-08 | 4 | Deferred |
-| TERM-01 to TERM-05, CAL-01 to CAL-07, UX-04 command shortcut | 5 | Deferred |
-| INB-01 to INB-06 | 6 | Deferred |
-| TASK-01 to TASK-09 | 7 | Deferred |
-| FOOD-01 to FOOD-06, TRN-01 to TRN-06 | 8 | Deferred |
-| OUT-01 to OUT-09 | 9 | Deferred |
-| PET-01, CRM-01, SCR-01, RST-01 to RST-06 | 10 | Deferred |
-| BRF-01 to BRF-08, UX-02, UX-06 | 11 | Deferred |
-| Full cross-module UX-01, UX-03, UX-07, UX-08, UX-09 verification and all end-to-end journeys | 12 | Deferred |
+| 2 | Onboarding | Deferred |
+| 3 | Financial simulator and sentinel | Deferred |
+| 4 | Survey and receipts | Deferred |
+| 5 | Command terminal and calendar | Deferred |
+| 6 | Tri-fold inbox | Deferred |
+| 7 | Tasks and AI decomposer | Deferred |
+| 8 | Recipes, groceries and transit | Deferred |
+| 9 | Hikes and activities | Deferred |
+| 10 | Pet, CRM, screen time and Sunday Reset | Deferred |
+| 11 | Morning briefing and progressive disclosure | Deferred |
+| 12 | Hardening and complete cross-module verification | Deferred |
 
 ## Found issues
 
-No earlier-phase defects. The visual PDF and Sites local publishing tools are absent; the configured output root is unavailable. These are recorded environment/input limitations rather than simulated completed features.
+No earlier-phase defects were changed. The visual PDF is still not supplied. Missing-key recovery needs a portable backup imported on a fresh device/browser profile; no key recovery service is implemented or promised. Encryption and readable-export limits are described in DECISIONS.md and beside the backup controls.
 
 ## Proposed additions
 
-The user supplied six animation integrations, retained in DECISIONS.md for the authorized later phases. No extra product features have been added.
+None beyond the previously requested animations. DynamicButton and HoldToConfirmButton are implemented in this phase; the remaining four components stay assigned to later phases.
 
 ## Open questions
 
-None block Phase 0. The unavailable PDF may provide additional visual guidance for later phases.
+None block Phase 1. Review and merge its branch before starting Phase 2.

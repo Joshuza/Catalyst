@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { cipherSchema, type Cipher } from './stored';
+import { cipherSchema, rowSchema, type Cipher } from './stored';
 import type { NexusDatabase } from './database';
 
 export class VaultError extends Error {
@@ -57,6 +57,10 @@ export class WebCryptoVault implements Vault {
     return parsed.data;
   }
   async initialize() {
+    if (!this.webCrypto?.subtle)
+      throw new VaultError(
+        'Encrypted storage requires HTTPS or localhost and a browser with WebCrypto support.',
+      );
     if (await this.db.keys.get('device')) {
       await this.key();
       return;
@@ -68,9 +72,16 @@ export class WebCryptoVault implements Vault {
     );
     await this.db.transaction('rw', this.db.keys, this.db.records, async () => {
       if (await this.db.keys.get('device')) return;
+      const existing = (await this.db.records.toArray()).map((row) =>
+        rowSchema.safeParse(row),
+      );
+      if (existing.some((row) => !row.success))
+        throw new VaultError(
+          'Local records could not be verified. Vault initialization stopped without changing them.',
+        );
       if (
-        (await this.db.records.toArray()).some(
-          (row) => row.value.storage === 'encrypted',
+        existing.some(
+          (row) => row.success && row.data.value.storage === 'encrypted',
         )
       ) {
         throw new VaultError(

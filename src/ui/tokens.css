@@ -66,6 +66,14 @@
   --sr-size: 1px;
   --sr-offset: -1px;
   --pattern-size: 1rem;
+  --overlay-width: 40rem;
+  --editor-height: 8rem;
+  --hold-width: 10rem;
+  --hold-fill-opacity: 0.15;
+  --layer-toast: 20;
+  --button-content-duration: 180ms;
+  --color-backdrop: #00000066;
+  --shadow-overlay: 0 1rem 4rem #00000022;
 }
 
 :root[data-theme='dark'] {
@@ -103,5 +111,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root { --motion-duration: 0ms; }
+  :root {
+    --motion-duration: 0ms;
+  }
 }
