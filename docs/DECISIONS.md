@@ -89,3 +89,43 @@ Visual verification caught an intermediate theme frame where text changed immedi
 Add zustand at exactly 4.5.7 (MIT) for ephemeral tile presentation, following the specified stack. It adds a small runtime selector/store layer; exact installed size and final production bundle size are recorded after installation. React component state remains appropriate for the local theme-storage hook. No Zustand persistence middleware or product records are used. A handwritten cross-tile store would duplicate the explicitly requested state library.
 
 Zustand 4.5.7 measured direct installed size: 319 KiB, excluding transitive dependencies. Only its used browser store and selector code reaches the production bundle. It is MIT licensed.
+
+## 2026-10-10: Phase 1 scope and dependencies
+
+Continue with Phase 1 only, from the Phase 0 source already published on main. Use `phase-1-data-search`. The new ZIP is byte-identical to the standing specifications; the pasted animation contract is retained. No onboarding or finance engine is started.
+
+| Package | Exact version | Purpose | License | Installed size, excluding transitives | Why hand-written code is insufficient |
+| --- | --- | --- | --- | --- | --- |
+| dexie | 4.2.1 | IndexedDB transactions and forward migrations | Apache-2.0 | 2961 KiB | Required stack; browser database transaction handling is not reimplemented. |
+| zod | 4.1.12 | Strict schemas on persistence and backup boundaries | MIT | 3865 KiB | Required stack; comprehensive untrusted-input validation needs shared schemas. |
+| minisearch | 7.2.0 | Local in-memory full-text search | MIT | 807 KiB | Required stack; avoids a custom inverted index. |
+| fast-check | 4.3.0 | Seeded property tests of exact cent arithmetic | MIT | 1507 KiB | Development only; generated edge cases are stronger than enumerated happy paths. |
+| fake-indexeddb | 6.2.4 | Database and migration tests using real Dexie transactions | Apache-2.0 | 330 KiB | Development only; browser storage cannot be replaced with a plain Map in contract tests. |
+
+Sizes are package files, not bundled bytes. Production bundle cost is measured in the Phase 1 report. No motion or icon library is needed for the hold control: the supplied timing, progress fill, cancellation, and reduced-motion behavior are ported to React and token-based CSS.
+
+## 2026-10-10: Storage, encryption and portable backups
+
+Core records use strict discriminated Zod schemas, integer cents, calendar dates, UTC instants, ULIDs, and soft deletion. Transaction and message payload fields are individually AES-GCM encrypted with independent random IVs. Associated data binds each field to the record identity, version, timestamps, deletion state and sample provenance. Routing metadata (kind, ID, timestamps, deletion status, sample label) is deliberately visible in IndexedDB; notes/tasks/recipes/settings are not sensitive collections under the Phase 1 specification.
+
+The device key is a non-extractable CryptoKey stored in IndexedDB. This protects against a casual plaintext database-file inspection, not against malicious same-origin JavaScript, a compromised browser/profile, an unlocked device, or code that can use the stored key to decrypt. There is no password authentication or recovery service. Never generate a replacement key silently when encrypted records exist. Invalid ciphertext stays untouched and is excluded from search with a visible error.
+
+A portable JSON export contains validated plaintext records so it can be restored on another device without exporting the non-extractable key. Explain this beside the export control. Exports include soft-deleted records and sample provenance; keys, search indexes, and internal migration metadata are not portable records. JSON input is capped at 20 MiB and 50,000 records, duplicate IDs and unknown schema keys are rejected, and import merges by ID in one undoable atomic command. Nothing is evaluated as code or inserted as HTML. Automatic migration snapshots remain on-device and retain ciphertext and the original key reference before transformations. Storage version 1 is the compatibility fixture; version 2 adds nullable sample provenance without destroying records.
+
+## 2026-10-10: Commands, search and presentation scope
+
+The engine depends on a domain RecordStore interface; the UI composes it with the data repository, preserving Phase 0 layer directions. The command bus serializes mutations, returns new state and inverse patches, and supports atomic multi-record undo/redo. Undo of creation makes a tombstone rather than physically deleting a record. Expected-state checks reject concurrent edits. Undo/redo history is session-only; record contents survive reload. Native text-field undo takes precedence while typing; app shortcuts apply outside editable controls.
+
+Search indexes active notes, tasks, transactions, messages and recipes in memory only. Plain-language receipt/amount/month and unread/sender filters use deterministic rules. Costs compare absolute cents because logged expenses are negative; month without a year searches all years. Promotional matches remain searchable but rank below equivalent direct matches. New note/task actions and month-filtered JSON export are search verbs; the complete module screens remain in later phases. Sample loading is opt-in, uses a deterministic fixture set, and removal soft-deletes exactly the records carrying that sample-set ID. Every fixture title carries Sample.
+
+The Phase 0 sample shell remains intact; Phase 1 adds a local-data toolbar, Spotlight, and a simple detail overlay. Existing design tokens and keyboard interaction remain. Hold-to-delete accepts pointer or held Enter/Space, cancels early release, blur, pointer movement outside the boundary, lost capture and disabled state, and awaits the command before announcing success. All user-data changes have undo. Theme and sample presentation controls are the explicit Phase 0 exceptions.
+
+## 2026-10-10: Phase 1 verification and UI implementation details
+
+Search chooses the least frequent indexed term as a MiniSearch candidate anchor, then checks the remaining prefix terms and deterministic filters. This avoids scoring every common term separately for selective multiword queries. The benchmark covers receipt, amount/month, sender/unread, and a selective text query across 50,000 deterministic records. The measured machine is the session VM; it does not certify all queries on every mid-range laptop. Finance drag budgets do not apply before the finance phase.
+
+Native modal dialogs handle background modality. An explicit Tab/Shift+Tab wrap prevents focus moving to browser chrome, the main field is focused after showModal, and an opener or the search control regains focus on close. The dynamic button retains measured widths, incoming and outgoing content transitions, ref forwarding, icon/state keys, and full/content width; all transforms and fades become instant under reduced motion. Hold duration remains 1600 ms even under reduced motion, since it is the confirmation gesture, not a decorative transition.
+
+React render functions in LocalWorkspace, RecordDetail, Spotlight, DynamicButton and HoldToConfirmButton exceed 60 lines because they include declarative accessible JSX and local lifecycle/event handling; splitting the markup would obscure focus and form relationships. Each file remains below 400 lines. Domain, command, and storage operations stay small. Integration tests that compose engine and data live under src/test, so the engine's runtime layer contract is preserved. The new test environment uses fake-indexeddb and Node WebCrypto instead of skipping storage and encryption checks. Currency editing and display use the configured settings locale or the browser locale, including localized digits; calculations continue to use exact integer cents.
+
+The Modal render function, the deterministic sample-record fixture table, suite declarations, and sequential e2e callbacks also exceed 60 lines intentionally. Their markup, fixture definitions, and complete user journeys remain together for review; no runtime computation is hidden in a long procedural function.
