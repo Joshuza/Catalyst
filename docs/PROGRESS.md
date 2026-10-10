@@ -6,7 +6,7 @@ PHASE: 2 Product-wide local implementation; user-authorized expanded scope cover
 
 BRANCH: `phase-2-complete-product`, continued from Phase 1 `a5c7f11`. Main remains unchanged.
 
-COMMITS: 3 this run: `f9eae1e` core models/engines/adapters; `71e0e5f` connected pages/interactions; final documentation/source instructions commit follows these. Exact final hash is available in git history.
+COMMITS: 4 this run: `f9eae1e` core models/engines/adapters; `71e0e5f` connected pages/interactions; `7c7a5e9` documentation/setup/scope; final portable-source instructions commit. Exact final hash is available in git history.
 
 STATUS: **INCOMPLETE for the entire future product vision.** The substantial local/manual implementation is runnable and passes its checks. Connected external accounts, automatic ingestion, and the specific gaps below are not complete. This report does not equate having a page with implementing every service described in the brainstorming conversation.
 
@@ -95,7 +95,7 @@ QUESTIONS FOR THE HUMAN: none block running this local build. External accounts 
 
 ## Verify by hand
 
-1. Extract the source, enter `Catalyst`, install Node 22.12+ and pnpm 11.19.0, then run `pnpm install --frozen-lockfile` and `pnpm dev`. Open the printed localhost URL.
+1. Extract the source, enter the folder containing `package.json`, install Node 22.12+ and pnpm 11.19.0, then run `pnpm install --frozen-lockfile` and `pnpm dev`. Open the printed localhost URL.
 2. Complete or skip setup, then edit savings/pay dates/working shifts/walking limits/diet. Reload and confirm preferences and Pet visibility persist.
 3. Use Connections & privacy to deliberately load Sample data. Visit Briefing, Finance, Calendar, Food and Outdoors; inspect Sample badges, dark theme and 360 px navigation.
 4. Cmd/Ctrl+J: enter `buy keyboard $150 on 11/20`, check preview and confirm. Move its marker/date, compare a scenario, and undo. Resolve a due purchase with actual final cost or a new postponed date.
@@ -105,3 +105,7 @@ QUESTIONS FOR THE HUMAN: none block running this local build. External accounts 
 8. Save research, plan its purchase, reserve goal funds, check in on a habit, add a care date, and create an itinerary stop with your original ticket URL. Search those records with Cmd/Ctrl+K.
 9. Scale a recipe, add missing groceries, compare permitted routes, plan a feasible hike, add missing gear to cart, log activity/contact/pet food, and finish or skip the weekly reset.
 10. Export a private JSON backup. For offline use, `pnpm build` and `pnpm exec vite preview`, visit once and wait for service worker installation; disconnect and reload. Back up before clearing browser data. Live services remain unconnected.
+
+## Source delivery
+
+The implementation branch is published to `Joshuza/Catalyst`; main is preserved. Download the complete source with GitHub’s branch archive: https://github.com/Joshuza/Catalyst/archive/refs/heads/phase-2-complete-product.zip . The requested projectless output path `/codex/browser/projectless/0001-files-mentioned-by-the-user-uploaded-file-pointe/output` does not exist in this environment, and creating its root fails with filesystem Permission denied even outside the sandbox. This is a filesystem ownership limitation, not an automatic approval-review rejection. No inaccessible local download link is presented. The repository archive contains every committed source file, pinned lockfile, fixtures, tests, and run instructions.

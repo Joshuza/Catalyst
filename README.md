@@ -4,7 +4,7 @@ A local-first life planner with **left-side pages** for money, calendar, tasks, 
 
 ## Run the downloaded source
 
-Install **Node.js 22.12 or newer** first. Extract the source ZIP, open a terminal inside its `Catalyst` folder, then run:
+Install **Node.js 22.12 or newer** first. Extract the source ZIP and open a terminal in the extracted folder containing `package.json`, then run:
 
 ```sh
 npm install --global pnpm@11.19.0
