@@ -18,3 +18,14 @@
 - Search offline with Cmd/Ctrl+K, grouped results, plain-language filters, and local quick actions.
 - Add dynamic save buttons and the requested hold-to-delete gesture with pointer and keyboard cancellation.
 - Find related receipt notes and messages alongside transactions, with keyboard navigation that follows visible groups and announces the selected result.
+
+## Phase 2: Product-wide implementation, authorized expanded scope
+
+- Replace module navigation with the requested left-side pages, retaining a focused morning briefing.
+- Add financial/work/mobility/lifestyle onboarding, pay-date forecasts, scheduled purchases, scenario income assumptions, savings reservations, and subscription history.
+- Add mandatory purchase reconciliation, local PDF and opt-in screenshot OCR, receipt review, and CSV/Excel expense and planning exports.
+- Connect natural-language capture, a zoomable calendar, contextual tasks, manual/Sample Small Steps planning, classified inboxes, and offline global search.
+- Add pantry-aware recipes/groceries, manually supplied transit/weather/trails, outing planning, gear purchases, and activity logs.
+- Add research capture, health reminders, habits, audio links, itineraries/ticket reminders, contacts, optional pet care, screen-time observations, and the weekly reset.
+- Integrate all six requested animation interactions with React/CSS, responsive pages, encrypted module storage, undoable linked changes, and offline asset caching.
+- Retain explicit limits: local/manual adapters do not imply connected external accounts or a completed live-service ecosystem.

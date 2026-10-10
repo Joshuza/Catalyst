@@ -1,0 +1,2 @@
+# PDF cross-reference entries contain format-defined padding; treat documents as binary.
+*.pdf binary
