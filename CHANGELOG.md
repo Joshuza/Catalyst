@@ -17,3 +17,4 @@
 - Undo and redo record changes, including soft deletion, imports and sample-data actions.
 - Search offline with Cmd/Ctrl+K, grouped results, plain-language filters, and local quick actions.
 - Add dynamic save buttons and the requested hold-to-delete gesture with pointer and keyboard cancellation.
+- Find related receipt notes and messages alongside transactions, with keyboard navigation that follows visible groups and announces the selected result.

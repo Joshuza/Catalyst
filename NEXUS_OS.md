@@ -31,6 +31,7 @@ Visit once online, wait for the service worker to install, then reload offline. 
 - Scroll to Local records. Create a note or transaction, save it, then reload to confirm persistence.
 - Use Cmd/Ctrl+K or Search to open Spotlight. Enter opens the highlighted result; arrow keys choose another result; Tab reaches secondary actions. Escape closes and restores focus.
 - Expand Data and backups to load clearly labeled Sample records. Try `receipt`, `receipts over $100 in October`, or `unread from Maria`.
+- A receipt search includes related notes and messages. Arrow keys follow the visible groups; Tab starts at the selected record and then reaches its actions.
 - Search `new task` for a minimal task record or `export October` for a month-filtered JSON backup.
 - Edit a record, hold Enter/Space or the deletion button for 1.6 seconds, then undo. Early release or moving outside cancels the hold. Undo/redo history lasts for this visit; saved records survive reload.
 - Export a JSON backup or import and merge a validated backup. Import is atomic and undoable. Exported files contain readable personal data and deleted records; keep them private. Limits are 20 MiB and 50,000 records.
@@ -46,6 +47,6 @@ MiniSearch indexes decrypted records in memory only. No search index or decrypte
 
 Run `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`, and `pnpm e2e`. Install Chromium with `pnpm exec playwright install chromium`, or set NEXUS_CHROMIUM_PATH to an existing executable. The cloud run used /usr/bin/chromium.
 
-AGENTS.md, docs/REQUIREMENTS.md and docs/PHASE_PROMPTS.md are unchanged specifications. See docs/PROGRESS.md for the exact results and requirement map, and docs/DECISIONS.md for dependency sizes, encryption limits and animation adaptations. The visual PDF referenced by the specifications was absent from both ZIPs.
+AGENTS.md, docs/REQUIREMENTS.md and docs/PHASE_PROMPTS.md are unchanged specifications. See docs/PROGRESS.md for the exact results and requirement map, and docs/DECISIONS.md for dependency sizes, encryption limits and animation adaptations. The 12-page UX guide is now available as user-pasted text; the original visual PDF was absent from both ZIPs.
 
 Phase 1 adds the requested dynamic button and hold-to-delete interactions using React and token-based CSS. ReceiptPrinter, Ticket, PlayingCard and MagneticDropZone remain assigned to their relevant later phases. Review and merge Phase 1 before starting Phase 2.

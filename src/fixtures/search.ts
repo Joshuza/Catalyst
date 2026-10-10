@@ -33,7 +33,7 @@ export function sampleRecords(): UserRecord[] {
       ...base(),
       kind: 'note',
       title: 'Sample: research notes',
-      body: 'Ideas for a quiet workspace.',
+      body: 'Ideas for a quiet workspace. Receipt scan for the equipment invoice.',
     },
     {
       ...base(),
@@ -76,7 +76,7 @@ export function sampleRecords(): UserRecord[] {
       ...base(),
       kind: 'message',
       title: 'Sample: draft feedback',
-      body: 'Could you review the draft?',
+      body: 'Could you review the draft? The equipment receipt is attached.',
       sender: 'Maria',
       unread: true,
       date: '2026-10-08',

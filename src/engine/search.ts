@@ -66,12 +66,6 @@ export function parseSearch(input: string): SearchFilters {
 }
 function matches(record: UserRecord, filters: SearchFilters): boolean {
   if (record.deletedAt || record.kind === 'settings') return false;
-  if (
-    filters.receipt &&
-    (record.kind !== 'transaction' ||
-      !(record.receiptFile || /receipt|invoice/i.test(record.title)))
-  )
-    return false;
   if (filters.unread && (record.kind !== 'message' || !record.unread))
     return false;
   if (
@@ -116,16 +110,24 @@ export class LocalSearch {
   private records = new Map<string, UserRecord>();
   private terms = new Map<string, Set<string>>();
   private frequency = new Map<string, number>();
+  private receiptIds = new Set<string>();
   rebuild(records: UserRecord[]) {
     this.index.removeAll();
     this.records.clear();
     this.terms.clear();
     this.frequency.clear();
+    this.receiptIds.clear();
     const documents = [];
     for (const record of records) {
       if (record.deletedAt || record.kind === 'settings') continue;
       this.records.set(record.id, record);
       const terms = new Set(tokenize(`${record.title} ${recordText(record)}`));
+      if (
+        record.kind === 'transaction'
+          ? record.receiptFile || /receipt|invoice/i.test(record.title)
+          : terms.has('receipt') || terms.has('receipts')
+      )
+        this.receiptIds.add(record.id);
       this.terms.set(record.id, terms);
       for (const term of terms)
         this.frequency.set(term, (this.frequency.get(term) ?? 0) + 1);
@@ -149,9 +151,13 @@ export class LocalSearch {
       ? this.index
           .search(anchor)
           .map((hit) => ({ id: String(hit.id), score: hit.score }))
-      : Array.from(this.records.keys(), (id) => ({ id, score: 1 }));
+      : Array.from(
+          filters.receipt ? this.receiptIds : this.records.keys(),
+          (id) => ({ id, score: 1 }),
+        );
     const hits: SearchHit[] = [];
     for (const hit of ranked) {
+      if (filters.receipt && !this.receiptIds.has(hit.id)) continue;
       const record = this.records.get(hit.id);
       const recordTerms = this.terms.get(hit.id);
       const includesTerms = terms.every((term) =>
@@ -163,7 +169,9 @@ export class LocalSearch {
           score:
             record.kind === 'message' && record.stream === 'promotional'
               ? hit.score * 0.05
-              : hit.score,
+              : filters.receipt && record.kind !== 'transaction'
+                ? hit.score * 0.8
+                : hit.score,
         });
     }
     return hits

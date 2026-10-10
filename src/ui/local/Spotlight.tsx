@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import type { UserRecord } from '../../domain/records';
 import { formatMoney } from '../../domain/money';
 import { quickActions, type QuickAction } from '../../engine/search';
@@ -18,15 +18,29 @@ export function Spotlight({
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(0);
   const [copyStatus, setCopyStatus] = useState('');
+  const snapshot = useSyncExternalStore(
+    workspace.subscribe,
+    workspace.getSnapshot,
+  );
   const results = useMemo(() => {
+    if (!snapshot.ready) return { hits: [], error: '' };
     try {
       return { hits: workspace.search.search(query), error: '' };
     } catch {
       return { hits: [], error: 'Check the amount in your search.' };
     }
-  }, [query]);
+  }, [query, snapshot]);
   const actions = quickActions(query);
   const groups = workspace.search.groups(results.hits);
+  const orderedHits = Object.values(groups).flat();
+  const selectedRecord =
+    orderedHits[Math.min(selected, orderedHits.length - 1)]?.record;
+  useEffect(() => {
+    if (selectedRecord)
+      document
+        .getElementById(`search-hit-${selectedRecord.id}`)
+        ?.scrollIntoView({ block: 'nearest' });
+  }, [selectedRecord]);
   return (
     <Modal title="Search this device" onClose={onClose}>
       <label className={styles.searchLabel}>
@@ -38,9 +52,11 @@ export function Spotlight({
           placeholder="receipts over $100 in October"
           maxLength={500}
           aria-controls="search-results"
+          aria-describedby="search-selection"
           onChange={(event) => {
             setQuery(event.target.value);
             setSelected(0);
+            setCopyStatus('');
           }}
           onKeyDown={(event) => {
             if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
@@ -49,7 +65,7 @@ export function Spotlight({
                 Math.max(
                   0,
                   Math.min(
-                    results.hits.length - 1,
+                    orderedHits.length - 1,
                     current + (event.key === 'ArrowDown' ? 1 : -1),
                   ),
                 ),
@@ -57,9 +73,14 @@ export function Spotlight({
             }
             if (event.key === 'Enter') {
               event.preventDefault();
-              const hit = results.hits[selected];
-              if (hit) onOpen(hit.record);
+              if (selectedRecord) onOpen(selectedRecord);
               else if (actions[0]) onAction(actions[0]);
+            }
+            if (event.key === 'Tab' && !event.shiftKey && selectedRecord) {
+              event.preventDefault();
+              document
+                .getElementById(`search-hit-${selectedRecord.id}`)
+                ?.focus();
             }
           }}
         />
@@ -85,9 +106,13 @@ export function Spotlight({
             {hits.map(({ record }) => (
               <div
                 key={record.id}
-                className={`${styles.result} ${record.id === results.hits[selected]?.record.id ? styles.highlight : ''}`}
+                className={`${styles.result} ${record.id === selectedRecord?.id ? styles.highlight : ''}`}
               >
-                <button type="button" onClick={() => onOpen(record)}>
+                <button
+                  id={`search-hit-${record.id}`}
+                  type="button"
+                  onClick={() => onOpen(record)}
+                >
                   <span>{record.title}</span>
                   <small>
                     {record.kind === 'transaction'
@@ -140,8 +165,9 @@ export function Spotlight({
           </section>
         )}
       </div>
-      <p role="status" className={styles.hint}>
-        {copyStatus || `${results.hits.length} results`}
+      <p id="search-selection" role="status" className={styles.hint}>
+        {copyStatus ||
+          `${results.hits.length} results${selectedRecord ? `. Selected: ${selectedRecord.title}` : ''}`}
       </p>
     </Modal>
   );

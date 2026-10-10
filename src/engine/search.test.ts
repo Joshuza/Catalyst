@@ -45,6 +45,50 @@ describe('SRCH-02 to SRCH-06: deterministic local search', () => {
     ).toEqual([original.id]);
     expect(search.search('receipts over 100 in October')).toHaveLength(2);
   });
+  it('finds receipt context across notes, messages, tasks and recipes while financial filters stay precise', () => {
+    const records = sampleRecords();
+    const task = records[1];
+    const recipe = records[8];
+    const promo = records[7];
+    if (
+      task?.kind !== 'task' ||
+      recipe?.kind !== 'recipe' ||
+      promo?.kind !== 'message'
+    )
+      throw new Error('Missing sample records.');
+    const search = new LocalSearch();
+    search.rebuild(
+      records.map((record) =>
+        record.id === task.id
+          ? { ...task, notes: 'File the receipt.' }
+          : record.id === recipe.id
+            ? { ...recipe, title: 'Sample: recipe receipt' }
+            : record.id === promo.id
+              ? { ...promo, body: 'Your receipt is ready.' }
+              : record,
+      ),
+    );
+    const hits = search.search('receipt');
+    expect(Object.keys(search.groups(hits))).toEqual(
+      expect.arrayContaining([
+        'transaction',
+        'note',
+        'message',
+        'task',
+        'recipe',
+      ]),
+    );
+    expect(hits[0]?.record.title).toBe('Sample: equipment invoice');
+    expect(hits.at(-1)?.record.id).toBe(promo.id);
+    expect(
+      search.search('receipt unread from Maria').map((hit) => hit.record.title),
+    ).toEqual(['Sample: draft feedback']);
+    expect(
+      search
+        .search('receipts over $100 in October')
+        .map((hit) => hit.record.title),
+    ).toEqual(['Sample: equipment invoice']);
+  });
   it('searches all five kinds, excludes tombstones, groups results and offers actual quick actions', () => {
     const search = new LocalSearch();
     const records = sampleRecords();
@@ -62,6 +106,7 @@ describe('SRCH-02 to SRCH-06: deterministic local search', () => {
     if (!note) throw new Error('Missing note.');
     search.rebuild([{ ...note, deletedAt: '2026-10-10T00:00:00Z' }]);
     expect(search.search('research')).toEqual([]);
+    expect(search.search('receipt')).toEqual([]);
     expect(quickActions('new task')).toEqual([
       { label: 'New task', kind: 'task' },
     ]);
