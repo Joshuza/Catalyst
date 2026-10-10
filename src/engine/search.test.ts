@@ -25,6 +25,26 @@ describe('SRCH-02 to SRCH-06: deterministic local search', () => {
     expect(search.search('receipts over $100 in October 2025')).toHaveLength(0);
     expect(parseSearch('unread from Maria in October').sender).toBe('maria');
   });
+  it('does not compare unlike currencies for a dollar threshold', () => {
+    const records = sampleRecords();
+    const original = records[2];
+    if (original?.kind !== 'transaction')
+      throw new Error('Missing transaction.');
+    const euro = {
+      ...original,
+      id: '01M4G8HMG0000000000000000Y',
+      currency: 'EUR',
+      title: 'Sample: euro invoice',
+    };
+    const search = new LocalSearch();
+    search.rebuild([original, euro]);
+    expect(
+      search
+        .search('receipts over $100 in October')
+        .map((hit) => hit.record.id),
+    ).toEqual([original.id]);
+    expect(search.search('receipts over 100 in October')).toHaveLength(2);
+  });
   it('searches all five kinds, excludes tombstones, groups results and offers actual quick actions', () => {
     const search = new LocalSearch();
     const records = sampleRecords();

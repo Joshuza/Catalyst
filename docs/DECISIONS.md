@@ -131,3 +131,9 @@ React render functions in LocalWorkspace, RecordDetail, Spotlight, DynamicButton
 The Modal render function, the deterministic sample-record fixture table, suite declarations, and sequential e2e callbacks also exceed 60 lines intentionally. Their markup, fixture definitions, and complete user journeys remain together for review; no runtime computation is hidden in a long procedural function.
 
 Final Phase 1 bundle: JavaScript 362,246 bytes, gzip 115,679; CSS 20,359 bytes, gzip 4,306 (Python gzip level 9). The combined dependency and feature delta from Phase 0 is 208,269 JavaScript bytes, gzip 65,376. No runtime CDN requests are required. Portable backup recovery when a key is lost or a stored row cannot be verified is possible on a fresh browser profile/device; in-place automatic key or corrupted-row recovery is not provided.
+
+## 2026-10-10: Conservative currency interpretation
+
+An explicit dollar symbol in an amount search means USD in Phase 1. Restrict that comparison to USD records, instead of comparing an EUR, GBP or other currency's nominal cents with a dollar threshold. Amount filters without a symbol compare nominal amounts within each record's stored currency; no exchange rates or conversions are implied. This is a conservative default because the requirements do not specify multiple dollar currencies. It needs human review if the intended dollar currency is CAD, AUD or another dollar unit. A mixed USD/EUR regression test covers the distinction. No finance or currency-conversion feature is introduced.
+
+The final currency-fix build measures JavaScript 362,338 bytes (115,700 gzip), CSS 20,359 bytes (4,306 gzip); JavaScript delta from Phase 0 is 208,361 bytes (65,397 gzip). Final verification: 72 unit tests and 10 browser flows pass, search benchmark queries 0.10 to 18.86 ms over 50,000 records, and empty-profile readiness 399.3 ms on this VM. Phase 1 log dates follow the current environment’s UTC calendar.

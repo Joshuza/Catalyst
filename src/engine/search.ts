@@ -30,6 +30,7 @@ export type SearchFilters = {
   amount?: {
     cents: number;
     comparison: 'over' | 'under' | 'at least' | 'at most';
+    currency?: string;
   };
 };
 export function parseSearch(input: string): SearchFilters {
@@ -45,6 +46,7 @@ export function parseSearch(input: string): SearchFilters {
   const amount = amountMatch
     ? {
         cents: parseMoney(amountMatch[2] ?? ''),
+        currency: amountMatch[0].includes('$') ? 'USD' : undefined,
         comparison: amountMatch[1] as 'over' | 'under' | 'at least' | 'at most',
       }
     : undefined;
@@ -88,6 +90,8 @@ function matches(record: UserRecord, filters: SearchFilters): boolean {
   }
   if (filters.amount) {
     if (record.kind !== 'transaction') return false;
+    if (filters.amount.currency && record.currency !== filters.amount.currency)
+      return false;
     const cost = Math.abs(record.amountCents);
     const { cents, comparison } = filters.amount;
     if (
