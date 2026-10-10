@@ -1,5 +1,5 @@
 /* Phase 0: cache the shell and same-origin static assets only. */
-const cacheName = 'nexus-shell-v0';
+const cacheName = 'nexus-shell-pages-v2';
 const shell = [
   '/',
   '/index.html',
@@ -22,14 +22,35 @@ self.addEventListener('install', (event) => {
         .filter((url) => url.origin === self.location.origin)
         .map((url) => url.href);
       await cache.addAll(assets);
+      const manifest = await fetch('/precache.json');
+      if (!manifest.ok)
+        throw new Error('Offline asset manifest was not available.');
+      const chunks = await manifest.json();
+      if (
+        !Array.isArray(chunks) ||
+        chunks.some(
+          (path) =>
+            typeof path !== 'string' ||
+            !path.startsWith('/assets/') ||
+            path.includes('..'),
+        )
+      )
+        throw new Error('Invalid offline asset manifest.');
+      await cache.addAll(chunks);
       await self.skipWaiting();
     })(),
   );
 });
 
 self.addEventListener('activate', (event) => {
-  // Preserve older caches until a versioned update policy is added.
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    (async () => {
+      for (const name of await caches.keys())
+        if (name.startsWith('nexus-shell-') && name !== cacheName)
+          await caches.delete(name);
+      await self.clients.claim();
+    })(),
+  );
 });
 
 self.addEventListener('fetch', (event) => {

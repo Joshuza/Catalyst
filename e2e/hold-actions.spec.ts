@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('hold control: pointer release and moving outside cancel; a full pointer hold saves deletion', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/#records');
   await expect(
     page.getByRole('button', { name: 'New note', exact: true }),
   ).toBeEnabled();
@@ -46,8 +46,10 @@ test('hold control: pointer release and moving outside cancel; a full pointer ho
 test('SRCH-05: new task and month export verbs perform real local actions', async ({
   page,
 }) => {
-  await page.goto('/');
-  await expect(page.getByRole('button', { name: /^Search/ })).toBeEnabled();
+  await page.goto('/#records');
+  await expect(
+    page.getByRole('button', { name: /^Search Ctrl/ }),
+  ).toBeEnabled();
   await page.getByText('Data and backups', { exact: true }).click();
   await page
     .getByRole('button', { name: 'Load sample data', exact: true })

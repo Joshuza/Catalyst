@@ -23,13 +23,21 @@ function luminance(hex: string): number {
   );
 }
 const blocks = {
-  light: css.match(/:root \{([^}]+)\}/)?.[1] ?? '',
-  dark: css.match(/:root\[data-theme='dark'\] \{([^}]+)\}/)?.[1] ?? '',
+  light: [...css.matchAll(/:root \{([^}]+)\}/g)].map((m) => m[1]).join('\n'),
+  dark: [...css.matchAll(/:root\[data-theme='dark'\] \{([^}]+)\}/g)]
+    .map((m) => m[1])
+    .join('\n'),
 };
 describe('UX-08 / UX-09 text token contrast', () => {
   for (const [theme, block] of Object.entries(blocks)) {
     const tokens = parseTokens(block);
-    for (const foreground of ['color-text', 'color-muted', 'color-focus']) {
+    for (const foreground of [
+      'color-text',
+      'color-muted',
+      'color-focus',
+      'color-urgent',
+      'color-warning',
+    ]) {
       for (const background of [
         'color-background',
         'color-surface',

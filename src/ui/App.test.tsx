@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { App } from './App';
+import { FoundationCanvas as App } from './FoundationCanvas';
 
 describe('Phase 0 canvas', () => {
   it('starts with exactly three clearly labeled sample tiles and no invented records', () => {

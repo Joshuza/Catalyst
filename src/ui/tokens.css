@@ -115,3 +115,37 @@
     --motion-duration: 0ms;
   }
 }
+
+:root {
+  --sidebar-width: 15rem;
+  --sidebar-small-width: 12rem;
+  --text-page-title: clamp(2rem, 3vw, 3rem);
+  --color-chart-cart: #80613c;
+  --color-chart-actual: #376c80;
+  --chart-ratio: 2.6;
+  --chart-label-size: 11px;
+  --chart-stroke: 2.5px;
+  --chart-dash: 5 5;
+  --calendar-min-width: 45rem;
+  --calendar-day-height: 17rem;
+  --layer-navigation: 30;
+  --printer-width: 20rem;
+  --printer-output-height: 18rem;
+  --ticket-width: 14rem;
+  --card-width: 8rem;
+  --card-height: 11rem;
+  --drop-height: 12rem;
+}
+:root[data-theme='dark'] {
+  --color-chart-cart: #d9bc83;
+  --color-chart-actual: #9dcddd;
+}
+
+:root {
+  --color-urgent: #992f36;
+  --color-warning: #7c5c25;
+}
+:root[data-theme='dark'] {
+  --color-urgent: #f0aaa6;
+  --color-warning: #e9c587;
+}

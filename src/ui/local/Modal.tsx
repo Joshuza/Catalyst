@@ -5,10 +5,12 @@ export function Modal({
   title,
   onClose,
   children,
+  required = false,
 }: {
   title: string;
   onClose: () => void;
   children: ReactNode;
+  required?: boolean;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const heading = useId();
@@ -32,6 +34,7 @@ export function Modal({
   return (
     <dialog
       ref={ref}
+      data-required={required}
       className={styles.modal}
       aria-labelledby={heading}
       onKeyDown={(event) => {
@@ -58,14 +61,16 @@ export function Modal({
       }}
       onCancel={(event) => {
         event.preventDefault();
-        onClose();
+        if (!required) onClose();
       }}
     >
       <div className={styles.modalHeader}>
         <h2 id={heading}>{title}</h2>
-        <button type="button" onClick={onClose} aria-label={`Close ${title}`}>
-          Close
-        </button>
+        {!required && (
+          <button type="button" onClick={onClose} aria-label={`Close ${title}`}>
+            Close
+          </button>
+        )}
       </div>
       {children}
     </dialog>

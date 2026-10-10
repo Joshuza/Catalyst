@@ -1,58 +1,47 @@
 import { expect, test } from '@playwright/test';
-
-test('Phase 0: fresh canvas, keyboard controls, dark theme, and reduced motion', async ({
+test('UX-08 / UX-09: left pages, keyboard navigation, history, dark theme and reduced motion', async ({
   page,
 }) => {
   const errors: string[] = [];
-  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/');
-  await expect(page.getByRole('article')).toHaveCount(3);
-  await expect(page.getByText('Sample', { exact: true })).toHaveCount(3);
-  await page.getByRole('radio', { name: 'Dark theme' }).check();
+  await expect(
+    page.getByRole('heading', { name: 'Let’s make room for your life.' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('navigation', { name: 'Nexus pages' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('link', { name: 'Pet Tracker', exact: true }),
+  ).toHaveCount(0);
+  await page.getByRole('radio', { name: 'Dark theme', exact: true }).check();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  expect(
-    await page
-      .getByRole('article')
-      .first()
-      .evaluate((element) => {
-        const probe = document.createElement('div');
-        probe.style.backgroundColor = 'var(--color-surface)';
-        document.body.append(probe);
-        const expected = getComputedStyle(probe).backgroundColor;
-        probe.remove();
-        return getComputedStyle(element).backgroundColor === expected;
-      }),
-  ).toBe(true);
   await page.reload();
-  await expect(page.getByRole('radio', { name: 'Dark theme' })).toBeChecked();
-  const expand = page
-    .getByRole('button', { name: 'Expand tile', exact: true })
-    .first();
-  await expand.focus();
+  await expect(
+    page.getByRole('radio', { name: 'Dark theme', exact: true }),
+  ).toBeChecked();
+  await page.getByRole('link', { name: 'Financial Core', exact: true }).focus();
   await page.keyboard.press('Enter');
   await expect(
-    page.getByRole('button', { name: 'Collapse tile' }),
-  ).toHaveAttribute('aria-expanded', 'true');
-  await page.getByRole('button', { name: 'Collapse tile' }).press('Enter');
-  await page
-    .getByRole('button', { name: 'Dim A place to bring it together.' })
-    .press('Space');
+    page.getByRole('heading', { name: 'Financial core', exact: true }),
+  ).toBeVisible();
+  await expect(page.locator('#main-content')).toBeFocused();
+  await page.goBack();
   await expect(
-    page.getByRole('button', { name: 'Restore A place to bring it together.' }),
-  ).toHaveAttribute('aria-pressed', 'true');
+    page.getByRole('heading', { name: 'Let’s make room for your life.' }),
+  ).toBeVisible();
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect
     .poll(() =>
       page
-        .getByRole('article')
+        .locator('main > section')
         .first()
-        .evaluate((element) => getComputedStyle(element).transitionDuration),
+        .evaluate((e) => getComputedStyle(e).animationDuration),
     )
     .toBe('0s');
   expect(errors).toEqual([]);
 });
-
-test('UX-07: an offline reload works after the first visit', async ({
+test('UX-07: every page works offline after the first visit', async ({
   page,
   context,
 }) => {
@@ -65,45 +54,86 @@ test('UX-07: an offline reload works after the first visit', async ({
     .toBe(true);
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('article')).toHaveCount(3);
-  await page.getByRole('radio', { name: 'Dark theme' }).check();
+  await expect(
+    page.getByRole('navigation', { name: 'Nexus pages' }),
+  ).toBeVisible();
+  for (const [name, heading] of [
+    ['Financial Core', 'Financial core'],
+    ['Recipes & groceries', 'Recipes & groceries'],
+    ['Outdoors & activities', 'Outdoors & activities'],
+    ['Receipts & reports', 'Receipts & reports'],
+  ]) {
+    await page.getByRole('link', { name, exact: true }).click();
+    await expect(
+      page.getByRole('heading', { name: heading, exact: true }),
+    ).toBeVisible();
+  }
+  await page.getByRole('radio', { name: 'Dark theme', exact: true }).check();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 });
-
-test('UX-09: all tiles fit a 360 px touch viewport', async ({ page }) => {
+test('UX-09: left page navigation works at a 360 px touch viewport', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 360, height: 800 });
   await page.goto('/');
+  await expect(
+    page.getByRole('heading', { name: 'Let’s make room for your life.' }),
+  ).toBeVisible();
   expect(
     await page.evaluate(
-      () => document.documentElement.scrollWidth <= window.innerWidth,
+      () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await expect(page.getByRole('article')).toHaveCount(3);
-  for (const tile of await page.getByRole('article').all()) {
-    const rect = await tile.boundingBox();
-    expect(rect).not.toBeNull();
-    if (rect) {
-      expect(rect.x).toBeGreaterThanOrEqual(0);
-      expect(rect.x + rect.width).toBeLessThanOrEqual(360);
-    }
-  }
-  await page.getByRole('button', { name: 'Expand tile' }).last().click();
+  await page.getByRole('button', { name: 'Pages', exact: true }).click();
+  await page.getByRole('link', { name: 'Calendar', exact: true }).click();
   await expect(
-    page.getByRole('button', { name: 'Collapse tile' }),
+    page.getByRole('heading', { name: 'Your calendar' }),
   ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.getByRole('button', { name: 'Pages', exact: true }).click();
+  await page
+    .getByRole('link', { name: 'Recipes & groceries', exact: true })
+    .click();
+  await expect(
+    page.getByRole('heading', { name: 'Recipes & groceries', exact: true }),
+  ).toBeVisible();
+  expect(
+    await page
+      .locator('main > section')
+      .first()
+      .evaluate((el) => el.getBoundingClientRect().width),
+  ).toBeGreaterThanOrEqual(296);
+  const ingredientPanel = page
+    .getByRole('heading', { name: 'Recipe library', exact: true })
+    .locator('..');
+  expect(
+    await ingredientPanel.evaluate((el) => el.getBoundingClientRect().width),
+  ).toBeGreaterThanOrEqual(296);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });
-
-test('UX-07: the default shell makes no requests to external origins', async ({
+test('UX-07: the default app makes no requests to external origins', async ({
   page,
 }) => {
   const external: string[] = [];
-  page.on('request', (request) => {
-    if (new URL(request.url()).origin !== 'http://127.0.0.1:4173')
-      external.push(request.url());
+  page.on('request', (r) => {
+    if (new URL(r.url()).origin !== 'http://127.0.0.1:4173')
+      external.push(r.url());
   });
   await page.goto('/');
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
-  await page.getByRole('radio', { name: 'Light theme' }).check();
-  await page.getByRole('button', { name: 'Expand tile' }).first().click();
+  await page
+    .getByRole('link', { name: 'Connections & privacy', exact: true })
+    .click();
+  await expect(
+    page.getByRole('heading', { name: 'Connections & privacy', exact: true }),
+  ).toBeVisible();
   expect(external).toEqual([]);
 });

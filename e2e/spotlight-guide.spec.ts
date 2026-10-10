@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('SRCH-02 / SRCH-03: guide receipt example spans modules and keyboard follows visible groups', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/#records');
   await page.getByText('Data and backups', { exact: true }).click();
   await page
     .getByRole('button', { name: 'Load sample data', exact: true })
@@ -11,7 +11,7 @@ test('SRCH-02 / SRCH-03: guide receipt example spans modules and keyboard follow
   await expect(
     page.getByText('9 records · Sample data loaded', { exact: true }),
   ).toBeVisible();
-  await page.getByRole('button', { name: /^Search/ }).focus();
+  await page.getByRole('button', { name: /^Search Ctrl/ }).focus();
   await page.keyboard.press('Control+k');
   const dialog = page.getByRole('dialog', { name: 'Search this device' });
   const input = dialog.getByRole('searchbox', { name: 'Search records' });
@@ -66,5 +66,7 @@ test('SRCH-02 / SRCH-03: guide receipt example spans modules and keyboard follow
     'Sample: research notes',
   );
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('button', { name: /^Search/ })).toBeFocused();
+  await expect(
+    page.getByRole('button', { name: /^Search Ctrl/ }),
+  ).toBeFocused();
 });

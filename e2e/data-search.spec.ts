@@ -3,8 +3,10 @@ import type { Row } from '../src/data/stored';
 import { sampleRecords } from '../src/fixtures/search';
 
 async function ready(page: Page) {
-  await page.goto('/');
-  await expect(page.getByRole('button', { name: /^Search/ })).toBeEnabled();
+  await page.goto('/#records');
+  await expect(
+    page.getByRole('button', { name: /^Search Ctrl/ }),
+  ).toBeEnabled();
 }
 async function samples(page: Page) {
   await page.getByText('Data and backups', { exact: true }).click();
@@ -28,7 +30,7 @@ test('SRCH-01 to SRCH-06: keyboard Spotlight, required filters, secondary action
   page.on('pageerror', (error) => errors.push(error.message));
   await ready(page);
   await samples(page);
-  const opener = page.getByRole('button', { name: /^Search/ });
+  const opener = page.getByRole('button', { name: /^Search Ctrl/ });
   await opener.focus();
   await page.keyboard.press('Control+k');
   const spotlight = page.getByRole('dialog', { name: 'Search this device' });
@@ -231,7 +233,9 @@ test('UX-07: durable data, atomic backups, sample removal and tamper error witho
   await expect(page.getByRole('alert')).toContainText(
     'stored record could not be verified',
   );
-  await expect(page.getByRole('button', { name: /^Search/ })).toBeEnabled();
+  await expect(
+    page.getByRole('button', { name: /^Search Ctrl/ }),
+  ).toBeEnabled();
   expect(errors).toEqual([]);
 });
 
@@ -246,7 +250,9 @@ test('Phase 1: starts from the Phase 0 profile at 360px, traps focus, reduced mo
   const elapsed = performance.now() - started;
   console.info(`COLD_EMPTY_LOAD elapsed_ms=${elapsed.toFixed(1)}`);
   expect(elapsed).toBeLessThan(2000);
+  await page.getByRole('button', { name: 'Pages', exact: true }).click();
   await expect(page.getByRole('radio', { name: 'Dark theme' })).toBeChecked();
+  await page.getByRole('button', { name: 'Close navigation' }).click();
   await page.keyboard.press('Control+k');
   const spotlight = page.getByRole('dialog', { name: 'Search this device' });
   const search = spotlight.getByRole('searchbox', { name: 'Search records' });

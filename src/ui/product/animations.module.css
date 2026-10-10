@@ -1,0 +1,184 @@
+.printer {
+  width: min(100%, var(--printer-width));
+  margin: auto;
+}
+.machine {
+  border-radius: var(--radius-large);
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-overlay);
+}
+.screen {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  border: var(--border-width) solid currentColor;
+  border-radius: var(--radius-small);
+  padding: var(--space-4);
+  margin-top: var(--space-3);
+}
+.slot {
+  height: var(--space-2);
+  background: var(--color-background);
+  border-radius: var(--radius-small);
+  margin-top: var(--space-4);
+}
+.output {
+  overflow: hidden;
+  margin-inline: var(--space-5);
+  height: var(--printer-output-height);
+}
+.paper {
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 96%,
+    95% 100%,
+    90% 96%,
+    85% 100%,
+    80% 96%,
+    75% 100%,
+    70% 96%,
+    65% 100%,
+    60% 96%,
+    55% 100%,
+    50% 96%,
+    45% 100%,
+    40% 96%,
+    35% 100%,
+    30% 96%,
+    25% 100%,
+    20% 96%,
+    15% 100%,
+    10% 96%,
+    5% 100%,
+    0 96%
+  );
+  min-height: var(--printer-output-height);
+}
+.paper[data-stage='processing'] {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.paper[data-stage='printing'] {
+  animation: print-feed 1750ms steps(12, end);
+}
+@keyframes print-feed {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.ticket {
+  max-width: var(--ticket-width);
+  padding: var(--space-6);
+  color: var(--color-accent-text);
+  background: var(--color-accent);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 71%,
+    94% 75%,
+    100% 79%,
+    100% 100%,
+    0 100%,
+    0 79%,
+    6% 75%,
+    0 71%
+  );
+  transition: transform var(--motion-duration);
+  transform: perspective(1100px) rotateX(var(--tilt-y, 0deg))
+    rotateY(var(--tilt-x, 0deg));
+}
+.ticket h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+}
+.stub {
+  border-top: var(--border-width) dashed currentColor;
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.barcode {
+  height: var(--space-8);
+  margin-top: var(--space-3);
+  background: repeating-linear-gradient(
+    90deg,
+    currentColor 0,
+    currentColor 2px,
+    transparent 2px,
+    transparent 5px
+  );
+}
+.deck {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-5) var(--space-0);
+}
+.card {
+  width: var(--card-width);
+  min-height: var(--card-height);
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: var(--space-5) !important;
+  transition:
+    transform var(--motion-duration),
+    background var(--motion-duration);
+  transform: rotate(var(--card-angle, 0deg));
+  box-shadow: var(--shadow-tile);
+  border-radius: var(--radius-medium) !important;
+}
+.card:hover,
+.card[aria-pressed='true'] {
+  transform: translateY(calc(-1 * var(--space-3))) rotate(0deg);
+}
+.rank {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-3);
+  font-family: var(--font-display);
+}
+.suit {
+  font-size: var(--text-xl);
+  color: var(--color-accent);
+}
+.drop {
+  min-height: var(--drop-height);
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  border: var(--focus-width) dashed var(--color-line);
+  border-radius: var(--radius-large);
+  background: var(--color-background);
+  text-align: center;
+  transition:
+    transform var(--motion-duration),
+    border-color var(--motion-duration);
+  transform: translate(var(--magnet-x, 0px), var(--magnet-y, 0px));
+}
+.drop[data-over='true'] {
+  border-color: var(--color-accent);
+  background: var(--color-surface-soft);
+  transform: scale(1.02);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticket,
+  .card,
+  .drop {
+    transform: none !important;
+  }
+  .paper[data-stage='printing'] {
+    animation: none;
+  }
+}

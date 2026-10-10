@@ -1,3 +1,4 @@
+import { dietaryCheck } from '../../domain/product/food';
 import { SystemClock } from '../../domain/clock';
 import { createUlidGenerator } from '../../domain/id';
 import {
@@ -12,6 +13,13 @@ import { exportBackup, importBackup } from '../../data/backup';
 import { CommandBus } from '../../engine/commands';
 import { LocalSearch } from '../../engine/search';
 import { sampleRecords, SAMPLE_SET } from '../../fixtures/search';
+import {
+  defaultProfile,
+  profileSchema,
+  type Profile,
+  type ModuleData,
+} from '../../domain/product/model';
+import { today } from '../../domain/product/dates';
 
 type Snapshot = {
   ready: boolean;
@@ -25,7 +33,7 @@ type Snapshot = {
 };
 export class Workspace {
   private db = new NexusDatabase();
-  private clock = new SystemClock();
+  readonly clock = new SystemClock();
   private id = createUlidGenerator(this.clock, (length) =>
     crypto.getRandomValues(new Uint8Array(length)),
   );
@@ -70,14 +78,29 @@ export class Workspace {
   }
   private async refresh() {
     const loaded = await this.repository.readAll();
-    this.search.rebuild(loaded.records);
+    const settings = loaded.records
+      .filter((r) => r.kind === 'settings' && !r.deletedAt && r.profile)
+      .sort((a, b) => Number(!!a.sampleSet) - Number(!!b.sampleSet))[0];
+    const profile =
+      settings?.kind === 'settings' ? settings.profile : undefined;
+    this.search.rebuild(
+      loaded.records.filter(
+        (r) =>
+          r.kind !== 'recipe' ||
+          dietaryCheck(r, profile?.dietary ?? []).allowed,
+      ),
+    );
     this.update(loaded);
   }
   private async perform<T>(
     label: string | null,
     action: () => Promise<T>,
   ): Promise<T> {
-    this.update({ busy: true, error: null });
+    this.update({
+      busy: true,
+      error: null,
+      ...(label ? { notice: null } : {}),
+    });
     try {
       const result = await action();
       if (label) {
@@ -97,6 +120,43 @@ export class Workspace {
       this.update({ busy: false });
     }
   }
+  rememberVisit() {
+    const before = this.visible('module').find(
+      (r) => r.kind === 'module' && r.data.type === 'briefing',
+    );
+    if (
+      before?.kind === 'module' &&
+      before.data.type === 'briefing' &&
+      before.data.lastVisit === today(this.clock)
+    )
+      return Promise.resolve();
+    const data =
+      before?.kind === 'module' && before.data.type === 'briefing'
+        ? {
+            ...before.data,
+            previousVisit: before.data.lastVisit,
+            lastVisit: today(this.clock),
+          }
+        : {
+            type: 'briefing' as const,
+            lastVisit: today(this.clock),
+            previousVisit: null,
+            deepWork: false,
+            activeTask: '',
+            hidden: [],
+            pinned: [],
+            expanded: [],
+          };
+    const record = before
+      ? { ...before, data }
+      : this.make('Briefing preferences', data);
+    return this.perform(null, async () => {
+      await this.bus.execute('Remember visit', [
+        { id: record.id, before: before ?? null, after: record },
+      ]);
+      await this.refresh();
+    });
+  }
   clearNotice() {
     this.update({ notice: null });
   }
@@ -106,7 +166,83 @@ export class Workspace {
     );
     return settings?.kind === 'settings' ? settings.locale : navigator.language;
   }
-  draft(kind: 'note' | 'task' | 'transaction'): UserRecord {
+  get profile(): Profile {
+    const options = this.visible('settings').filter(
+      (r) => r.kind === 'settings' && r.profile,
+    );
+    const record = options.find((r) => !r.sampleSet) ?? options[0];
+    return record?.kind === 'settings' && record.profile
+      ? record.profile
+      : defaultProfile(today(this.clock));
+  }
+  make(
+    title: string,
+    data: ModuleData,
+  ): Extract<UserRecord, { kind: 'module' }> {
+    const now = this.clock.now().toISOString();
+    return recordSchema.parse({
+      id: this.id(),
+      kind: 'module',
+      title,
+      data:
+        data.type === 'purchase' || data.type === 'subscription'
+          ? { ...data, currency: data.currency ?? this.profile.currency }
+          : data,
+      createdAt: now,
+      updatedAt: now,
+      schemaVersion: 1,
+      deletedAt: null,
+      sampleSet: null,
+    }) as Extract<UserRecord, { kind: 'module' }>;
+  }
+  saveProfile(profile: Profile) {
+    const valid = profileSchema.parse(profile);
+    const existing = this.visible('settings').find(
+      (r) => r.kind === 'settings' && !r.sampleSet,
+    );
+    const now = this.clock.now().toISOString();
+    return this.save(
+      recordSchema.parse({
+        ...existing,
+        id: existing?.id ?? this.id(),
+        createdAt: existing?.createdAt ?? now,
+        updatedAt: existing?.updatedAt ?? now,
+        schemaVersion: 1,
+        deletedAt: null,
+        sampleSet: null,
+        kind: 'settings',
+        title: 'Your preferences',
+        locale: this.locale,
+        currency: valid.currency,
+        profile: valid,
+      }),
+    );
+  }
+  commit(label: string, inputs: UserRecord[]) {
+    return this.perform(label, async () => {
+      const changes = inputs.map((input) => {
+        const before =
+          this.snapshot.records.find((r) => r.id === input.id) ?? null;
+        if (before && before.updatedAt !== input.updatedAt)
+          throw new Error('A record changed. Reopen it before saving.');
+        const after = recordSchema.parse({
+          ...input,
+          updatedAt: this.clock.now().toISOString(),
+        });
+        return { id: after.id, before, after };
+      });
+      await this.bus.execute(label, changes);
+    });
+  }
+  draft(kind: 'note'): Extract<UserRecord, { kind: 'note' }>;
+  draft(kind: 'task'): Extract<UserRecord, { kind: 'task' }>;
+  draft(kind: 'transaction'): Extract<UserRecord, { kind: 'transaction' }>;
+  draft(
+    kind: 'note' | 'task' | 'transaction',
+  ): Extract<UserRecord, { kind: 'note' | 'task' | 'transaction' }>;
+  draft(
+    kind: 'note' | 'task' | 'transaction',
+  ): Extract<UserRecord, { kind: 'note' | 'task' | 'transaction' }> {
     const base = {
       id: this.id(),
       kind,
@@ -179,9 +315,7 @@ export class Workspace {
       await this.bus.execute(
         'Remove sample data',
         this.snapshot.records
-          .filter(
-            (record) => record.sampleSet === SAMPLE_SET && !record.deletedAt,
-          )
+          .filter((record) => !!record.sampleSet && !record.deletedAt)
           .map((before) => ({
             id: before.id,
             before,

@@ -97,12 +97,17 @@ export function Spotlight({
         {!results.hits.length && !results.error && (
           <p>
             No matching records. Create a note or load Sample data from the
-            canvas.
+            workspace.
           </p>
         )}
         {Object.entries(groups).map(([kind, hits]) => (
-          <section key={kind} aria-label={`${kind} results`}>
-            <h3 className={styles.groupTitle}>{kind}</h3>
+          <section
+            key={kind}
+            aria-label={`${kind === 'module' ? 'saved records' : kind} results`}
+          >
+            <h3 className={styles.groupTitle}>
+              {kind === 'module' ? 'Saved records' : kind}
+            </h3>
             {hits.map(({ record }) => (
               <div
                 key={record.id}
@@ -119,7 +124,9 @@ export function Spotlight({
                       ? `${formatMoney(record.amountCents, workspace.locale, record.currency)} · ${record.date}`
                       : record.kind === 'message'
                         ? `${record.sender} · ${record.unread ? 'Unread' : 'Read'}`
-                        : record.kind}
+                        : record.kind === 'module'
+                          ? record.data.type.replace(/([a-z])([A-Z])/g, '$1 $2')
+                          : record.kind}
                   </small>
                 </button>
                 {record.kind === 'transaction' && (

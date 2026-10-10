@@ -1,149 +1,318 @@
-import { Icon } from './icons';
-import { Tile } from './Tile';
+import { useEffect, useRef, useState, Suspense } from 'react';
 import { useTheme, type Theme } from './theme';
-import styles from './canvas.module.css';
+import { workspace } from './local/runtime';
 import { LocalWorkspace } from './local/LocalWorkspace';
-
-const themes: Theme[] = ['system', 'light', 'dark'];
-
+import { useProduct, entities, navigate, type Entity } from './product/state';
+import {
+  BriefingPage,
+  ProfilePage,
+  FinancePage,
+  ReceiptsPage,
+  CalendarPage,
+  InboxPage,
+  TasksPage,
+  FoodPage,
+  TransitPage,
+  OutdoorsPage,
+  ContactsPage,
+  PetPage,
+  ScreenPage,
+  ReadingPage,
+  ResetPage,
+  ConnectionsPage,
+  ResearchPage,
+  GoalsPage,
+  HealthPage,
+  HabitsPage,
+  AudioPage,
+  ItineraryPage,
+  Terminal,
+} from './product/Pages';
+import { PurchaseSurvey } from './product/Survey';
+import { Page } from './product/Common';
+import s from './product/product.module.css';
+import { navigation, allPages } from './product/navigation';
+function currentPage() {
+  const hash = window.location.hash.slice(1);
+  return allPages.has(hash) ? hash : 'briefing';
+}
 export function App() {
   const { theme, setTheme, storageWarning } = useTheme();
+  const state = useProduct();
+  const [page, setPage] = useState(currentPage),
+    [mobile, setMobile] = useState(false),
+    [terminal, setTerminal] = useState(false),
+    [survey, setSurvey] = useState<Entity<'purchase'> | null>(null);
+  const main = useRef<HTMLElement>(null),
+    visited = useRef(false);
+  useEffect(() => {
+    if (state.ready && state.profile.completed && !visited.current) {
+      visited.current = true;
+      void workspace.rememberVisit().catch(() => undefined);
+    }
+  }, [state.ready, state.profile.completed]);
+  useEffect(() => {
+    const hash = () => {
+      setPage(currentPage());
+      setMobile(false);
+    };
+    const change = (e: Event) => {
+      const destination = (e as CustomEvent<string>).detail;
+      if (allPages.has(destination)) window.location.hash = destination;
+    };
+    const key = (e: KeyboardEvent) => {
+      if (document.querySelector('dialog[data-required="true"][open]')) return;
+      if (
+        (e.metaKey || e.ctrlKey) &&
+        !e.altKey &&
+        e.key.toLowerCase() === 'j'
+      ) {
+        e.preventDefault();
+        setTerminal(true);
+      }
+    };
+    window.addEventListener('hashchange', hash);
+    window.addEventListener('nexus:navigate', change);
+    window.addEventListener('keydown', key);
+    return () => {
+      window.removeEventListener('hashchange', hash);
+      window.removeEventListener('nexus:navigate', change);
+      window.removeEventListener('keydown', key);
+    };
+  }, []);
+  useEffect(() => {
+    if (state.ready && !survey && !terminal) {
+      const due = entities('purchase').find(
+        (p) =>
+          p.data.status === 'planned' &&
+          p.data.scenario === 'Main' &&
+          p.data.date <= state.today,
+      );
+      if (due) setSurvey(due);
+    }
+  }, [state.ready, state.records, state.today, survey, terminal]);
+  useEffect(() => {
+    document.title = `${navigation.flatMap((g) => g.links).find((l) => l[0] === page)?.[1] ?? 'Briefing'} · Nexus OS`;
+    main.current?.focus({ preventScroll: true });
+  }, [page]);
+  const displayPage =
+    page === 'pet' && !state.profile.petEnabled ? 'profile' : page;
+  const views: Record<string, () => React.ReactNode> = {
+    briefing: () =>
+      !state.profile.completed ? <ProfilePage /> : <BriefingPage />,
+    profile: () => <ProfilePage />,
+    finance: () => <FinancePage />,
+    receipts: () => <ReceiptsPage />,
+    calendar: () => <CalendarPage />,
+    inbox: () => <InboxPage />,
+    tasks: () => <TasksPage />,
+    food: () => <FoodPage />,
+    transit: () => <TransitPage />,
+    outdoors: () => <OutdoorsPage />,
+    contacts: () => <ContactsPage />,
+    pet: () => <PetPage />,
+    screen: () => <ScreenPage />,
+    reading: () => <ReadingPage />,
+    reset: () => <ResetPage />,
+    research: () => <ResearchPage />,
+    goals: () => <GoalsPage />,
+    health: () => <HealthPage />,
+    habits: () => <HabitsPage />,
+    audio: () => <AudioPage />,
+    itineraries: () => <ItineraryPage />,
+    connections: () => <ConnectionsPage />,
+    records: () => (
+      <Page
+        title="Notes & records"
+        subtitle="Capture research, notes, and transactions. Back up or restore your entire workspace here."
+      >
+        <p className={s.muted}>
+          Use the record tools below to create, search, edit, and export.
+        </p>
+      </Page>
+    ),
+  };
   return (
-    <div className={styles.app}>
-      <a href="#canvas" className={styles.skipLink}>
-        Skip to canvas
+    <div className={s.shell}>
+      <a
+        className={s.skip}
+        href="#main-content"
+        onClick={(e) => {
+          e.preventDefault();
+          main.current?.focus();
+        }}
+      >
+        Skip to content
       </a>
-      <header className={styles.header}>
-        <a href="#canvas" className={styles.brand} aria-label="Nexus OS canvas">
-          <span className={styles.logo}>N</span>Nexus
-          <span className={styles.os}>OS</span>
+      <aside
+        className={s.sidebar}
+        data-open={mobile}
+        aria-label="Workspace sidebar"
+      >
+        <a className={s.brand} href="#briefing">
+          <span className={s.logo}>N</span>Nexus <small>OS</small>
         </a>
-        <span className={styles.headerLabel}>
-          <Icon name="grid" />
-          Your canvas
-        </span>
-        <fieldset className={styles.themeControl}>
-          <legend className={styles.srOnly}>Theme</legend>
-          {themes.map((value) => (
-            <label
-              key={value}
-              title={`${value.charAt(0).toUpperCase()}${value.slice(1)} theme`}
-            >
-              <input
-                type="radio"
-                name="theme"
-                value={value}
-                checked={theme === value}
-                onChange={() => setTheme(value)}
-              />
-              <span>
-                <Icon
-                  name={
-                    value === 'light'
-                      ? 'sun'
-                      : value === 'dark'
-                        ? 'moon'
-                        : 'system'
-                  }
-                />
-                <span className={styles.srOnly}>
-                  {value.charAt(0).toUpperCase()}
-                  {value.slice(1)} theme
-                </span>
-              </span>
-            </label>
+        <nav aria-label="Nexus pages">
+          {navigation.map((group) => (
+            <div className={s.navGroup} key={group.group}>
+              <p className={s.navLabel}>{group.group}</p>
+              {group.links
+                .filter((l) => l[0] !== 'pet' || state.profile.petEnabled)
+                .map(([id, label, icon]) => (
+                  <a
+                    key={id}
+                    href={`#${id}`}
+                    className={s.navLink}
+                    data-dim={
+                      state.deep &&
+                      ![
+                        'briefing',
+                        'tasks',
+                        'calendar',
+                        'records',
+                        'profile',
+                      ].includes(id ?? '')
+                    }
+                    aria-current={displayPage === id ? 'page' : undefined}
+                    onClick={() => setMobile(false)}
+                  >
+                    <span className={s.navIcon} aria-hidden="true">
+                      {icon}
+                    </span>
+                    {label}
+                  </a>
+                ))}
+            </div>
           ))}
-        </fieldset>
-      </header>
-      <main id="canvas" className={styles.main} tabIndex={-1}>
-        <div className={styles.introduction}>
-          <div>
-            <p className={styles.eyebrow}>SPACE TO THINK, ROOM TO ACT</p>
-            <h1>
-              A little room
-              <br />
-              for everything.
-            </h1>
-          </div>
-          <div className={styles.introAside}>
-            <span className={styles.phase}>LOCAL / PRIVATE</span>
-            <p>
-              One calm canvas.
-              <br />
-              Ready to grow with your day.
-            </p>
-          </div>
+        </nav>
+        <div className={s.sidebarFoot}>
+          <p>LOCAL / PRIVATE / YOURS</p>
+          <fieldset className={s.theme}>
+            <legend>Theme</legend>
+            {(['system', 'light', 'dark'] as Theme[]).map((value) => (
+              <label key={value}>
+                <input
+                  type="radio"
+                  name="theme"
+                  checked={theme === value}
+                  onChange={() => setTheme(value)}
+                />
+                <span className={s.srOnly}>
+                  {value.charAt(0).toUpperCase() + value.slice(1)} theme
+                </span>
+                <span aria-hidden="true">{value}</span>
+              </label>
+            ))}
+          </fieldset>
+          <p>Your records stay on this device.</p>
+          <button
+            type="button"
+            className={s.mobileMenu}
+            onClick={() => setMobile(false)}
+          >
+            Close navigation
+          </button>
         </div>
-        <div className={styles.canvasHeading}>
-          <p>
-            <Icon name="grid" />
-            The starting point
-          </p>
-          <span>3 sample tiles</span>
-        </div>
-        <section aria-label="Sample canvas" className={styles.canvas}>
-          <Tile
-            id="workspace"
-            title="A place to bring it together."
-            label="01 / WORKSPACE"
-            description="An open space for the things that matter. Expand a tile when you need more room."
-            wide
+      </aside>
+      <div className={s.content}>
+        <header className={s.topbar}>
+          <button
+            type="button"
+            className={s.mobileMenu}
+            aria-expanded={mobile}
+            onClick={() => setMobile(!mobile)}
           >
-            <div className={styles.workspaceSketch}>
-              <div className={styles.sketchLabel}>YOUR SPACE, TAKING SHAPE</div>
-              <div className={styles.sketchRows}>
-                <span />
-                <span />
-                <span />
-              </div>
-              <div className={styles.sketchCircle}>
-                <Icon name="expand" />
-              </div>
-            </div>
-          </Tile>
-          <Tile
-            id="rhythm"
-            title="Room to focus."
-            label="02 / RHYTHM"
-            description="A quieter canvas starts with a little breathing room."
-          >
-            <div className={styles.rhythmSketch}>
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-          </Tile>
-          <Tile
-            id="horizon"
-            title="Space for what comes next."
-            label="03 / HORIZON"
-            description="The foundation is here. Your modules will find their place in later phases."
-          >
-            <div className={styles.horizonSketch}>
-              <span />
-              <span />
-              <span />
-            </div>
-          </Tile>
-        </section>
-        <LocalWorkspace />
-        {storageWarning && (
-          <p role="status" className={styles.notice}>
-            Your theme works for this visit. Browser storage is unavailable, so
-            it cannot be saved.
-          </p>
-        )}
-        <footer className={styles.footer}>
-          <span>
-            <span className={styles.statusDot} />
-            Designed for local-first use
-          </span>
-          <span>Your records stay on this device.</span>
-          <span>NEXUS OS / 0.1</span>
+            Pages
+          </button>
+          <span className={s.eyebrow}>A calmer way to run your day</span>
+          <div className={s.actions}>
+            <button
+              type="button"
+              data-workspace-trigger
+              disabled={!state.ready}
+              onClick={() => {
+                window.dispatchEvent(
+                  new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }),
+                );
+              }}
+            >
+              Search this device <kbd>Ctrl/Cmd K</kbd>
+            </button>
+            <button
+              type="button"
+              disabled={!state.ready}
+              onClick={() => setTerminal(true)}
+            >
+              Command <kbd>Ctrl/Cmd J</kbd>
+            </button>
+          </div>
+        </header>
+        <main id="main-content" ref={main} tabIndex={-1}>
+          <Suspense fallback={<p role="status">Opening this page.</p>}>
+            {state.ready ? (
+              views[displayPage]?.()
+            ) : (
+              <p role="status">Opening your local workspace.</p>
+            )}
+          </Suspense>
+          {displayPage !== 'records' &&
+            (state.error || state.issues.length > 0) && (
+              <p role="alert" className={s.alert}>
+                {state.error ||
+                  `${state.issues.length} stored records could not be verified. Originals were kept unchanged.`}
+              </p>
+            )}
+          <LocalWorkspace
+            visible={displayPage === 'records'}
+            onOpenModule={(record) => {
+              const type = record.data.type;
+              const mapping: Record<string, string> = {
+                research: 'research',
+                goal: 'goals',
+                health: 'health',
+                habit: 'habits',
+                audio: 'audio',
+                itinerary: 'itineraries',
+                purchase: 'finance',
+                scenario: 'finance',
+                subscription: 'finance',
+                receipt: 'receipts',
+                event: 'calendar',
+                grocery: 'food',
+                pantry: 'food',
+                place: 'transit',
+                trail: 'outdoors',
+                outing: 'outdoors',
+                activity: 'outdoors',
+                pet: 'pet',
+                contact: 'contacts',
+                screen: 'screen',
+                reset: 'reset',
+                news: 'reading',
+              };
+              navigate(mapping[type] ?? 'connections');
+            }}
+          />
+          {storageWarning && (
+            <p role="status">Your theme cannot be saved in this browser.</p>
+          )}
+        </main>
+        <footer className={s.muted}>
+          NEXUS OS · Local-first personal workspace
         </footer>
-      </main>
+      </div>
+      {terminal && !survey && (
+        <Suspense fallback={<p role="status">Opening command bar.</p>}>
+          <Terminal onClose={() => setTerminal(false)} />
+        </Suspense>
+      )}{' '}
+      {survey && (
+        <PurchaseSurvey
+          key={survey.id}
+          purchase={survey}
+          onDone={() => setSurvey(null)}
+        />
+      )}
     </div>
   );
 }
