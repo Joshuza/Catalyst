@@ -60,3 +60,17 @@ Briefing summarizes urgent financial signals, the next three events, inbox count
 ## Honest boundaries
 
 No remote service is connected by default. Live accounts, automatic news fetching, product metadata scraping, AI-generated semantic tagging, native screen-time sync and automatic ticket ingestion are future adapter work. An emergency personal-records vault was excluded at your request. [docs/PROGRESS.md](docs/PROGRESS.md) records partial requirements, tests and remaining work; it is not a claim that the entire future service ecosystem exists.
+
+## Startup foundation and survey state
+
+At every boot, the archival startup screen offers prefilled setup or a return to saved answers. The four chapters cover finances, working time, mobility and lifestyle, followed by review and JSON export. Skipped questions stay in your weekly reset; editing their values later clears the corresponding prompt.
+
+Monthly overhead reduces the cart projection on each bill's actual monthly due date, clamped for short months. It does not change verified transactions. Do not enter a subscription here if it is already tracked separately in Finance. The minimum safe balance informs purchase scheduling.
+
+Calendar opens at the survey scale: half-hour, 3/6/12-hour pacing, focused day or work week. Pacing has its own interval control. Role sets new task context; a Hybrid setup starts with the general personal task role and can be changed per task.
+
+Transit settings separate asset availability, public mode preferences, and walking ceilings. Light Rail is available as a mode. Walking opt-out also removes transit options requiring walking. Bicycle/scooter availability shares the cycling route mode; routes are manually entered, not live maps.
+
+Sources and topic keywords prioritize imported reading. Digest time is your preferred review time, not an automatic background feed subscription. Pet care's next dates and intervals appear in the care rhythm: add one pending reminder, complete it, then add the next. No veterinary date is assumed.
+
+Survey JSON contains the validated profile, explicit defaults, skip markers, format and version. It is an export of answers, not a workspace backup or an automatic import. Sensitive financial values are included, so keep this file private. Existing Notes backups still export and restore the full workspace.

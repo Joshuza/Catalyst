@@ -29,3 +29,11 @@
 - Add research capture, health reminders, habits, audio links, itineraries/ticket reminders, contacts, optional pet care, screen-time observations, and the weekly reset.
 - Integrate all six requested animation interactions with React/CSS, responsive pages, encrypted module storage, undoable linked changes, and offline asset caching.
 - Retain explicit limits: local/manual adapters do not imply connected external accounts or a completed live-service ecosystem.
+
+## Phase 2: Archival startup survey
+
+- Add an every-startup, prefilled survey with original Renaissance-style Egyptian oasis and nectarine artwork.
+- Bundle open-license Cormorant Garamond and IBM Plex Mono locally, with responsive archival layouts and accessible contrast.
+- Expand financial, schedule, transit, content, and pet questions; connect monthly bills, role defaults, calendar zoom, Light Rail, reading interests, and care intervals to real planning behavior.
+- Export validated survey JSON and show a three-second local initialization with live financial curves, working-hour masks, and news/transit rule matrices.
+- Preserve existing records, undo, offline assets, and the left-side page navigation.

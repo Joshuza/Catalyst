@@ -2,6 +2,65 @@
 
 ## Current run
 
+PHASE: 2, startup survey and nectarine art direction, user-authorized continuation.
+
+BRANCH: `phase-2-onboarding-art-direction`, based on published product branch `e6a4e58`. Main is unchanged.
+
+COMMITS: 3: `f412622` bundle artwork/type; `7cc4876` startup survey/preferences; `docs: publish startup source guide and verification report` (this report's commit).
+
+STATUS: **COMPLETE for this startup redesign.** The broader connected-service product remains incomplete as documented in the retained previous report below.
+
+REQUIREMENTS COVERED: ONB-01, ONB-02, ONB-04; ONB-I-01 through ONB-I-05 and ONB-I-07; ONB-II-01, ONB-II-02, ONB-II-04; ONB-III-01, ONB-III-03, ONB-III-04. User additions: every-boot survey, four detailed chapters, overhead, persona, six calendar defaults, transit pass/cycle equipment/Light Rail, topics/digest time, pet intervals, original nectarine/oasis art, local archival type, supplied pear.no HTML adaptation, clean response JSON, three-second initialization with real financial/mask/rule computation.
+
+REQUIREMENTS NOT COVERED: ONB-03 human under-five-minute timing is unmeasured; ONB-II-03 units are manually selectable rather than automatically inferred from locale; ONB-III-02 accepts source names/URLs and local feed imports, but automatic remote feed discovery is absent. ONB-I-06 has real live preview but uses the requested art-and-survey layout instead of a separate graph/input split. ONB-II-05 public filters use the newly requested native checkboxes with Tab/Space, rather than arrow navigation across every card. Other product-wide gaps remain in the previous report.
+
+CHECKS (actual results from this run):
+
+- typecheck: PASS, zero errors.
+- lint: PASS, zero errors/warnings.
+- unit tests: 148 passed, 0 failed, 0 skipped, 22 files.
+- build: PASS, including the final production browser build.
+- e2e: full suite 26 passed, 0 failed; after reference refinements, both affected onboarding journeys passed again (2/2).
+- Exact intermediate artwork commit: typecheck passed; 139 unit tests passed, 0 failed/skipped.
+- Whitespace/file limits: PASS; every source/test/CSS file is at most 400 lines.
+
+REQUIREMENT TO TEST MAP:
+
+- ONB-01/02/04, ONB-I, survey additions -> `e2e/onboarding.spec.ts`, detailed startup flow; `e2e/product.spec.ts`, ONB profile persistence flow; `src/domain/product/startup.test.ts`, validated JSON, due dates, masks, matrices and affordability.
+- ONB-II/III, calendar/role/pet propagation -> `e2e/onboarding.spec.ts`, detailed startup flow; `e2e/product.spec.ts`, FOOD/TRN/OUT and PET/CRM/SCR/RST journeys; startup hard-walking and personalized-reading unit cases.
+- Skipped-answer resolution -> `src/ui/onboarding/resolve-skipped.test.ts`, nested financial changes and newly selected defaults.
+- Offline art/type, 360px, reduced motion, validation/focus -> `e2e/onboarding.spec.ts`, mobile/offline journey; survey text contrast -> `src/test/contrast.test.ts`, eight new pairs.
+- Existing encryption/search/backup contracts -> retained storage, backup and migration unit/browser suites. Cold first interactive 408.1ms; 50,000-record search 0.07–10.82ms; 730-day/100-purchase finance 0.88ms. These are VM measurements; the intentional three-second startup transition is tested separately.
+
+FILES ADDED OR CHANGED OUTSIDE THE PHASE SCOPE: none. Calendar, Tasks, Reading, Briefing, Pet and Preferences changes propagate survey answers. Runtime initialization and walking-rule corrections are necessary for the requested startup/hard-limit behavior.
+
+DEPENDENCIES ADDED: none. Bundled original PNG plus two SIL OFL font files: 4,528,800 bytes, with licenses/provenance in `src/assets/README.md`.
+
+DECISIONS MADE: continue the tested product branch; additive strict profile fields; actual spending remains verified; monthly estimates affect simulation; saved records survive every boot; use local source/topic ranking and user-entered pet care dates; native requested form controls; use original art/local fonts; adapt supplied HTML's chapters/framing/ornaments; preserve reduced motion and left sidebar pages. All recorded in `docs/DECISIONS.md`.
+
+DEFERRED: Pear's linked CSS/JS/films were absent; the stylesheet URL returned 403, so exact canvas choreography and original font identification cannot be reproduced. Letterform Archive reported maintenance; fonts are identified open-license alternatives. Live banking/mail/AI/feed/transit/weather/screen-time integrations remain unconnected. Full human usability and screen-reader audit remain open.
+
+FOUND ISSUES IN EARLIER PHASES: no unresolved new issue. The authorized walking-limit bypass was fixed with adversarial tests.
+
+PROPOSED ADDITIONS: none beyond user requests.
+
+QUESTIONS FOR THE HUMAN: none block running this build.
+
+HOW TO VERIFY BY HAND:
+
+1. Download the source ZIP below, extract it, install Node 22.12+ and pnpm 11.19.0. In the folder with `package.json`, run `pnpm install --frozen-lockfile`, then `pnpm dev`; open the printed localhost address.
+2. Begin the survey. Enter `4.5k`, a deposit date, liquid savings, monthly overhead and a safety buffer. Confirm the live graph changes and overhead does not become an actual transaction.
+3. Set a role, working shifts, calendar scale, walking opt-out/ceiling, Light Rail, diet, sources/topics, and optional pet intervals/next dates. Skip a question and inspect the review.
+4. Export survey JSON, inspect its responses, then initialize. Confirm the exact three-second title and computed graph/working mask/rule counts before the sidebar pages appear.
+5. Check Calendar's chosen scale, new Task role, Reading priorities, Pet care reminders, and Preferences editing. Existing records should remain. Reload: saved answers return; use Continue with saved answers.
+6. Run `pnpm build` and `pnpm exec vite preview`; visit once and allow service-worker installation. Disconnect/reload, test the art and local fonts, then try 360px, keyboard controls, dark theme and reduced motion.
+
+SOURCE DELIVERY: https://github.com/Joshuza/Catalyst/archive/refs/heads/phase-2-onboarding-art-direction.zip . Full source, pinned lockfile, tests and run instructions are included. Build output and installed dependencies are excluded. The requested projectless output folder is unavailable due to filesystem ownership; the repository archive is the usable delivery path.
+
+---
+
+## Previous product-wide run
+
 PHASE: 2 Product-wide local implementation; user-authorized expanded scope covering planned phases 2–12 and the supplied Gemini additions.
 
 BRANCH: `phase-2-complete-product`, continued from Phase 1 `a5c7f11`. Main remains unchanged.

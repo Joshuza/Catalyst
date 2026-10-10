@@ -16,16 +16,16 @@ Open the address printed in the terminal, usually **http://localhost:5173**. Kee
 
 ## Run from GitHub
 
-This implementation is on `phase-2-complete-product`:
+This implementation, including the startup redesign, is on `phase-2-onboarding-art-direction`:
 
 ```sh
-git clone --branch phase-2-complete-product https://github.com/Joshuza/Catalyst.git
+git clone --branch phase-2-onboarding-art-direction https://github.com/Joshuza/Catalyst.git
 cd Catalyst
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-For an existing clone, run `git fetch origin` and `git switch phase-2-complete-product`, then the last two commands. Commit or stash your own edits before switching branches.
+For an existing clone, run `git fetch origin` and `git switch phase-2-onboarding-art-direction`, then the last two commands. Commit or stash your own edits before switching branches.
 
 ## Start using it
 
@@ -69,3 +69,15 @@ pnpm e2e
 ```
 
 An existing Chromium can be selected with `NEXUS_CHROMIUM_PATH=/path/to/chromium pnpm e2e`. See [NEXUS_OS.md](NEXUS_OS.md) for controls and [docs/DECISIONS.md](docs/DECISIONS.md) for architecture and dependency decisions. The source archive includes the exact lockfile and tests; installed packages and build output are excluded.
+
+## Startup survey
+
+Every reload opens the new archival survey with your saved answers prefilled. Choose **Begin survey** on first launch, or **Review my answers** later. Returning users can choose **Continue with saved answers**. Setup is one question at a time across money, time, mobility and lifestyle; every question may be skipped. There are 19 answer screens, plus a review screen (20 answers for irregular pay).
+
+Add monthly bills with their next due dates to see their effect on the dotted financial line. The actual line still requires verified transactions. Choose a role, working hours, default calendar scale, walking ceiling, public modes, reading interests and optional pet-care intervals. Your existing records remain intact.
+
+**Export survey JSON** downloads a validated, versioned state file containing all responses and explicit defaults. Initialization displays **Initializing Codex Command Engine...** for three seconds while presenting the computed financial curves, working-hour mask and local news/transit rules. This is the app's local engine; external accounts remain opt-in/manual. Use **Profile & preferences** to edit these choices later.
+
+The oasis/nectarine illustration and open-license fonts are bundled locally and available offline after the first production visit. Artwork and font provenance: [src/assets/README.md](src/assets/README.md).
+
+The supplied pear.no HTML informed the chapter rail, fine ruled frame, corner ornaments and editorial scale. Its linked stylesheet, scripts and films were not attached; this is a working adaptation with original artwork and local fonts.
