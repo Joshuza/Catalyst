@@ -1,9 +1,11 @@
+import { enterWorkspace } from './startup-helper';
 import { expect, test, type Page } from '@playwright/test';
 import type { Row } from '../src/data/stored';
 import { sampleRecords } from '../src/fixtures/search';
 
 async function ready(page: Page) {
   await page.goto('/#records');
+  await enterWorkspace(page);
   await expect(
     page.getByRole('button', { name: /^Search Ctrl/ }),
   ).toBeEnabled();
@@ -88,6 +90,7 @@ test('SRCH-01 to SRCH-06: keyboard Spotlight, required filters, secondary action
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
   await context.setOffline(true);
   await page.reload();
+  await enterWorkspace(page);
   await expect(opener).toBeEnabled();
   await page.keyboard.press('Control+k');
   await search.fill('receipt');
@@ -175,6 +178,7 @@ test('UX-07: durable data, atomic backups, sample removal and tamper error witho
   await page.getByRole('button', { name: 'Undo', exact: true }).click();
   await expect(recent(page, 'Sample: equipment invoice')).toBeVisible();
   await page.reload();
+  await enterWorkspace(page);
   await expect(recent(page, 'Sample: equipment invoice')).toBeVisible();
   await page.getByText('Data and backups', { exact: true }).click();
   await page.locator('input[type="file"]').setInputFiles({
@@ -230,6 +234,7 @@ test('UX-07: durable data, atomic backups, sample removal and tamper error witho
     db.close();
   });
   await page.reload();
+  await enterWorkspace(page);
   await expect(page.getByRole('alert')).toContainText(
     'stored record could not be verified',
   );
@@ -246,10 +251,14 @@ test('Phase 1: starts from the Phase 0 profile at 360px, traps focus, reduced mo
   await page.setViewportSize({ width: 360, height: 800 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const started = performance.now();
-  await ready(page);
+  await page.goto('/#records');
+  await expect(
+    page.getByRole('button', { name: 'Begin survey', exact: true }),
+  ).toBeEnabled();
   const elapsed = performance.now() - started;
   console.info(`COLD_EMPTY_LOAD elapsed_ms=${elapsed.toFixed(1)}`);
   expect(elapsed).toBeLessThan(2000);
+  await enterWorkspace(page);
   await page.getByRole('button', { name: 'Pages', exact: true }).click();
   await expect(page.getByRole('radio', { name: 'Dark theme' })).toBeChecked();
   await page.getByRole('button', { name: 'Close navigation' }).click();

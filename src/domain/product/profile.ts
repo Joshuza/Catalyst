@@ -38,6 +38,7 @@ export const modeSchema = z.enum([
   'subway',
   'bus',
   'ferry',
+  'light-rail',
 ]);
 export const dietaryTags = [
   'Gluten-Free',
@@ -75,8 +76,33 @@ export const shiftSchema = z
 export const profileSchema = z
   .object({
     completed: z.boolean(),
+    persona: z.enum(['student', 'professional', 'hybrid']).optional(),
+    calendarZoom: z.enum(['30m', '3h', '6h', '12h', 'day', 'week']).optional(),
+    fixedExpenses: z
+      .array(
+        z
+          .object({
+            name: short.min(1),
+            amountCents: cents.refine((v) => v >= 0),
+            nextDate: date,
+          })
+          .strict(),
+      )
+      .max(30)
+      .optional(),
+    transitPass: z.boolean().optional(),
+    cycleKind: z.enum(['bicycle', 'scooter', 'both']).optional(),
+    mediaTopics: z.array(short.min(1)).max(30).optional(),
+    digestTime: z
+      .string()
+      .regex(/^(?:[01]\d|2[0-3]):[0-5]\d$/)
+      .optional(),
+    petVetMonths: z.number().int().min(1).max(36).optional(),
+    petFoodDays: z.number().int().min(1).max(365).optional(),
+    petNextVet: date.nullable().optional(),
+    petNextFood: date.nullable().optional(),
     receiptOcr: z.boolean().optional(),
-    skipped: z.array(short).max(30),
+    skipped: z.array(short).max(60),
     safetyBufferCents: cents.refine((v) => v >= 0).optional(),
     currency: z.string().regex(/^[A-Z]{3}$/),
     pay: incomeSchema,
@@ -92,7 +118,7 @@ export const profileSchema = z
       z.number().int().min(1).max(28),
     ]),
     shifts: z.array(shiftSchema).max(21),
-    modes: z.array(modeSchema).max(7),
+    modes: z.array(modeSchema).max(8),
     walkingMiles: z.number().min(0).max(5),
     distanceUnit: z.enum(['mi', 'km']),
     dietary: z.array(z.enum(dietaryTags)).max(7),

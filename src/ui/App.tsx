@@ -31,6 +31,7 @@ import {
 import { PurchaseSurvey } from './product/Survey';
 import { Page } from './product/Common';
 import s from './product/product.module.css';
+import { StartupSurvey } from './onboarding/StartupSurvey';
 import { navigation, allPages } from './product/navigation';
 function currentPage() {
   const hash = window.location.hash.slice(1);
@@ -40,17 +41,27 @@ export function App() {
   const { theme, setTheme, storageWarning } = useTheme();
   const state = useProduct();
   const [page, setPage] = useState(currentPage),
+    [bootDone, setBootDone] = useState(false),
     [mobile, setMobile] = useState(false),
     [terminal, setTerminal] = useState(false),
     [survey, setSurvey] = useState<Entity<'purchase'> | null>(null);
   const main = useRef<HTMLElement>(null),
     visited = useRef(false);
   useEffect(() => {
-    if (state.ready && state.profile.completed && !visited.current) {
+    void workspace.initialize().catch(() => undefined);
+  }, []);
+  useEffect(() => {
+    if (
+      bootDone &&
+      page === 'briefing' &&
+      state.ready &&
+      state.profile.completed &&
+      !visited.current
+    ) {
       visited.current = true;
       void workspace.rememberVisit().catch(() => undefined);
     }
-  }, [state.ready, state.profile.completed]);
+  }, [bootDone, page, state.ready, state.profile.completed]);
   useEffect(() => {
     const hash = () => {
       setPage(currentPage());
@@ -61,7 +72,12 @@ export function App() {
       if (allPages.has(destination)) window.location.hash = destination;
     };
     const key = (e: KeyboardEvent) => {
-      if (document.querySelector('dialog[data-required="true"][open]')) return;
+      if (
+        document.querySelector(
+          'dialog[data-required="true"][open], [data-startup-survey]',
+        )
+      )
+        return;
       if (
         (e.metaKey || e.ctrlKey) &&
         !e.altKey &&
@@ -81,7 +97,7 @@ export function App() {
     };
   }, []);
   useEffect(() => {
-    if (state.ready && !survey && !terminal) {
+    if (bootDone && state.ready && !survey && !terminal) {
       const due = entities('purchase').find(
         (p) =>
           p.data.status === 'planned' &&
@@ -90,7 +106,7 @@ export function App() {
       );
       if (due) setSurvey(due);
     }
-  }, [state.ready, state.records, state.today, survey, terminal]);
+  }, [bootDone, state.ready, state.records, state.today, survey, terminal]);
   useEffect(() => {
     document.title = `${navigation.flatMap((g) => g.links).find((l) => l[0] === page)?.[1] ?? 'Briefing'} · Nexus OS`;
     main.current?.focus({ preventScroll: true });
@@ -132,6 +148,18 @@ export function App() {
       </Page>
     ),
   };
+  if (!bootDone)
+    return state.ready ? (
+      <StartupSurvey
+        onDone={() => {
+          setBootDone(true);
+        }}
+      />
+    ) : (
+      <p role={state.error ? 'alert' : 'status'}>
+        {state.error || 'Opening your local workspace.'}
+      </p>
+    );
   return (
     <div className={s.shell}>
       <a

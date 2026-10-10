@@ -1,3 +1,4 @@
+import { enterWorkspace } from './startup-helper';
 import { test, expect } from '@playwright/test';
 test('RCP-01 / RCP-02: opt-in screenshot OCR runs offline with local models and keeps unclear matches reviewable', async ({
   page,
@@ -11,6 +12,7 @@ test('RCP-01 / RCP-02: opt-in screenshot OCR runs offline with local models and 
       external.push(r.url());
   });
   await page.goto('/#receipts');
+  await enterWorkspace(page);
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
   await expect
     .poll(() =>

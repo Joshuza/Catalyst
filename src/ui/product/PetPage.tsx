@@ -1,3 +1,4 @@
+import { PetRhythm } from '../onboarding/PetRhythm';
 import { useState } from 'react';
 import { addDays, addMonths, daysBetween } from '../../domain/product/dates';
 import type { DataOf } from '../../domain/product/model';
@@ -188,6 +189,7 @@ export function PetPage() {
             </button>
           </form>
         </Panel>
+        <PetRhythm />
         <Panel title="Age-aware reminders">
           <p className={s.muted}>
             Confirm clinical timing with your vet. These are planning prompts

@@ -1,3 +1,4 @@
+import { enterWorkspace } from './startup-helper';
 import { expect, test } from '@playwright/test';
 test('UX-08 / UX-09: left pages, keyboard navigation, history, dark theme and reduced motion', async ({
   page,
@@ -5,8 +6,9 @@ test('UX-08 / UX-09: left pages, keyboard navigation, history, dark theme and re
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/');
+  await enterWorkspace(page);
   await expect(
-    page.getByRole('heading', { name: 'Let’s make room for your life.' }),
+    page.getByRole('heading', { name: 'A little clarity for your day.' }),
   ).toBeVisible();
   await expect(
     page.getByRole('navigation', { name: 'Nexus pages' }),
@@ -17,6 +19,7 @@ test('UX-08 / UX-09: left pages, keyboard navigation, history, dark theme and re
   await page.getByRole('radio', { name: 'Dark theme', exact: true }).check();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.reload();
+  await enterWorkspace(page);
   await expect(
     page.getByRole('radio', { name: 'Dark theme', exact: true }),
   ).toBeChecked();
@@ -28,7 +31,7 @@ test('UX-08 / UX-09: left pages, keyboard navigation, history, dark theme and re
   await expect(page.locator('#main-content')).toBeFocused();
   await page.goBack();
   await expect(
-    page.getByRole('heading', { name: 'Let’s make room for your life.' }),
+    page.getByRole('heading', { name: 'A little clarity for your day.' }),
   ).toBeVisible();
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect
@@ -46,6 +49,7 @@ test('UX-07: every page works offline after the first visit', async ({
   context,
 }) => {
   await page.goto('/');
+  await enterWorkspace(page);
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
   await expect
     .poll(() =>
@@ -54,6 +58,7 @@ test('UX-07: every page works offline after the first visit', async ({
     .toBe(true);
   await context.setOffline(true);
   await page.reload();
+  await enterWorkspace(page);
   await expect(
     page.getByRole('navigation', { name: 'Nexus pages' }),
   ).toBeVisible();
@@ -76,8 +81,9 @@ test('UX-09: left page navigation works at a 360 px touch viewport', async ({
 }) => {
   await page.setViewportSize({ width: 360, height: 800 });
   await page.goto('/');
+  await enterWorkspace(page);
   await expect(
-    page.getByRole('heading', { name: 'Let’s make room for your life.' }),
+    page.getByRole('heading', { name: 'A little clarity for your day.' }),
   ).toBeVisible();
   expect(
     await page.evaluate(
@@ -128,6 +134,7 @@ test('UX-07: the default app makes no requests to external origins', async ({
       external.push(r.url());
   });
   await page.goto('/');
+  await enterWorkspace(page);
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
   await page
     .getByRole('link', { name: 'Connections & privacy', exact: true })

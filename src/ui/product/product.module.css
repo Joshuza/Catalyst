@@ -1,2 +1,15 @@
 @import './product-base.css';
 @import './product-extra.css';
+
+.calendar[data-single='true'] {
+  grid-template-columns: 1fr;
+  min-width: 0;
+}
+
+.row[data-protected='false'] {
+  opacity: var(--dimmed-opacity);
+}
+.row[data-protected='true'] {
+  border-left: var(--focus-width) solid var(--color-accent);
+  padding-left: var(--space-3);
+}

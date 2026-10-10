@@ -136,6 +136,7 @@ export function ProfileLifestyle({
           <label>
             <input
               type="checkbox"
+              role="switch"
               checked={draft.petEnabled}
               onChange={(e) => patch({ petEnabled: e.target.checked })}
             />
@@ -153,6 +154,46 @@ export function ProfileLifestyle({
                 <input
                   value={draft.petSpecies}
                   onChange={(e) => patch({ petSpecies: e.target.value })}
+                />
+              </Field>
+              <Field label="Vet visit interval in months">
+                <input
+                  type="number"
+                  min="1"
+                  max="36"
+                  value={draft.petVetMonths ?? 12}
+                  onChange={(e) =>
+                    patch({ petVetMonths: Number(e.target.value) })
+                  }
+                />
+              </Field>
+              <Field label="Food restock interval in days">
+                <input
+                  type="number"
+                  min="1"
+                  max="365"
+                  value={draft.petFoodDays ?? 30}
+                  onChange={(e) =>
+                    patch({ petFoodDays: Number(e.target.value) })
+                  }
+                />
+              </Field>
+              <Field label="Next vet visit">
+                <input
+                  type="date"
+                  value={draft.petNextVet ?? ''}
+                  onChange={(e) =>
+                    patch({ petNextVet: e.target.value || null })
+                  }
+                />
+              </Field>
+              <Field label="Next food restock">
+                <input
+                  type="date"
+                  value={draft.petNextFood ?? ''}
+                  onChange={(e) =>
+                    patch({ petNextFood: e.target.value || null })
+                  }
                 />
               </Field>
               <Field label="Pet birthdate">

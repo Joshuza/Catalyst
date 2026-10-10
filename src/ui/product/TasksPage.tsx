@@ -8,7 +8,7 @@ import { TaskCard } from './TaskCard';
 import s from './product.module.css';
 type Task = Extract<UserRecord, { kind: 'task' }>;
 export function TasksPage() {
-  const { records } = useProduct();
+  const { records, profile } = useProduct();
   const [title, setTitle] = useState(''),
     [sampleAi, setSampleAi] = useState(false);
   const tasks = records.filter(
@@ -37,7 +37,15 @@ export function TasksPage() {
                 .save({
                   ...workspace.draft('task'),
                   title,
-                  details: emptyTaskDetails(),
+                  details: {
+                    ...emptyTaskDetails(),
+                    role:
+                      profile.persona === 'student'
+                        ? 'student'
+                        : profile.persona === 'professional'
+                          ? 'professional'
+                          : 'personal',
+                  },
                 })
                 .then(() => setTitle('')),
             )

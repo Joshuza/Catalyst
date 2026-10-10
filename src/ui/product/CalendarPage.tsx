@@ -7,9 +7,8 @@ import {
 } from '../../domain/product/dates';
 import { availableSlots, overlap } from '../../domain/product/schedule';
 import { workspace } from '../local/runtime';
-import { Modal } from '../local/Modal';
-import { Page, Panel, Field, DeleteRecord } from './Common';
-import { Ticket } from './Animations';
+import { CalendarEventDetails } from './CalendarEventDetails';
+import { Page, Panel, Field } from './Common';
 import {
   useProduct,
   entities,
@@ -20,11 +19,25 @@ import {
 import s from './product.module.css';
 import { CalendarEditor } from './CalendarEditor';
 import { EventButton } from './EventButton';
-const bands = ['30 minutes', 'Hourly', 'Pacing', 'Working week'];
+import { CalendarZoom, bands } from './CalendarZoom';
 export function CalendarPage() {
   const { today, profile } = useProduct();
   const [date, setDate] = useState(() => takeCalendarDate(today)),
-    [zoom, setZoom] = useState(3),
+    [zoom, setZoom] = useState(
+      profile.calendarZoom === '30m'
+        ? 0
+        : ['3h', '6h', '12h'].includes(profile.calendarZoom ?? '')
+          ? 2
+          : 3,
+    ),
+    [singleDay, setSingleDay] = useState(profile.calendarZoom === 'day'),
+    [pacingHours, setPacingHours] = useState(
+      profile.calendarZoom === '6h'
+        ? 6
+        : profile.calendarZoom === '12h'
+          ? 12
+          : 3,
+    ),
     [editing, setEditing] = useState<Entity<'event'> | null>(null),
     [selected, setSelected] = useState<Entity<'event'> | null>(null),
     [draftSlot, setDraftSlot] = useState<{
@@ -39,7 +52,9 @@ export function CalendarPage() {
       .visible('task')
       .filter((t) => t.kind === 'task' && !t.completed);
   const first = weekStart(date),
-    dates = Array.from({ length: 7 }, (_, i) => addDays(first, i));
+    dates = singleDay
+      ? [date]
+      : Array.from({ length: 7 }, (_, i) => addDays(first, i));
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (
@@ -47,7 +62,10 @@ export function CalendarPage() {
         document.querySelector('dialog[open]')
       )
         return;
-      if (/^[1-4]$/.test(e.key)) setZoom(Number(e.key) - 1);
+      if (/^[1-4]$/.test(e.key)) {
+        setZoom(Number(e.key) - 1);
+        setSingleDay(false);
+      }
     };
     const focus = (e: Event) => setDate((e as CustomEvent<string>).detail);
     const node = ref.current;
@@ -134,7 +152,9 @@ export function CalendarPage() {
         <div className={s.actions}>
           <button
             type="button"
-            onClick={() => setDate(addDays(date, zoom === 3 ? -7 : -1))}
+            onClick={() =>
+              setDate(addDays(date, zoom === 3 && !singleDay ? -7 : -1))
+            }
           >
             Previous
           </button>
@@ -147,30 +167,32 @@ export function CalendarPage() {
           </Field>
           <button
             type="button"
-            onClick={() => setDate(addDays(date, zoom === 3 ? 7 : 1))}
+            onClick={() =>
+              setDate(addDays(date, zoom === 3 && !singleDay ? 7 : 1))
+            }
           >
             Next
           </button>
-          <div className={s.chips}>
-            {bands.map((b, i) => (
-              <button
-                key={b}
-                type="button"
-                aria-pressed={zoom === i}
-                onClick={() => setZoom(i)}
-              >
-                {b}
-              </button>
-            ))}
-          </div>
         </div>
+        <CalendarZoom
+          zoom={zoom}
+          singleDay={singleDay}
+          pacingHours={pacingHours}
+          setZoom={setZoom}
+          setSingleDay={setSingleDay}
+          setPacingHours={setPacingHours}
+        />
         <p className={s.muted}>
           Keys 1-4, pinch, or Ctrl/Cmd + scroll change the view. Focused date:{' '}
           {date}.
         </p>
         {error && <p role="alert">{error}</p>}
         <Panel
-          title={zoom < 2 ? `${date} · ${bands[zoom]}` : `Week of ${first}`}
+          title={
+            zoom < 2 || singleDay
+              ? `${date} · ${singleDay ? '1 Day' : bands[zoom]}`
+              : `Week of ${first}`
+          }
         >
           {zoom < 2 ? (
             <>
@@ -191,6 +213,10 @@ export function CalendarPage() {
                   <div
                     key={h}
                     className={s.row}
+                    data-protected={profile.shifts.some(
+                      (v) =>
+                        v.day === weekday(date) && h >= v.start && h < v.end,
+                    )}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => {
                       e.preventDefault();
@@ -231,7 +257,7 @@ export function CalendarPage() {
             </>
           ) : (
             <div className={s.tableWrap}>
-              <div className={s.calendar}>
+              <div className={s.calendar} data-single={singleDay}>
                 {dates.map((d) => (
                   <div
                     className={`${s.day} ${profile.shifts.some((v) => v.day === weekday(d)) ? '' : s.dayQuiet}`}
@@ -252,11 +278,11 @@ export function CalendarPage() {
                       {d.slice(8)}
                     </button>
                     {zoom === 2
-                      ? [
-                          ['Morning', 0, 12],
-                          ['Afternoon', 12, 18],
-                          ['Evening', 18, 24],
-                        ].map(([label, start, end]) => (
+                      ? Array.from({ length: 24 / pacingHours }, (_, i) => [
+                          timeLabel(i * pacingHours),
+                          i * pacingHours,
+                          (i + 1) * pacingHours,
+                        ]).map(([label, start, end]) => (
                           <div key={label}>
                             <h3>{label}</h3>
                             {events
@@ -348,29 +374,18 @@ export function CalendarPage() {
         />
       )}
       {selected && (
-        <Modal title={selected.title} onClose={() => setSelected(null)}>
-          <div className={s.page}>
-            <p>
-              {selected.data.date} · {timeLabel(selected.data.start)} ·{' '}
-              {selected.data.minutes} minutes
-            </p>
-            {selected.data.ticket !== 'none' && <Ticket event={selected} />}
-            <button
-              type="button"
-              onClick={() => {
-                setDraftSlot({
-                  date: selected.data.date,
-                  start: selected.data.start,
-                });
-                setSelected(null);
-                setEditing(selected);
-              }}
-            >
-              Edit or move event
-            </button>
-            <DeleteRecord record={selected} />
-          </div>
-        </Modal>
+        <CalendarEventDetails
+          event={selected}
+          onClose={() => setSelected(null)}
+          onEdit={() => {
+            setDraftSlot({
+              date: selected.data.date,
+              start: selected.data.start,
+            });
+            setSelected(null);
+            setEditing(selected);
+          }}
+        />
       )}
     </Page>
   );

@@ -1,0 +1,397 @@
+.survey {
+  display: grid;
+  grid-template-columns: var(--survey-art-width) minmax(0, 1fr);
+  min-height: 100dvh;
+  color: var(--color-survey-ink);
+  background: var(--color-parchment);
+}
+.art {
+  position: sticky;
+  top: var(--space-0);
+  height: 100dvh;
+  overflow: hidden;
+}
+.art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 54% center;
+}
+.artTop,
+.artCaption {
+  position: absolute;
+  color: var(--color-art-caption);
+}
+.artTop {
+  inset: var(--space-8) var(--space-8) auto;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+}
+.artCaption {
+  inset: auto var(--space-8) var(--space-10);
+  text-shadow: var(--space-0) var(--border-width) var(--space-8)
+    var(--color-art-shade);
+}
+.artCaption p {
+  font: var(--weight-medium) var(--survey-heading-size) / var(--leading-tight)
+    var(--font-display);
+  margin: var(--space-3) var(--space-0) var(--space-5);
+}
+.artCaption em {
+  font-weight: var(--weight-normal);
+}
+.canvas {
+  padding: var(--space-8) clamp(var(--space-6), 4vw, var(--space-16))
+    var(--space-5);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: var(--survey-panel-width);
+  width: 100%;
+  margin: auto;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-survey-line);
+  padding-bottom: var(--space-6);
+}
+.wordmark {
+  font: var(--weight-bold) var(--text-xl) var(--font-display);
+  letter-spacing: var(--tracking-display);
+}
+.wordmark > span {
+  font: var(--text-xs) var(--font-mono);
+  margin-left: var(--space-2);
+  letter-spacing: var(--tracking-label);
+}
+.micro,
+.footer,
+.chapterNav,
+.preview summary {
+  font: var(--text-xs) / var(--leading-body) var(--font-mono);
+  letter-spacing: var(--tracking-label);
+}
+.micro {
+  color: var(--color-survey-muted);
+}
+.artCaption .micro {
+  color: var(--color-art-caption);
+}
+.welcome {
+  margin: auto var(--space-0);
+  padding: var(--space-16) var(--space-0) var(--space-10);
+}
+.welcome h1 {
+  font: var(--weight-medium) var(--survey-heading-size) / var(--leading-tight)
+    var(--font-display);
+  letter-spacing: var(--tracking-display);
+  margin: var(--space-6) var(--space-0);
+}
+.welcome h1 em {
+  color: var(--color-nectarine);
+  font-weight: var(--weight-normal);
+}
+.intro {
+  max-width: var(--survey-form-width);
+  font-size: var(--text-lg);
+  color: var(--color-survey-muted);
+}
+.chapters {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  padding: var(--space-7) var(--space-0);
+  border-top: var(--border-width) solid var(--color-survey-line);
+  border-bottom: var(--border-width) solid var(--color-survey-line);
+  margin: var(--space-8) var(--space-0);
+}
+.chapters li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.chapters li > span {
+  font: var(--text-xs) var(--font-mono);
+  color: var(--color-nectarine);
+}
+.survey button {
+  border: var(--border-width) solid var(--color-survey-line);
+  background: transparent;
+  color: var(--color-survey-ink);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition:
+    background var(--motion-duration) var(--motion-ease),
+    border-color var(--motion-duration) var(--motion-ease);
+  border-radius: var(--radius-small);
+  box-shadow: none;
+  font-size: var(--text-sm);
+}
+.survey button[aria-pressed='true'] {
+  border-color: var(--color-nectarine);
+  background: var(--color-nectarine-soft);
+  color: var(--color-survey-ink);
+}
+.survey .primary {
+  display: inline-flex;
+  justify-content: space-between;
+  gap: var(--space-10);
+  padding: var(--space-4) var(--space-6);
+  border-color: var(--color-survey-ink);
+  background: var(--color-survey-ink);
+  color: var(--color-parchment);
+}
+.welcomeActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+.small {
+  color: var(--color-survey-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+}
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  margin-top: var(--space-8);
+  border-top: var(--border-width) solid var(--color-survey-line);
+  color: var(--color-survey-muted);
+}
+.footer button {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  padding: var(--space-2);
+}
+.question {
+  padding: var(--space-6) var(--space-0) var(--space-4);
+}
+.chapterNav {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  color: var(--color-survey-muted);
+}
+.chapterNav > span {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-bottom: var(--space-3);
+}
+.chapterNav > [aria-current='step'] {
+  color: var(--color-nectarine);
+  border-bottom: var(--focus-width) solid currentColor;
+}
+.survey progress {
+  display: block;
+  width: 100%;
+  height: var(--space-1);
+  accent-color: var(--color-nectarine);
+  margin-bottom: var(--space-6);
+}
+.question h1 {
+  font: var(--weight-medium) clamp(var(--space-8), 3vw, var(--space-12)) /
+    var(--leading-heading) var(--font-display);
+  letter-spacing: var(--tracking-display);
+  margin: var(--space-5) var(--space-0) var(--space-3);
+}
+.description {
+  color: var(--color-survey-muted);
+  margin: var(--space-0) var(--space-0) var(--space-7);
+  max-width: var(--survey-form-width);
+}
+.form {
+  max-width: var(--survey-form-width);
+}
+.form fieldset {
+  border: none;
+  padding: var(--space-0);
+  margin: var(--space-0);
+}
+.form legend {
+  font-weight: var(--weight-bold);
+  margin-bottom: var(--space-4);
+}
+.form label {
+  color: var(--color-survey-ink);
+}
+.form input:not([type='range']):not([type='radio']):not([type='checkbox']),
+.form select {
+  background: var(--color-parchment);
+  border-color: var(--color-survey-line);
+  border-radius: var(--radius-small);
+}
+.form input[type='range'] {
+  accent-color: var(--color-nectarine);
+}
+.form input[type='checkbox'],
+.form input[type='radio'] {
+  accent-color: var(--color-nectarine);
+}
+.formActions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding-top: var(--space-5);
+  border-top: var(--border-width) solid var(--color-survey-line);
+}
+.preview {
+  margin-top: var(--space-8);
+  border-top: var(--border-width) solid var(--color-survey-line);
+  padding-top: var(--space-4);
+}
+.preview summary {
+  cursor: pointer;
+  color: var(--color-survey-muted);
+}
+.preview svg path {
+  transition: d var(--motion-duration) var(--motion-ease);
+}
+.roles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.roles button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-3);
+  white-space: normal;
+}
+.roles strong {
+  font: var(--weight-bold) var(--text-lg) var(--font-display);
+}
+.roles button > span:last-child {
+  font-size: var(--text-sm);
+  color: var(--color-survey-muted);
+}
+.review dl {
+  margin: var(--space-0);
+}
+.review dl > div {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-survey-line);
+  padding: var(--space-4) var(--space-0);
+}
+.review dt {
+  font: var(--text-xs) var(--font-mono);
+  color: var(--color-survey-muted);
+}
+.review dd {
+  margin: var(--space-0);
+}
+.initializing {
+  padding: var(--space-12) var(--space-0);
+}
+.initializing h1 {
+  font: var(--weight-medium) var(--space-10) / var(--leading-heading)
+    var(--font-display);
+}
+.stages {
+  list-style: none;
+  padding: var(--space-0);
+  margin: var(--space-6) var(--space-0);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+.stages li {
+  color: var(--color-survey-muted);
+  padding: var(--space-3) var(--space-0);
+  border-bottom: var(--border-width) solid var(--color-survey-line);
+  transition: color var(--motion-duration) var(--motion-ease);
+}
+.stages [data-complete='true'] {
+  color: var(--color-nectarine);
+}
+.mask {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-5) var(--space-0);
+}
+.mask > div {
+  display: grid;
+  grid-template-columns: var(--space-4) repeat(48, minmax(0, 1fr));
+  gap: var(--border-width);
+}
+.mask span {
+  font: var(--text-xs) var(--font-mono);
+}
+.mask i {
+  background: var(--color-survey-line);
+  height: var(--survey-grid-cell);
+}
+.mask [data-protected='true'] {
+  background: var(--color-nectarine);
+}
+
+.welcome h1,
+.question h1 {
+  outline: none;
+}
+.survey button:disabled {
+  opacity: var(--dimmed-opacity);
+  cursor: not-allowed;
+}
+.survey button:focus-visible,
+.survey input:focus-visible,
+.survey select:focus-visible,
+.survey summary:focus-visible {
+  outline: var(--focus-width) solid var(--color-nectarine);
+  outline-offset: var(--focus-offset);
+}
+.form input:not([type='checkbox']):not([type='radio']):not([type='range']),
+.form select {
+  width: 100%;
+  color: var(--color-survey-ink);
+  padding: var(--space-3);
+  min-height: var(--space-12);
+  border: var(--border-width) solid var(--color-survey-line);
+  font: inherit;
+}
+.form label:has(input[type='radio']),
+.form label:has(input[type='checkbox']) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: var(--border-width) solid var(--color-survey-line);
+  border-radius: var(--radius-small);
+  padding: var(--space-3);
+}
+.form label:has(input[type='radio']:checked),
+.form label:has(input[type='checkbox']:checked) {
+  background: var(--color-nectarine-soft);
+  border-color: var(--color-nectarine);
+}
+
+.art::after {
+  content: '';
+  position: absolute;
+  inset: var(--space-0);
+  background: var(--survey-art-gradient);
+  pointer-events: none;
+}
+.artCaption,
+.artTop {
+  z-index: 1;
+}

@@ -22,7 +22,10 @@ export function routeOptions(
     .filter(
       (r) =>
         profile.modes.includes(r.mode) &&
-        r.walkingMiles <= profile.walkingMiles &&
+        (r.mode !== 'walk' || profile.walkingMiles > 0) &&
+        (r.mode === 'walk'
+          ? Math.max(r.walkingMiles, r.distanceMiles)
+          : r.walkingMiles) <= profile.walkingMiles &&
         (profile.walkingMiles > 0 || r.walkingMiles === 0),
     )
     .map((r) => {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { rankReading } from '../../domain/product/evolution';
+import { personalizedReading } from '../../domain/product/reading-preferences';
 import { addDays } from '../../domain/product/dates';
 import { workspace } from '../local/runtime';
 import { Page, Panel, Field, DeleteRecord } from './Common';
@@ -68,11 +68,15 @@ export function ReadingPage() {
   return (
     <Page
       title="Reading & research"
-      subtitle="A quiet feed ranked by recency and your reading history. Saved messages live in Notes."
+      subtitle="A quiet feed ranked by your sources, topics, recency, and reading history. Saved messages live in Notes."
     >
       <div className={s.grid}>
         <Panel title="Your reading queue" wide>
-          {rankReading(articles, today).map((n) => (
+          <p className={s.muted}>
+            Digest review time: {profile.digestTime ?? '07:00'}. Sources and
+            topics prioritize your imported reading.
+          </p>
+          {personalizedReading(articles, today, profile).map((n) => (
             <div className={s.row} key={n.id}>
               <div>
                 <a

@@ -12,6 +12,13 @@ import { Page, Panel, Field, ToggleSet } from './Common';
 import { FinancialChart } from './Chart';
 import { useProduct, run } from './state';
 import s from './product.module.css';
+import { MobilityFields } from '../onboarding/MobilityFields';
+import { resolvedSurveyQuestions } from '../onboarding/resolve-skipped';
+import { FinancialFields } from '../onboarding/FinancialFields';
+import { ScheduleFields } from '../onboarding/ScheduleFields';
+import { LifestyleFields } from '../onboarding/LifestyleFields';
+import { downloadBackup } from '../local/runtime';
+import { surveyJson } from '../../domain/product/startup';
 import { ProfileFinance } from './ProfileFinance';
 import { ProfileWeek } from './ProfileWeek';
 import { ProfileLifestyle } from './ProfileLifestyle';
@@ -65,14 +72,24 @@ export function ProfilePage() {
         ...(Object.hasOwn(p, 'savingsCents')
           ? { balanceDate: state.today }
           : {}),
-        skipped: d.skipped.filter((v) => !resolved.includes(v)),
+        skipped: d.skipped.filter(
+          (v) =>
+            !resolved.includes(v) &&
+            !resolvedSurveyQuestions(d, { ...d, ...p }).includes(v),
+        ),
       };
     });
-  const preview = project(
-    draft,
-    state.today,
-    daysBetween(state.today, addMonths(state.today, 12)),
-  );
+  const preview = (() => {
+    try {
+      return project(
+        draft,
+        state.today,
+        daysBetween(state.today, addMonths(state.today, 12)),
+      );
+    } catch {
+      return [];
+    }
+  })();
   const three = threePaycheckMonths(
     draft,
     state.today,
@@ -88,6 +105,12 @@ export function ProfilePage() {
           ? [...new Set([...draft.skipped, steps[step]!])]
           : draft.skipped.filter((v) => v !== steps[step]),
     };
+    if (!preview.length) {
+      setError(
+        'Financial amounts exceed safe projection limits. Reduce the values before saving.',
+      );
+      return;
+    }
     const parsed = profileSchema.safeParse(next);
     if (!parsed.success) {
       setError(parsed.error.issues[0]?.message ?? 'Check these values.');
@@ -152,6 +175,44 @@ export function ProfilePage() {
             <ProfileFinance draft={draft} patch={patch} show={show} />
             <ProfileWeek draft={draft} patch={patch} show={show} />
             <ProfileLifestyle draft={draft} patch={patch} show={show} />
+            {!wizard && (
+              <>
+                <FinancialFields
+                  draft={draft}
+                  patch={patch}
+                  question="overhead"
+                />
+                <FinancialFields
+                  draft={draft}
+                  patch={patch}
+                  question="buffer"
+                />
+                <ScheduleFields
+                  draft={draft}
+                  patch={patch}
+                  question="persona"
+                />
+                <ScheduleFields draft={draft} patch={patch} question="zoom" />
+                <MobilityFields draft={draft} patch={patch} question="assets" />
+                <LifestyleFields
+                  draft={draft}
+                  patch={patch}
+                  question="topics"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    try {
+                      downloadBackup(surveyJson(draft), 'nexus-survey.json');
+                    } catch {
+                      setError('Check your answers before exporting.');
+                    }
+                  }}
+                >
+                  Export survey JSON
+                </button>
+              </>
+            )}
             {!wizard && (
               <Field label="Weekly reset day">
                 <select
@@ -224,6 +285,11 @@ export function ProfilePage() {
         <div className={s.stack}>
           <Panel title="Your next 12 months">
             <FinancialChart points={preview} />
+            {!preview.length && (
+              <p role="alert">
+                Check your financial amounts to restore the preview.
+              </p>
+            )}
             <p className={s.muted}>
               Baseline follows your actual deposit dates. Actual stays at
               savings until verified transactions are logged.

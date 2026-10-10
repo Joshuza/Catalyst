@@ -1,3 +1,4 @@
+import { enterWorkspace } from './startup-helper';
 import { expect, test, type Page } from '@playwright/test';
 async function start(page: Page) {
   await page.goto('/#profile');
@@ -30,6 +31,7 @@ test('ONB / UX override: complete profile, real live pay graph, persisted prefer
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/#profile');
+  await page.getByRole('button', { name: 'Begin survey', exact: true }).click();
   await page.getByRole('radio', { name: 'Bi-Weekly', exact: true }).check();
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
   await page.getByLabel('Net income per pay period after taxes').fill('4.5k');
@@ -37,11 +39,13 @@ test('ONB / UX override: complete profile, real live pay graph, persisted prefer
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
   await page.getByLabel('Current liquid savings').fill('12000');
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
-  for (let i = 0; i < 7; i++)
+  for (let i = 0; i < 15; i++)
     await page
       .getByRole('button', { name: 'Skip this question', exact: true })
       .click();
-  await page.getByRole('button', { name: 'Finish setup', exact: true }).click();
+  await page
+    .getByRole('button', { name: 'Initialize my workspace', exact: true })
+    .click();
   await expect(
     page.getByRole('heading', { name: 'Your preferences', exact: true }),
   ).toBeVisible();
@@ -56,6 +60,7 @@ test('ONB / UX override: complete profile, real live pay graph, persisted prefer
     .click();
   await expect(page.getByText('Record saved', { exact: true })).toBeVisible();
   await page.reload();
+  await enterWorkspace(page);
   await expect(
     page.getByRole('radio', { name: 'Monthly', exact: true }),
   ).toBeChecked();
@@ -205,6 +210,7 @@ test('INB / TASK: two sorting corrections persist; selected task plan needs appr
     await page.getByRole('button', { name: /2 · Personal/ }).click();
   }
   await page.reload();
+  await enterWorkspace(page);
   await expect(
     page.getByText('Newsletter → personal · 2 corrections'),
   ).toBeVisible();
@@ -237,6 +243,19 @@ test('FOOD / TRN / OUT: pantry-aware groceries, hard walking filters, real outin
   page,
 }) => {
   await page.goto('/#connections');
+  await enterWorkspace(page);
+  await page
+    .getByRole('link', { name: 'Profile & preferences', exact: true })
+    .click();
+  await page
+    .getByRole('button', { name: 'Commuter Trains', exact: true })
+    .click();
+  await page.getByRole('button', { name: 'Bicycle', exact: true }).click();
+  await page.getByRole('button', { name: 'Gluten-Free', exact: true }).click();
+  for (const activity of ['Hike', 'Bike ride', 'Run'])
+    await page.getByRole('button', { name: activity, exact: true }).click();
+  await income(page);
+  await go(page, 'Connections & privacy');
   await page
     .getByRole('button', { name: 'Load product sample data', exact: true })
     .click();
@@ -323,6 +342,7 @@ test('PET / CRM / SCR / RST: maintenance records and a complete skippable weekly
     page.getByRole('heading', { name: 'Reset complete', exact: true }),
   ).toBeVisible();
   await page.reload();
+  await enterWorkspace(page);
   await go(page, 'Notes & records');
   await page.keyboard.press('Control+k');
   await page.getByRole('searchbox').fill('Sam');

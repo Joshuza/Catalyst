@@ -158,6 +158,23 @@ export function project(
         addMoney(spending.get(charge) ?? 0, subscription.amountCents),
       );
   }
+  for (const expense of profile.fixedExpenses ?? []) {
+    for (const charge of deposits(
+      {
+        name: expense.name,
+        amountCents: expense.amountCents,
+        cadence: 'monthly',
+        nextDate: expense.nextDate,
+      },
+      anchor,
+      end,
+    )) {
+      spending.set(
+        charge.date,
+        addMoney(spending.get(charge.date) ?? 0, charge.cents),
+      );
+    }
+  }
   const verified = new Map<string, number>();
   for (const t of transactions.filter(
     (t) =>

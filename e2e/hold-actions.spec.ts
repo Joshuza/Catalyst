@@ -1,9 +1,11 @@
+import { enterWorkspace } from './startup-helper';
 import { expect, test } from '@playwright/test';
 
 test('hold control: pointer release and moving outside cancel; a full pointer hold saves deletion', async ({
   page,
 }) => {
   await page.goto('/#records');
+  await enterWorkspace(page);
   await expect(
     page.getByRole('button', { name: 'New note', exact: true }),
   ).toBeEnabled();
@@ -47,6 +49,7 @@ test('SRCH-05: new task and month export verbs perform real local actions', asyn
   page,
 }) => {
   await page.goto('/#records');
+  await enterWorkspace(page);
   await expect(
     page.getByRole('button', { name: /^Search Ctrl/ }),
   ).toBeEnabled();

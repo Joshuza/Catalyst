@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { trialHours, rankReading } from '../../domain/product/evolution';
+import { personalizedReading } from '../../domain/product/reading-preferences';
+import { trialHours } from '../../domain/product/evolution';
 import { project } from '../../domain/product/finance';
 import { daysBetween, weekday, timeLabel } from '../../domain/product/dates';
 import { briefingSections } from '../../engine/product/briefing';
@@ -73,7 +74,7 @@ export function BriefingPage() {
         a.data.date.localeCompare(b.data.date) || a.data.start - b.data.start,
     )
     .slice(0, 3);
-  const reading = rankReading(entities('news'), today)
+  const reading = personalizedReading(entities('news'), today, profile)
     .filter((n) => !n.data.read)
     .slice(0, 3);
   const tx = records.filter(

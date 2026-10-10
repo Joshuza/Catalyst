@@ -118,6 +118,7 @@ export function ProfileWeek({
               subway: 'Subway',
               bus: 'City Buses',
               ferry: 'Ferries',
+              'light-rail': 'Light Rail',
             }}
             options={modeSchema.options}
             values={draft.modes}
@@ -127,13 +128,16 @@ export function ProfileWeek({
             type="button"
             aria-pressed={
               !draft.modes.some((m) =>
-                ['train', 'subway', 'bus', 'ferry'].includes(m),
+                ['train', 'subway', 'bus', 'ferry', 'light-rail'].includes(m),
               )
             }
             onClick={() =>
               patch({
                 modes: draft.modes.filter(
-                  (m) => !['train', 'subway', 'bus', 'ferry'].includes(m),
+                  (m) =>
+                    !['train', 'subway', 'bus', 'ferry', 'light-rail'].includes(
+                      m,
+                    ),
                 ),
               })
             }

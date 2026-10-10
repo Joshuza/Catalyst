@@ -1,0 +1,75 @@
+@media (max-width: 900px) {
+  .survey {
+    --survey-art-width: 30%;
+  }
+  .artTop {
+    display: none;
+  }
+  .artCaption {
+    inset: auto var(--space-5) var(--space-8);
+  }
+  .artCaption p {
+    font-size: var(--space-10);
+  }
+  .header > .micro {
+    max-width: 50%;
+    text-align: right;
+  }
+  .roles {
+    grid-template-columns: 1fr;
+  }
+  .chapterNav > span > span {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .survey {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .art {
+    position: relative;
+    height: var(--survey-art-mobile-height);
+  }
+  .art img {
+    object-position: center 66%;
+  }
+  .artCaption {
+    inset: auto var(--space-6) var(--space-4);
+  }
+  .artCaption p {
+    font-size: var(--space-8);
+    margin: var(--space-2) var(--space-0);
+  }
+  .artCaption > .micro {
+    display: none;
+  }
+  .artCaption br {
+    display: none;
+  }
+  .canvas {
+    padding: var(--space-5) var(--space-6);
+  }
+  .welcome {
+    padding-top: var(--space-8);
+  }
+  .chapters {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  .formActions .primary {
+    width: 100%;
+  }
+  .footer > span:last-child {
+    display: none;
+  }
+  .review dl > div {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .preview svg path,
+  .stages li {
+    transition: none;
+  }
+}

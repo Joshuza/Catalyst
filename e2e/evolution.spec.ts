@@ -1,3 +1,4 @@
+import { enterWorkspace } from './startup-helper';
 import { test, expect, type Page } from '@playwright/test';
 async function open(page: Page) {
   await page.goto('/#profile');
@@ -64,6 +65,7 @@ test('Gemini research and goals: visual capture, local tags, cart link, search a
   ).toBeVisible();
   await expect(page.getByText('$11,000.00', { exact: true })).toBeVisible();
   await page.reload();
+  await enterWorkspace(page);
   await expect(
     page.getByRole('heading', { name: 'Emergency savings', exact: true }),
   ).toBeVisible();
@@ -89,6 +91,7 @@ test('Gemini habits, health and audio: persisted check-ins, recurring care and c
     .click();
   await expect(page.getByText('1 day streak', { exact: true })).toBeVisible();
   await page.reload();
+  await enterWorkspace(page);
   await expect(page.getByText('1 day streak', { exact: true })).toBeVisible();
   await go(page, 'Health & care');
   await page.getByLabel('Care title').fill('Dental cleaning');
@@ -162,6 +165,7 @@ test('Gemini itinerary: original ticket reminder links calendar and planned fina
     page.getByText('Conference entry', { exact: true }),
   ).toBeVisible();
   await page.reload();
+  await enterWorkspace(page);
   await go(page, 'Itineraries & tickets');
   await expect(page.getByText('USER-REF-123')).toBeVisible();
   expect(errors).toEqual([]);
@@ -253,6 +257,7 @@ test('BRF / UX-02: focus suppresses reading, collapses the inbox, keeps pinned s
     page.getByRole('heading', { name: 'Inbox, quietly', exact: true }),
   ).toBeVisible();
   await page.reload();
+  await enterWorkspace(page);
   await expect(
     page.getByRole('button', { name: 'End deep work', exact: true }),
   ).toBeVisible();

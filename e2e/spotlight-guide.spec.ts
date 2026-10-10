@@ -1,9 +1,11 @@
+import { enterWorkspace } from './startup-helper';
 import { expect, test } from '@playwright/test';
 
 test('SRCH-02 / SRCH-03: guide receipt example spans modules and keyboard follows visible groups', async ({
   page,
 }) => {
   await page.goto('/#records');
+  await enterWorkspace(page);
   await page.getByText('Data and backups', { exact: true }).click();
   await page
     .getByRole('button', { name: 'Load sample data', exact: true })

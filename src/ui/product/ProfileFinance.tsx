@@ -64,6 +64,7 @@ export function ProfileFinance({
       {show(1) && (
         <>
           <MoneyField
+            currency={draft.currency}
             label="Net income per pay period after taxes"
             cents={draft.pay.amountCents}
             onChange={(amountCents) =>
@@ -102,6 +103,7 @@ export function ProfileFinance({
       {show(3) && (
         <>
           <MoneyField
+            currency={draft.currency}
             label="Current liquid savings"
             cents={draft.savingsCents}
             onChange={(savingsCents) => patch({ savingsCents })}
@@ -135,6 +137,7 @@ export function ProfileFinance({
       )}
       {show(3) && (
         <MoneyField
+          currency={draft.currency}
           label="Safety buffer"
           cents={draft.safetyBufferCents ?? 0}
           onChange={(safetyBufferCents) => patch({ safetyBufferCents })}
@@ -158,6 +161,7 @@ export function ProfileFinance({
                 />
               </Field>
               <MoneyField
+                currency={draft.currency}
                 label="Secondary income amount"
                 cents={stream.amountCents}
                 onChange={(amountCents) =>
@@ -237,6 +241,7 @@ export function ProfileFinance({
           {draft.pay.cadence === 'irregular' ? (
             <>
               <MoneyField
+                currency={draft.currency}
                 label="Typical invoice size"
                 cents={draft.invoiceCents}
                 onChange={(invoiceCents) => patch({ invoiceCents })}
@@ -251,6 +256,7 @@ export function ProfileFinance({
                 />
               </Field>
               <MoneyField
+                currency={draft.currency}
                 label="Conservative low-month estimate"
                 cents={draft.lowMonthCents}
                 onChange={(lowMonthCents) => patch({ lowMonthCents })}
