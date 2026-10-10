@@ -1,0 +1,6 @@
+pnpm-lock.yaml
+dist
+coverage
+docs/REQUIREMENTS.md
+docs/PHASE_PROMPTS.md
+AGENTS.md
