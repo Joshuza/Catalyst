@@ -1,4 +1,4 @@
-# Catalyst / Nexus OS
+# Catalyst
 
 A local-first life planner with **left-side pages** for money, calendar, tasks, research, recipes, transit, outdoors, and life maintenance. It evolves the existing Phase 1 app using the supplied PDF, ZIP specifications, Gemini transcript, and animation fragments.
 
@@ -16,16 +16,16 @@ Open the address printed in the terminal, usually **http://localhost:5173**. Kee
 
 ## Run from GitHub
 
-This implementation, including the startup redesign, is on `phase-2-onboarding-art-direction`:
+This implementation, including the startup redesign, is on `phase-2-catalyst-scroll-journey`:
 
 ```sh
-git clone --branch phase-2-onboarding-art-direction https://github.com/Joshuza/Catalyst.git
+git clone --branch phase-2-catalyst-scroll-journey https://github.com/Joshuza/Catalyst.git
 cd Catalyst
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-For an existing clone, run `git fetch origin` and `git switch phase-2-onboarding-art-direction`, then the last two commands. Commit or stash your own edits before switching branches.
+For an existing clone, run `git fetch origin` and `git switch phase-2-catalyst-scroll-journey`, then the last two commands. Commit or stash your own edits before switching branches.
 
 ## Start using it
 
@@ -72,12 +72,20 @@ An existing Chromium can be selected with `NEXUS_CHROMIUM_PATH=/path/to/chromium
 
 ## Startup survey
 
-Every reload opens the new archival survey with your saved answers prefilled. Choose **Begin survey** on first launch, or **Review my answers** later. Returning users can choose **Continue with saved answers**. Setup is one question at a time across money, time, mobility and lifestyle; every question may be skipped. There are 19 answer screens, plus a review screen (20 answers for irregular pay).
+Every reload opens the archival survey with your saved answers prefilled. Scroll through the questions as a house blueprint draws over the oasis scene, then reveals the full nectarine painting. Choose **Begin survey** on first launch, or **Review my answers** later. Returning users can choose **Continue with saved answers**. One question is open at a time across money, time, mobility and lifestyle. **Continue** validates and saves; questions passed by scrolling are collected into the weekly reset. There are 19 answer screens, plus review (20 answers for irregular pay). Reduced motion shows static finished artwork.
 
 Add monthly bills with their next due dates to see their effect on the dotted financial line. The actual line still requires verified transactions. Choose a role, working hours, default calendar scale, walking ceiling, public modes, reading interests and optional pet-care intervals. Your existing records remain intact.
 
-**Export survey JSON** downloads a validated, versioned state file containing all responses and explicit defaults. Initialization displays **Initializing Codex Command Engine...** for three seconds while presenting the computed financial curves, working-hour mask and local news/transit rules. This is the app's local engine; external accounts remain opt-in/manual. Use **Profile & preferences** to edit these choices later.
+**Export survey JSON** downloads a validated, versioned state file containing all responses and explicit defaults. Initialization displays **Initializing Catalyst Command Engine...** for three seconds while presenting the computed financial curves, working-hour mask and local news/transit rules. This is the app's local engine; external accounts remain opt-in/manual. Use **Profile & preferences** to edit these choices later.
 
 The oasis/nectarine illustration and open-license fonts are bundled locally and available offline after the first production visit. Artwork and font provenance: [src/assets/README.md](src/assets/README.md).
 
 The supplied pear.no HTML informed the chapter rail, fine ruled frame, corner ornaments and editorial scale. Its linked stylesheet, scripts and films were not attached; this is a working adaptation with original artwork and local fonts.
+
+## Capture and a quieter dashboard
+
+**Add new** is a dedicated sidebar page for purchases, tasks, events, notes, research and subscriptions. Save one entry at a time, then open it in its destination page. Purchases show the receipt animation and update the simulated cart; they do not send money. Events respect protected working hours. Other creation tools, including recipes, receipts, goals, contacts and trips, are linked under **Add something else**.
+
+Briefing starts with money, the next three events and inbox counts. Open **View financial projection** for the graph, **More for today** for reading/tasks/weekend sections, and **Customize dashboard** for pin/hide/detail controls. Urgent alerts, catch-up and pinned sections remain visible. Deep work still suppresses reading and promotions.
+
+The visible product and downloaded filenames are now **Catalyst**. Existing database identifiers, theme keys and version-1 backup/survey format identifiers retain their legacy names so saved data and old backups remain usable.

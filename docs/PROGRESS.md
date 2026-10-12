@@ -2,6 +2,65 @@
 
 ## Current run
 
+PHASE: 2, Catalyst scrolling survey, unified capture and quieter dashboard; user-authorized design continuation.
+
+BRANCH: `phase-2-catalyst-scroll-journey`, based on published onboarding commit `2b20f3d`. Main is unchanged.
+
+COMMITS: 2: `55f6be5` Catalyst scroll/capture implementation; `docs: publish Catalyst journey guide and final verification` (this report's commit).
+
+STATUS: **COMPLETE for the requested Catalyst design update.** The broader connected-service product remains incomplete, as documented in the previous reports.
+
+REQUIREMENTS COVERED: user's scroll/blueprint/construction animation, survey integration, Catalyst rename, Add new page and quieter dashboard. Related ONB-01/02/04, UX-02/03/05/07/08 and BRF progressive disclosure, urgency, pinning and deep work behavior are exercised. Existing finance, storage, search, receipts and life modules remain in the implementation.
+
+REQUIREMENTS NOT COVERED: exact missing Pear WebGL/film choreography; live external services; full human usability/screen-reader audit. Earlier specification gaps remain in the previous reports. The new user-directed layout takes precedence over the original tiled-canvas requirement.
+
+CHECKS (actual results from this run):
+
+- typecheck: PASS, zero errors.
+- lint: PASS, zero warnings/errors.
+- unit tests: 151 passed, 0 failed/skipped, 23 files.
+- build: PASS, production build run by Playwright.
+- e2e: 29 passed, 0 failed, full production suite in 4.0 minutes. Targeted scrolling/scheduling regressions also passed 3/3 after fixes.
+- Whitespace/format/file limits: PASS, source/test/CSS files at most 400 lines. Cold first interactive: 503.3ms; 50,000-record search: 0.10–13.60ms; 730-day/100-purchase finance: 0.89ms. These are VM measurements, not a hardware certification.
+
+REQUIREMENT TO TEST MAP:
+
+- Scroll animation, active question, Catalyst name, skipped-question persistence -> `e2e/catalyst.spec.ts`, native scrolling journey; `e2e/onboarding.spec.ts`, complete detailed survey.
+- Add new persistence/receipt/calendar/search, quiet dashboard, pinned/urgent sections -> `e2e/catalyst.spec.ts`, unified capture journey; `src/engine/product/briefing.test.ts`, urgency/pinning/hidden/focus rules.
+- Skipped questions and old prompts -> `src/ui/onboarding/resolve-skipped.test.ts`, untouched questions and resolution cases.
+- Mobile/reduced motion/offline art/type -> Catalyst mobile journey and existing onboarding/foundation browser checks.
+- Legacy data/backup compatibility, export rename, undo/tamper -> data-search/hold-actions browser checks and retained storage/backup/migration unit tests.
+- Detailed settings and rapid skipping -> existing ONB product journey; task approval/scheduling -> fixed-clock INB/TASK product journey; deep-work/pinning -> existing BRF evolution journey.
+
+FILES ADDED OR CHANGED OUTSIDE THE PHASE SCOPE: none. Branding touches visible messages, download filenames, installation metadata and the shell; legacy data identifiers are retained deliberately.
+
+DEPENDENCIES ADDED: none. Package renamed to `catalyst`; the same frozen-lockfile dependencies were restored when pnpm required an installed-metadata refresh. Original art/fonts are reused; blueprint animation uses native SVG/CSS and scrolling.
+
+DECISIONS MADE: native scrolling with one active form; preserve expanded section heights; respect user scrolling during async saves; keep untouched prompts for Reset; static finished art under reduced motion; real undoable module capture; three default briefing sections with optional disclosure/customization; never conceal urgent/catch-up/pinned content; retain legacy database/backup contracts during visible rebranding. All recorded in `docs/DECISIONS.md`.
+
+DEFERRED: live account/provider integrations and full human accessibility/usability audit remain open. Animation is an original scroll-driven blueprint and layered illustration reveal; unavailable third-party films/scripts are not replicated.
+
+FOUND ISSUES IN EARLIER PHASES: an older calendar browser assertion depended on the host day being Saturday. Its clock is now fixed to the original example date; no scheduling rule was changed.
+
+PROPOSED ADDITIONS: none beyond the user's request.
+
+QUESTIONS FOR THE HUMAN: none block running the implementation.
+
+HOW TO VERIFY BY HAND:
+
+1. Download the branch ZIP below, extract it, install Node 22.12+ and pnpm 11.19.0, then run `pnpm install --frozen-lockfile` and `pnpm dev` from the folder with `package.json`. Open the printed localhost URL.
+2. Scroll through setup and watch the house outlines draw, then reveal the existing oasis/nectarine painting. Begin/Back/Answer controls also move/focus the current question.
+3. Enter financial values and use Continue. Scroll ahead immediately during a save; the page should respect your new position. Review skipped questions, export JSON and complete the three-second Catalyst initialization.
+4. Open Add new and save a purchase, task, event, note, research item or subscription. Check its destination page/search, the purchase receipt animation and Undo. Personal events inside working hours require explicit confirmation.
+5. Visit Briefing: money, schedule and inbox are visible first. Expand the financial graph, More for today and Customize dashboard. Pin a section, return to the quiet view and reload; pinned/urgent sections should remain visible.
+6. At 360px, check survey scrolling and capture forms; with reduced motion, artwork remains static. For offline use, build and preview once, allow service-worker installation, disconnect and reload. Existing records/backups should remain usable.
+
+SOURCE DELIVERY: https://github.com/Joshuza/Catalyst/archive/refs/heads/phase-2-catalyst-scroll-journey.zip . Full source, lockfile, tests and run instructions are included. The projectless output folder is unavailable in this environment; delivery uses the repository archive.
+
+---
+
+## Previous startup art-direction run
+
 PHASE: 2, startup survey and nectarine art direction, user-authorized continuation.
 
 BRANCH: `phase-2-onboarding-art-direction`, based on published product branch `e6a4e58`. Main is unchanged.

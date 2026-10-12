@@ -1,5 +1,14 @@
 # Changelog
 
+## Phase 2: Catalyst scrolling journey and quieter capture
+
+- Rename visible branding, install metadata, icon and downloaded files to Catalyst while retaining existing data/backup identifiers.
+- Integrate detailed setup into native scrolling with an original house blueprint, layered construction reveal and the existing oasis/nectarine painting.
+- Keep one active question, preserve section heights, validate/save with Continue, and collect questions passed by scrolling into weekly reset.
+- Add a dedicated Add new page for purchases, tasks, events, notes, research and subscriptions, plus links to other creation tools.
+- Reduce the default briefing to finance, schedule and inbox. Disclose other sections and customization controls on demand; retain urgent, catch-up and pinned content.
+- Preserve keyboard controls, reduced motion, offline operation, undo and previous records.
+
 ## Phase 0: Foundation
 
 - Add the React 18 and Vite shell with three labeled Sample tiles.

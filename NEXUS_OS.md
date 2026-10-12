@@ -1,4 +1,8 @@
-# Nexus OS operating guide
+# Catalyst operating guide
+
+The guide's filename is retained for existing links. The product is named Catalyst.
+
+**Add new** in the sidebar provides a focused capture form for purchases, tasks, events, notes, research and subscriptions. Briefing shows three core sections by default; **More for today** reveals the rest, and **Customize dashboard** reveals pin/hide controls. Urgent and pinned sections remain visible.
 
 Follow [README.md](README.md) to install and start the app. Your records are local to this browser and origin; development and production addresses may have different data stores.
 
@@ -62,6 +66,8 @@ Briefing summarizes urgent financial signals, the next three events, inbox count
 No remote service is connected by default. Live accounts, automatic news fetching, product metadata scraping, AI-generated semantic tagging, native screen-time sync and automatic ticket ingestion are future adapter work. An emergency personal-records vault was excluded at your request. [docs/PROGRESS.md](docs/PROGRESS.md) records partial requirements, tests and remaining work; it is not a claim that the entire future service ecosystem exists.
 
 ## Startup foundation and survey state
+
+Scroll naturally through the survey. A blueprint outlines the oasis house, then the finished painting emerges as you progress. Only the current question opens its inputs. Continue saves and validates; scrolling past an untouched question places it in the reset checklist. Back/Answer controls provide a keyboard alternative. Reduced motion presents the finished art without drawing or reveal movement.
 
 At every boot, the archival startup screen offers prefilled setup or a return to saved answers. The four chapters cover finances, working time, mobility and lifestyle, followed by review and JSON export. Skipped questions stay in your weekly reset; editing their values later clears the corresponding prompt.
 
