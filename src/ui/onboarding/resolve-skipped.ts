@@ -1,5 +1,19 @@
 import type { Profile } from '../../domain/product/profile';
 import { questions } from './steps';
+/** Scrolling does not count as an answer; keep untouched questions for Reset. */
+export function collectSkipped(
+  previous: string[],
+  questions: readonly { id: string; title: string }[],
+  answered: ReadonlySet<string>,
+) {
+  const untouched = questions
+    .filter((q) => q.id !== 'review' && !answered.has(q.id))
+    .map((q) => q.title);
+  const retained = previous.filter(
+    (title) => !questions.some((q) => q.title === title && answered.has(q.id)),
+  );
+  return [...new Set([...retained, ...untouched])];
+}
 export function resolvedSurveyQuestions(before: Profile, after: Profile) {
   const values = (p: Profile): Record<string, unknown> => ({
     cadence: [p.pay.cadence, p.semiDays],

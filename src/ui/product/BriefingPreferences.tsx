@@ -1,9 +1,27 @@
 import { useState } from 'react';
 import { workspace } from '../local/runtime';
 import { Modal } from '../local/Modal';
-import { useProduct, entities, run, type Entity } from './state';
+import { useProduct, entities, run, navigate, type Entity } from './state';
 import { Field } from './Common';
 import s from './product.module.css';
+export function DashboardTools({
+  customizing,
+  toggle,
+}: {
+  customizing: boolean;
+  toggle: () => void;
+}) {
+  return (
+    <div className={s.briefingTools}>
+      <button type="button" onClick={() => navigate('create')}>
+        Add new <span aria-hidden="true">+</span>
+      </button>
+      <button type="button" aria-pressed={customizing} onClick={toggle}>
+        {customizing ? 'Finish customizing' : 'Customize dashboard'}
+      </button>
+    </div>
+  );
+}
 export function BriefingControls({
   id,
   expanded,

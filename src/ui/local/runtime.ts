@@ -360,7 +360,7 @@ export class Workspace {
 }
 export const workspace = new Workspace();
 
-export function downloadBackup(text: string, filename = 'nexus-backup.json') {
+export function downloadBackup(text: string, filename = 'catalyst-backup.json') {
   const url = URL.createObjectURL(
     new Blob([text], { type: 'application/json' }),
   );

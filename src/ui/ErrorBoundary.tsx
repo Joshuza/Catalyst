@@ -19,7 +19,7 @@ export class ErrorBoundary extends Component<
     if (!this.state.failed) return this.props.children;
     return (
       <main className={styles.errorScreen}>
-        <p className={styles.eyebrow}>NEXUS OS</p>
+        <p className={styles.eyebrow}>CATALYST</p>
         <h1>The canvas could not open.</h1>
         <p>Reload to try again. Your browser data will stay in place.</p>
         <button

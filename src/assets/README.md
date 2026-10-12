@@ -2,6 +2,8 @@
 
 The oasis/nectarine painting is original AI-generated artwork created for this project on 2026-10-10. Its brief depicts artisans building a sandstone pavilion beside an imagined Egyptian oasis, painted with Renaissance composition, sfumato, linen clothing, palms, and nectarine still life. It is an illustration, not a historical document. The original generated PNG is bundled locally without runtime network requests.
 
+The Catalyst scrolling journey adds an original SVG house/pavilion study and dimension/grid lines over that painting. Native scroll progress draws its outlines and gradually reveals the existing color illustration. It is decorative art direction, not an architectural plan for construction. Reduced motion presents the finished image. No film, remote canvas bundle or new image asset is required.
+
 Archival typography uses **Cormorant Garamond** (variable weight, Christian Thalmann's Renaissance-influenced family) and **IBM Plex Mono** (catalogue labels and microtype). Both font files come from the Google Fonts repository and are distributed under the SIL Open Font License 1.1. Full licenses accompany the fonts in `fonts/`.
 
 Sources:

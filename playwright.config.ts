@@ -5,7 +5,10 @@ export default defineConfig({
   fullyParallel: false,
   use: {
     baseURL: 'http://127.0.0.1:4173',
-    launchOptions: { executablePath: process.env.NEXUS_CHROMIUM_PATH },
+    launchOptions: {
+      executablePath:
+        process.env.CATALYST_CHROMIUM_PATH ?? process.env.NEXUS_CHROMIUM_PATH,
+    },
   },
   webServer: {
     command:

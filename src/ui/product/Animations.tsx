@@ -31,7 +31,7 @@ export function ReceiptPrinter({
       data-stage={stage}
     >
       <div className={a.machine}>
-        <strong>NEXUS / RECEIPT</strong>
+        <strong>CATALYST / RECEIPT</strong>
         <div className={a.screen} role="status">
           {stage === 'processing'
             ? planned
@@ -51,7 +51,7 @@ export function ReceiptPrinter({
           data-stage={stage}
           aria-hidden={stage !== 'complete'}
         >
-          <p>NEXUS OS</p>
+          <p>CATALYST</p>
           <hr />
           <p>{title}</p>
           <p>{money(cents, currency)}</p>

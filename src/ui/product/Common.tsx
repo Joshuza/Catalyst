@@ -42,7 +42,7 @@ export function Page({
     >
       <div className={s.titleRow}>
         <div>
-          <p className={s.eyebrow}>NEXUS / YOUR DAY, CONNECTED</p>
+          <p className={s.eyebrow}>CATALYST / YOUR DAY, CONNECTED</p>
           <h1>{title}</h1>
           <p className={s.subtitle}>{subtitle}</p>
         </div>

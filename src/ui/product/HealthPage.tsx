@@ -94,7 +94,7 @@ export function HealthPage() {
   return (
     <Page
       title="Health & care"
-      subtitle="Keep checkups, dental care, and refill reminders in view. You choose every date and recurrence; Nexus does not give medical advice."
+      subtitle="Keep checkups, dental care, and refill reminders in view. You choose every date and recurrence; Catalyst does not give medical advice."
     >
       <div className={s.grid}>
         <Panel title="Upcoming care" wide>

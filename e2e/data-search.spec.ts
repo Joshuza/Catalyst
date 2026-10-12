@@ -172,7 +172,7 @@ test('UX-07: durable data, atomic backups, sample removal and tamper error witho
   await samples(page);
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export JSON backup' }).click();
-  expect((await download).suggestedFilename()).toBe('nexus-backup.json');
+  expect((await download).suggestedFilename()).toBe('catalyst-backup.json');
   await page.getByRole('button', { name: 'Remove sample data' }).click();
   await expect(page.getByText('0 records', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Undo', exact: true }).click();
@@ -188,7 +188,7 @@ test('UX-07: durable data, atomic backups, sample removal and tamper error witho
   });
   await page.getByRole('button', { name: 'Import and merge' }).click();
   await expect(page.getByRole('alert')).toContainText(
-    'not a valid Nexus backup',
+    'not a valid Catalyst backup',
   );
   const incoming = sampleRecords().map((record) => ({
     ...record,

@@ -5,6 +5,7 @@ import { LocalWorkspace } from './local/LocalWorkspace';
 import { useProduct, entities, navigate, type Entity } from './product/state';
 import {
   BriefingPage,
+  CreatePage,
   ProfilePage,
   FinancePage,
   ReceiptsPage,
@@ -108,12 +109,13 @@ export function App() {
     }
   }, [bootDone, state.ready, state.records, state.today, survey, terminal]);
   useEffect(() => {
-    document.title = `${navigation.flatMap((g) => g.links).find((l) => l[0] === page)?.[1] ?? 'Briefing'} · Nexus OS`;
+    document.title = `${navigation.flatMap((g) => g.links).find((l) => l[0] === page)?.[1] ?? 'Briefing'} · Catalyst`;
     main.current?.focus({ preventScroll: true });
   }, [page]);
   const displayPage =
     page === 'pet' && !state.profile.petEnabled ? 'profile' : page;
   const views: Record<string, () => React.ReactNode> = {
+    create: () => <CreatePage />,
     briefing: () =>
       !state.profile.completed ? <ProfilePage /> : <BriefingPage />,
     profile: () => <ProfilePage />,
@@ -178,9 +180,9 @@ export function App() {
         aria-label="Workspace sidebar"
       >
         <a className={s.brand} href="#briefing">
-          <span className={s.logo}>N</span>Nexus <small>OS</small>
+          <span className={s.logo}>C</span>Catalyst
         </a>
-        <nav aria-label="Nexus pages">
+        <nav aria-label="Catalyst pages">
           {navigation.map((group) => (
             <div className={s.navGroup} key={group.group}>
               <p className={s.navLabel}>{group.group}</p>
@@ -326,7 +328,7 @@ export function App() {
           )}
         </main>
         <footer className={s.muted}>
-          NEXUS OS · Local-first personal workspace
+          CATALYST · Local-first personal workspace
         </footer>
       </div>
       {terminal && !survey && (

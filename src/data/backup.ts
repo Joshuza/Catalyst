@@ -46,7 +46,7 @@ export function importBackup(text: string): Backup {
     return backupSchema.parse(JSON.parse(text) as unknown);
   } catch {
     throw new Error(
-      'This file is not a valid Nexus backup. Nothing was imported.',
+      'This file is not a valid Catalyst backup. Nothing was imported.',
     );
   }
 }

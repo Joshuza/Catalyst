@@ -58,7 +58,9 @@ export function SurveyReview({ draft }: { draft: Profile }) {
       )}
       <button
         type="button"
-        onClick={() => downloadBackup(surveyJson(draft), 'nexus-survey.json')}
+        onClick={() =>
+          downloadBackup(surveyJson(draft), 'catalyst-survey.json')
+        }
       >
         Export survey JSON
       </button>

@@ -1,8 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { defaultProfile } from '../../domain/product/profile';
-import { resolvedSurveyQuestions } from './resolve-skipped';
+import { resolvedSurveyQuestions, collectSkipped } from './resolve-skipped';
 import { questions } from './steps';
 describe('ONB-02 / ONB-04: resolved setup prompts', () => {
+  it('collects questions passed by scrolling while preserving older prompts and excluding review', () => {
+    const prompts = [
+      { id: 'pay', title: 'Pay' },
+      { id: 'mobility', title: 'Mobility' },
+      { id: 'review', title: 'Review' },
+    ];
+    expect(
+      collectSkipped(['Legacy', 'Pay', 'Mobility'], prompts, new Set(['pay'])),
+    ).toEqual(['Legacy', 'Mobility']);
+    expect(collectSkipped([], prompts, new Set())).toEqual(['Pay', 'Mobility']);
+  });
   it('resolves only the income prompt when its amount changes, preserving unanswered deposit and cadence questions', () => {
     const before = defaultProfile('2026-01-01');
     const after = { ...before, pay: { ...before.pay, amountCents: 450000 } };

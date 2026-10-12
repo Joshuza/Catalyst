@@ -68,8 +68,8 @@ export function Initialization({
   }, [profile, today]);
   return (
     <section className={s.initializing} aria-labelledby="initialization-title">
-      <p className={s.micro}>NEXUS OS / ESTABLISHING YOUR FOUNDATION</p>
-      <h1 id="initialization-title">Initializing Codex Command Engine...</h1>
+      <p className={s.micro}>CATALYST / ESTABLISHING YOUR FOUNDATION</p>
+      <h1 id="initialization-title">Initializing Catalyst Command Engine...</h1>
       <p>Your plans are taking shape on this device.</p>
       <progress
         aria-label="Initialization progress"

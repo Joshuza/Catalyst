@@ -80,7 +80,7 @@ test('SRCH-05: new task and month export verbs perform real local actions', asyn
     .fill('export October');
   const download = page.waitForEvent('download');
   await page.keyboard.press('Enter');
-  expect((await download).suggestedFilename()).toBe('nexus-backup.json');
+  expect((await download).suggestedFilename()).toBe('catalyst-backup.json');
   await page.getByRole('button', { name: 'Remove sample data' }).click();
   await expect(page.getByText('1 record', { exact: true })).toBeVisible();
   await expect(

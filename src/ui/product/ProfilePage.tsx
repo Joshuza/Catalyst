@@ -203,7 +203,7 @@ export function ProfilePage() {
                   type="button"
                   onClick={() => {
                     try {
-                      downloadBackup(surveyJson(draft), 'nexus-survey.json');
+                      downloadBackup(surveyJson(draft), 'catalyst-survey.json');
                     } catch {
                       setError('Check your answers before exporting.');
                     }

@@ -3,7 +3,7 @@ import { Field, MoneyField } from './Common';
 import { useProduct, run } from './state';
 import { workspace } from '../local/runtime';
 import s from './product.module.css';
-export function SubscriptionForm() {
+export function SubscriptionForm({ expanded = false }: { expanded?: boolean }) {
   const { today, busy } = useProduct();
   const [title, setTitle] = useState(''),
     [cents, setCents] = useState(0),
@@ -13,7 +13,7 @@ export function SubscriptionForm() {
     [url, setUrl] = useState(''),
     [cadence, setCadence] = useState<'monthly' | 'annual'>('monthly');
   return (
-    <details>
+    <details open={expanded || undefined}>
       <summary>Add subscription or trial</summary>
       <div className={s.form}>
         <Field label="Subscription name">

@@ -312,7 +312,9 @@ export function ExpenseExport() {
         <button
           type="button"
           disabled={start > end}
-          onClick={() => downloadBackup(reportCsv(rows), 'nexus-expenses.csv')}
+          onClick={() =>
+            downloadBackup(reportCsv(rows), 'catalyst-expenses.csv')
+          }
         >
           Export CSV
         </button>
@@ -329,7 +331,7 @@ export function ExpenseExport() {
                       value: String(value ?? ''),
                     })),
                   ),
-                  { fileName: 'nexus-expenses.xlsx' },
+                  { fileName: 'catalyst-expenses.xlsx' },
                 );
               }),
             )

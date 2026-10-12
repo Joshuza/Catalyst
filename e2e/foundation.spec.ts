@@ -11,7 +11,7 @@ test('UX-08 / UX-09: left pages, keyboard navigation, history, dark theme and re
     page.getByRole('heading', { name: 'A little clarity for your day.' }),
   ).toBeVisible();
   await expect(
-    page.getByRole('navigation', { name: 'Nexus pages' }),
+    page.getByRole('navigation', { name: 'Catalyst pages' }),
   ).toBeVisible();
   await expect(
     page.getByRole('link', { name: 'Pet Tracker', exact: true }),
@@ -60,7 +60,7 @@ test('UX-07: every page works offline after the first visit', async ({
   await page.reload();
   await enterWorkspace(page);
   await expect(
-    page.getByRole('navigation', { name: 'Nexus pages' }),
+    page.getByRole('navigation', { name: 'Catalyst pages' }),
   ).toBeVisible();
   for (const [name, heading] of [
     ['Financial Core', 'Financial core'],

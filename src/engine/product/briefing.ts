@@ -22,3 +22,20 @@ export function briefingSections(context: BriefingContext): string[] {
     (id) => context.pinned.includes(id) || !context.hidden.includes(id),
   );
 }
+
+/** Quiet defaults never conceal urgent, catch-up, or explicitly pinned sections. */
+export function compactBriefing(
+  sections: string[],
+  pinned: string[],
+  more: boolean,
+) {
+  const essential = new Set([
+    'finance',
+    'schedule',
+    'inbox',
+    'sentinel',
+    'catchup',
+    ...pinned,
+  ]);
+  return more ? sections : sections.filter((id) => essential.has(id));
+}

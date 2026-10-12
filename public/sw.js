@@ -1,13 +1,6 @@
 /* Phase 0: cache the shell and same-origin static assets only. */
-const cacheName = 'nexus-shell-pages-v2';
-const shell = [
-  '/',
-  '/index.html',
-  '/icon.svg',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/manifest.webmanifest',
-];
+const cacheName = 'catalyst-shell-pages-v3';
+const shell = ['/', '/index.html', '/icon.svg', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -46,7 +39,11 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
       for (const name of await caches.keys())
-        if (name.startsWith('nexus-shell-') && name !== cacheName)
+        if (
+          (name.startsWith('nexus-shell-') ||
+            name.startsWith('catalyst-shell-')) &&
+          name !== cacheName
+        )
           await caches.delete(name);
       await self.clients.claim();
     })(),

@@ -12,7 +12,7 @@ export async function enterWorkspace(page: Page) {
       .click();
   await expect(
     page.getByRole('heading', {
-      name: 'Initializing Codex Command Engine...',
+      name: 'Initializing Catalyst Command Engine...',
       exact: true,
     }),
   ).toBeVisible();

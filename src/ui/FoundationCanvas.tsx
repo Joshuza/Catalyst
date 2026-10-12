@@ -14,8 +14,8 @@ export function FoundationCanvas() {
         Skip to canvas
       </a>
       <header className={styles.header}>
-        <a href="#canvas" className={styles.brand} aria-label="Nexus OS canvas">
-          <span className={styles.logo}>N</span>Nexus
+        <a href="#canvas" className={styles.brand} aria-label="Catalyst canvas">
+          <span className={styles.logo}>C</span>Catalyst
           <span className={styles.os}>OS</span>
         </a>
         <span className={styles.headerLabel}>
@@ -141,7 +141,7 @@ export function FoundationCanvas() {
             Designed for local-first use
           </span>
           <span>Your records stay on this device.</span>
-          <span>NEXUS OS / 0.1</span>
+          <span>CATALYST / 0.1</span>
         </footer>
       </main>
     </div>

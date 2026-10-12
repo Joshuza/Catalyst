@@ -168,14 +168,15 @@ test('RCP: background multi-file PDF parsing, low-confidence review and safe rep
   ).toBeVisible();
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export CSV', exact: true }).click();
-  expect((await download).suggestedFilename()).toBe('nexus-expenses.csv');
+  expect((await download).suggestedFilename()).toBe('catalyst-expenses.csv');
   const excel = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export Excel', exact: true }).click();
-  expect((await excel).suggestedFilename()).toBe('nexus-expenses.xlsx');
+  expect((await excel).suggestedFilename()).toBe('catalyst-expenses.xlsx');
 });
 test('INB / TASK: two sorting corrections persist; selected task plan needs approval and fits the calendar', async ({
   page,
 }) => {
+  await page.clock.setFixedTime(new Date('2026-10-10T12:00:00Z'));
   await start(page);
   await go(page, 'Inbox');
   for (let i = 0; i < 2; i++) {

@@ -183,6 +183,16 @@
   --survey-art-mobile-height: 14rem;
   --survey-grid-cell: 0.5rem;
   --survey-stage-duration: 1000ms;
+  --survey-scroll-offset: 6rem;
+  --survey-header-layer: 2;
+  --survey-scene-layer: 3;
+  --color-blueprint: #183941;
+  --color-blueprint-ink: #e2eee7;
+  --survey-underpainting-opacity: 0.16;
+  --survey-grid-opacity: 0.18;
+  --survey-plan-stroke: 1.6;
+  --capture-width: 52rem;
+  --capture-menu-width: 11rem;
 }
 :root[data-theme='dark'] {
   --color-nectarine: #eeb59d;

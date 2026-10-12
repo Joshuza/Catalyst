@@ -103,7 +103,7 @@ test('ONB art direction: detailed survey drives finance, calendar, role, pet car
     .click();
   await expect(
     page.getByRole('heading', {
-      name: 'Initializing Codex Command Engine...',
+      name: 'Initializing Catalyst Command Engine...',
       exact: true,
     }),
   ).toBeVisible();
@@ -112,7 +112,7 @@ test('ONB art direction: detailed survey drives finance, calendar, role, pet car
     '1',
   );
   await expect(
-    page.getByRole('navigation', { name: 'Nexus pages' }),
+    page.getByRole('navigation', { name: 'Catalyst pages' }),
   ).toBeVisible({ timeout: 6000 });
   expect(performance.now() - started).toBeGreaterThanOrEqual(3000);
   expect(performance.now() - started).toBeLessThan(6000);
@@ -216,7 +216,7 @@ test('ONB: native validation, offline artwork and fonts, keyboard focus and mobi
     .click();
   await expect(
     page.getByRole('heading', {
-      name: 'Initializing Codex Command Engine...',
+      name: 'Initializing Catalyst Command Engine...',
       exact: true,
     }),
   ).toBeVisible();
@@ -225,7 +225,7 @@ test('ONB: native validation, offline artwork and fonts, keyboard focus and mobi
   ).toBeVisible({ timeout: 6000 });
   await page.getByRole('button', { name: 'Pages', exact: true }).click();
   await expect(
-    page.getByRole('navigation', { name: 'Nexus pages' }),
+    page.getByRole('navigation', { name: 'Catalyst pages' }),
   ).toBeVisible();
   await page
     .getByRole('link', { name: 'Profile & preferences', exact: true })

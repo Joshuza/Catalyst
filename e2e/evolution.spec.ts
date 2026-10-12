@@ -231,6 +231,9 @@ test('BRF / UX-02: focus suppresses reading, collapses the inbox, keeps pinned s
 }) => {
   await open(page);
   await go(page, 'Briefing');
+  await page
+    .getByRole('button', { name: 'Customize dashboard', exact: true })
+    .click();
   const finance = page
     .getByRole('heading', { name: 'Financial velocity', exact: true })
     .locator('..');
@@ -263,6 +266,9 @@ test('BRF / UX-02: focus suppresses reading, collapses the inbox, keeps pinned s
   ).toBeVisible();
   await page
     .getByRole('button', { name: 'End deep work', exact: true })
+    .click();
+  await page
+    .getByRole('button', { name: 'More for today', exact: true })
     .click();
   await expect(
     page.getByRole('heading', { name: 'Three things to read', exact: true }),

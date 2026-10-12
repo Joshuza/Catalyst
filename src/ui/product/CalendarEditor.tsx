@@ -161,7 +161,7 @@ export function CalendarEditor({
                 onChange={(e) => setTicketUrl(e.target.value)}
               />
               <span className={s.muted}>
-                Use your provider's original ticket. Nexus does not issue entry
+                Use your provider's original ticket. Catalyst does not issue entry
                 codes.
               </span>
             </Field>

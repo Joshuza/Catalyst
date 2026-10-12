@@ -140,7 +140,7 @@ export function SubscriptionSentinel() {
       )}
       {notice && <p role="status">{notice}</p>}
       <p className={s.muted}>
-        Nexus links to billing pages and never cancels a subscription for you.
+        Catalyst links to billing pages and never cancels a subscription for you.
       </p>
     </Panel>
   );

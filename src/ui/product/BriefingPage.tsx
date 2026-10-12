@@ -3,19 +3,28 @@ import { personalizedReading } from '../../domain/product/reading-preferences';
 import { trialHours } from '../../domain/product/evolution';
 import { project } from '../../domain/product/finance';
 import { daysBetween, weekday, timeLabel } from '../../domain/product/dates';
-import { briefingSections } from '../../engine/product/briefing';
+import {
+  briefingSections,
+  compactBriefing,
+} from '../../engine/product/briefing';
 import type { UserRecord } from '../../domain/records';
 import { workspace } from '../local/runtime';
 import { FinancialChart } from './Chart';
 import { Page, Panel } from './Common';
 import { useProduct, entities, navigate, run, money } from './state';
-import { BriefingControls, DeepWorkSetup } from './BriefingPreferences';
+import {
+  BriefingControls,
+  DeepWorkSetup,
+  DashboardTools,
+} from './BriefingPreferences';
 import s from './product.module.css';
 export function BriefingPage() {
   const { profile, today, records, deep } = useProduct();
   const [expanded, setExpanded] = useState<string[]>([]);
   const preferences = entities('briefing')[0];
   const [focusSetup, setFocusSetup] = useState(false);
+  const [more, setMore] = useState(false);
+  const [customizing, setCustomizing] = useState(false);
   const urgent = entities('subscription').filter(
     (v) =>
       v.data.nextDate === today ||
@@ -45,6 +54,11 @@ export function BriefingPage() {
     pinned: preferences?.data.pinned ?? [],
     hidden: preferences?.data.hidden ?? [],
   });
+  const visibleSections = compactBriefing(
+    sections,
+    preferences?.data.pinned ?? [],
+    more,
+  );
   const messages = records.filter(
     (r): r is Extract<UserRecord, { kind: 'message' }> =>
       r.kind === 'message' && !r.deletedAt && !r.archived && r.unread,
@@ -101,17 +115,18 @@ export function BriefingPage() {
       );
     else setFocusSetup(true);
   };
-  const controls = (id: string) => (
-    <BriefingControls
-      id={id}
-      expanded={expanded.includes(id)}
-      toggle={() =>
-        setExpanded((v) =>
-          v.includes(id) ? v.filter((x) => x !== id) : [...v, id],
-        )
-      }
-    />
-  );
+  const controls = (id: string) =>
+    customizing ? (
+      <BriefingControls
+        id={id}
+        expanded={expanded.includes(id)}
+        toggle={() =>
+          setExpanded((v) =>
+            v.includes(id) ? v.filter((x) => x !== id) : [...v, id],
+          )
+        }
+      />
+    ) : null;
   return (
     <Page
       title={deep ? 'Room for focused work.' : 'A little clarity for your day.'}
@@ -126,12 +141,16 @@ export function BriefingPage() {
         <div className={s.alert}>
           <p>Start with your pay dates, working week, and preferences.</p>
           <button type="button" onClick={() => navigate('profile')}>
-            Set up Nexus
+            Set up Catalyst
           </button>
         </div>
       )}
-      <div className={s.grid}>
-        {sections.map((id) =>
+      <DashboardTools
+        customizing={customizing}
+        toggle={() => setCustomizing((v) => !v)}
+      />
+      <div className={s.grid} data-briefing-sections>
+        {visibleSections.map((id) =>
           id === 'catchup' ? (
             <Panel key={id} title="Welcome back" wide>
               <p>
@@ -186,10 +205,13 @@ export function BriefingPage() {
                   Open Financial Core
                 </button>
               </div>
-              <FinancialChart
-                points={points}
-                compact={!expanded.includes(id)}
-              />
+              <details className={s.quietDetails} open={expanded.includes(id)}>
+                <summary>View financial projection</summary>
+                <FinancialChart
+                  points={points}
+                  compact={!expanded.includes(id)}
+                />
+              </details>
               <p className={s.muted}>
                 Verified cash flow against your pay-date projection.{' '}
                 {profile.pay.amountCents === 0
@@ -339,6 +361,16 @@ export function BriefingPage() {
           ) : null,
         )}
       </div>
+      {(more || visibleSections.length < sections.length) && (
+        <button
+          className={s.moreForToday}
+          type="button"
+          aria-expanded={more}
+          onClick={() => setMore((v) => !v)}
+        >
+          {more ? 'Keep it simple' : 'More for today'}
+        </button>
+      )}
       {preferences && preferences.data.hidden.length > 0 && (
         <button
           type="button"

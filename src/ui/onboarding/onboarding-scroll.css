@@ -1,0 +1,111 @@
+.scrollJourney {
+  align-items: start;
+}
+.scrollJourney .canvas {
+  margin: var(--space-0) auto;
+  padding-top: var(--space-0);
+}
+.scrollJourney .header {
+  position: sticky;
+  top: var(--space-0);
+  z-index: var(--survey-header-layer);
+  background: var(--color-parchment);
+  padding-top: var(--space-6);
+}
+.scrollStop {
+  min-height: calc(100svh - var(--survey-scroll-offset));
+  scroll-margin-top: var(--survey-scroll-offset);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: var(--border-width) solid var(--color-survey-line);
+  padding: var(--space-10) var(--space-0);
+}
+.scrollStop > button {
+  align-self: flex-start;
+}
+.scrollStop[data-survey-active='false'] {
+  color: var(--color-survey-muted);
+}
+.scrollStop .formActions {
+  margin-top: var(--space-5);
+}
+.scrollStop .description {
+  margin-bottom: var(--space-5);
+}
+.scene {
+  background: var(--color-blueprint);
+}
+.scene img {
+  position: absolute;
+  inset: var(--space-0);
+}
+.sceneUnderpainting {
+  opacity: var(--survey-underpainting-opacity);
+  filter: grayscale(1);
+}
+.scenePainting {
+  will-change: clip-path, opacity;
+}
+.blueprint {
+  position: absolute;
+  inset: var(--space-0);
+  width: 100%;
+  height: 100%;
+  color: var(--color-blueprint-ink);
+  pointer-events: none;
+}
+.blueprint path {
+  fill: none;
+  stroke: currentColor;
+  vector-effect: non-scaling-stroke;
+}
+.planGrid {
+  opacity: var(--survey-grid-opacity);
+}
+.planLines {
+  stroke-width: var(--survey-plan-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.planDimensions {
+  font-family: var(--font-mono);
+  font-size: var(--chart-label-size);
+  letter-spacing: var(--tracking-label);
+  fill: currentColor;
+}
+.planDimensions path {
+  opacity: var(--dimmed-opacity);
+}
+.scrollJourney .question {
+  animation: none;
+}
+@media (max-width: 600px) {
+  .scrollJourney .art {
+    position: sticky;
+    top: var(--space-0);
+    z-index: var(--survey-scene-layer);
+    height: var(--survey-art-mobile-height);
+  }
+  .scrollJourney .canvas {
+    padding-top: var(--space-0);
+  }
+  .scrollJourney .header {
+    top: var(--survey-art-mobile-height);
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+  }
+  .scrollStop {
+    scroll-margin-top: calc(
+      var(--survey-art-mobile-height) + var(--survey-scroll-offset)
+    );
+  }
+  .blueprint {
+    object-position: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scenePainting {
+    will-change: auto;
+  }
+}

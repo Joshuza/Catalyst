@@ -1,4 +1,7 @@
 import { lazy } from 'react';
+export const CreatePage = lazy(() =>
+  import('./CreatePage').then((module) => ({ default: module.CreatePage })),
+);
 export const BriefingPage = lazy(() =>
   import('./BriefingPage').then((module) => ({
     default: module.BriefingPage,

@@ -95,7 +95,7 @@ export function ContactsPage() {
         </Panel>
         <Panel title="Quiet reminders">
           <p>
-            Nudges appear in the briefing and weekly reset. Nexus never sends
+            Nudges appear in the briefing and weekly reset. Catalyst never sends
             messages to your contacts.
           </p>
           <p className={s.muted}>

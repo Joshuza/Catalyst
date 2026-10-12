@@ -3,6 +3,7 @@ export const navigation = [
     group: 'Your day',
     links: [
       ['briefing', 'Briefing', '◈'],
+      ['create', 'Add new', '+'],
       ['calendar', 'Calendar', '▦'],
       ['inbox', 'Inbox', '≡'],
       ['tasks', 'Tasks', '✓'],

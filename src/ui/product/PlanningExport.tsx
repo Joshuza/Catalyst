@@ -35,7 +35,9 @@ export function PlanningExport() {
         <button
           type="button"
           disabled={start > end}
-          onClick={() => downloadBackup(reportCsv(rows), 'nexus-planning.csv')}
+          onClick={() =>
+            downloadBackup(reportCsv(rows), 'catalyst-planning.csv')
+          }
         >
           Export planning CSV
         </button>
@@ -52,7 +54,7 @@ export function PlanningExport() {
                       value: String(value ?? ''),
                     })),
                   ),
-                  { fileName: 'nexus-planning.xlsx' },
+                  { fileName: 'catalyst-planning.xlsx' },
                 );
               }),
             )
