@@ -1,0 +1,140 @@
+.survey .wordmark {
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-lg);
+}
+.scrollJourney .header {
+  background: var(--color-glass);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+.welcome h1,
+.question h1,
+.initializing h1 {
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
+}
+.welcome h1 em {
+  color: var(--color-accent);
+  font-style: normal;
+  font-weight: inherit;
+}
+.survey .micro,
+.survey .chapterNav,
+.survey .preview summary {
+  font-family: var(--font-body);
+  letter-spacing: var(--tracking-widget);
+}
+.chapters li {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+}
+.chapters li > span,
+.chapterNav > [aria-current='step'] {
+  color: var(--color-accent);
+}
+.survey button {
+  border-radius: var(--radius-round-control);
+  min-height: var(--control-spacious);
+}
+.survey button,
+.survey input,
+.survey select,
+.survey textarea {
+  scroll-margin-top: var(--survey-scroll-offset);
+  scroll-margin-bottom: var(--space-8);
+}
+.survey .primary,
+.survey .primary:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+.survey button[aria-pressed='true'],
+.form label:has(input:checked) {
+  background: var(--color-selection);
+  border-color: var(--color-selection-text);
+  color: var(--color-selection-text);
+}
+.form {
+  border: var(--border-width) solid var(--color-survey-line);
+  background: var(--color-surface);
+  border-radius: var(--radius-large);
+  corner-shape: squircle;
+  padding: var(--survey-card-padding);
+  box-shadow: var(--shadow-widget);
+}
+.survey .form input,
+.survey progress {
+  accent-color: var(--color-accent);
+}
+.form input:not([type='range']):not([type='radio']):not([type='checkbox']),
+.form select {
+  background: var(--color-background);
+  border-radius: var(--radius-medium);
+}
+.survey button:focus-visible,
+.survey input:focus-visible,
+.survey select:focus-visible,
+.survey summary:focus-visible {
+  outline-color: var(--color-focus);
+}
+.roles button {
+  border-radius: var(--radius-medium);
+  min-height: var(--sketch-height);
+}
+.roles strong {
+  font-family: var(--font-body);
+}
+.stages li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.stages li::before {
+  content: '';
+  width: var(--space-2);
+  height: var(--space-2);
+  border: var(--border-width) solid var(--color-survey-muted);
+  border-radius: var(--radius-round);
+  flex-shrink: 0;
+  transition:
+    background-color var(--motion-duration) var(--motion-ease),
+    border-color var(--motion-duration) var(--motion-ease);
+}
+.stages [data-complete='true'] {
+  color: var(--color-accent);
+}
+.stages [data-complete='true']::before,
+.mask [data-protected='true'] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+/* A small interpolation removes wheel-step jitter without moving the canvas. */
+.scenePainting {
+  transition:
+    clip-path var(--motion-control-duration) linear,
+    opacity var(--motion-control-duration) linear;
+}
+.blueprint,
+.planLines path {
+  transition:
+    opacity var(--motion-control-duration) linear,
+    stroke-dashoffset var(--motion-control-duration) linear;
+}
+.preview svg path {
+  transition: none;
+}
+@media (max-width: 600px) {
+  .survey button,
+  .survey input,
+  .survey select,
+  .survey textarea {
+    scroll-margin-top: calc(
+      var(--survey-art-mobile-height) + var(--survey-scroll-offset)
+    );
+  }
+  .roles button {
+    min-height: var(--space-20);
+  }
+}

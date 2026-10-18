@@ -3,6 +3,7 @@
 @import './product-quiet.css';
 @import './product-dashboard.css';
 @import './product-chart.css';
+@import './product-apple.css';
 
 .calendar[data-single='true'] {
   grid-template-columns: 1fr;

@@ -1,5 +1,5 @@
 /* Phase 0: cache the shell and same-origin static assets only. */
-const cacheName = 'catalyst-shell-pages-v3';
+const cacheName = 'catalyst-shell-pages-v4';
 const shell = ['/', '/index.html', '/icon.svg', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {

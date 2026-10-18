@@ -34,6 +34,7 @@ import { Page } from './product/Common';
 import s from './product/product.module.css';
 import { StartupSurvey } from './onboarding/StartupSurvey';
 import { navigation, allPages } from './product/navigation';
+import { NavIcon } from './product/NavIcon';
 function currentPage() {
   const hash = window.location.hash.slice(1);
   return allPages.has(hash) ? hash : 'briefing';
@@ -111,7 +112,7 @@ export function App() {
   useEffect(() => {
     document.title = `${navigation.flatMap((g) => g.links).find((l) => l[0] === page)?.[1] ?? 'Briefing'} · Catalyst`;
     main.current?.focus({ preventScroll: true });
-  }, [page]);
+  }, [page, bootDone]);
   const displayPage =
     page === 'pet' && !state.profile.petEnabled ? 'profile' : page;
   const views: Record<string, () => React.ReactNode> = {
@@ -188,7 +189,7 @@ export function App() {
               <p className={s.navLabel}>{group.group}</p>
               {group.links
                 .filter((l) => l[0] !== 'pet' || state.profile.petEnabled)
-                .map(([id, label, icon]) => (
+                .map(([id, label]) => (
                   <a
                     key={id}
                     href={`#${id}`}
@@ -207,7 +208,7 @@ export function App() {
                     onClick={() => setMobile(false)}
                   >
                     <span className={s.navIcon} aria-hidden="true">
-                      {icon}
+                      <NavIcon page={id ?? 'briefing'} />
                     </span>
                     {label}
                   </a>
@@ -277,8 +278,16 @@ export function App() {
             </button>
           </div>
         </header>
-        <main id="main-content" ref={main} tabIndex={-1}>
-          <Suspense fallback={<p role="status">Opening this page.</p>}>
+        <main
+          id="main-content"
+          ref={main}
+          tabIndex={-1}
+          data-page={displayPage}
+        >
+          <Suspense
+            key={displayPage}
+            fallback={<p role="status">Opening this page.</p>}
+          >
             {state.ready ? (
               views[displayPage]?.()
             ) : (

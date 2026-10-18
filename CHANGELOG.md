@@ -1,5 +1,13 @@
 # Changelog
 
+## Phase 2: Neutral interface and seamless motion
+
+- Replace green shared surfaces with white, silver and graphite, plus accessible blue controls and selections in light/dark modes.
+- Unify sidebar line icons, system typography, squircle cards, rounded forms, segmented theme controls and installed icon.
+- Reveal active survey questions after native navigation and smooth the scroll-driven blueprint/painting scene without delaying interaction.
+- Add finite page, capture-form, dashboard-card and dialog entrances, focus feedback and subtle press states.
+- Remove animation delays and movement under reduced motion; preserve event-based financial steps, dotted unbought cart, local records and existing interactions.
+
 ## Phase 2: Squircle dashboard and event-based financial graph
 
 - Style the main briefing with soft squircle cards, a neutral light/dark palette, clearer system typography and compact summary figures.

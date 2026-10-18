@@ -95,7 +95,7 @@
   margin: var(--space-6) var(--space-0);
 }
 .welcome h1 em {
-  color: var(--color-nectarine);
+  color: var(--color-accent);
   font-weight: var(--weight-normal);
 }
 .intro {
@@ -120,7 +120,7 @@
 }
 .chapters li > span {
   font: var(--text-xs) var(--font-mono);
-  color: var(--color-nectarine);
+  color: var(--color-accent);
 }
 .survey button {
   border: var(--border-width) solid var(--color-survey-line);
@@ -137,8 +137,8 @@
   font-size: var(--text-sm);
 }
 .survey button[aria-pressed='true'] {
-  border-color: var(--color-nectarine);
-  background: var(--color-nectarine-soft);
+  border-color: var(--color-accent);
+  background: var(--color-selection);
   color: var(--color-survey-ink);
 }
 .survey .primary {
@@ -194,14 +194,14 @@
   padding-bottom: var(--space-3);
 }
 .chapterNav > [aria-current='step'] {
-  color: var(--color-nectarine);
+  color: var(--color-accent);
   border-bottom: var(--focus-width) solid currentColor;
 }
 .survey progress {
   display: block;
   width: 100%;
   height: var(--space-1);
-  accent-color: var(--color-nectarine);
+  accent-color: var(--color-accent);
   margin-bottom: var(--space-6);
 }
 .question h1 {
@@ -237,11 +237,11 @@
   border-radius: var(--radius-small);
 }
 .form input[type='range'] {
-  accent-color: var(--color-nectarine);
+  accent-color: var(--color-accent);
 }
 .form input[type='checkbox'],
 .form input[type='radio'] {
-  accent-color: var(--color-nectarine);
+  accent-color: var(--color-accent);
 }
 .formActions {
   display: flex;
@@ -322,7 +322,7 @@
   transition: color var(--motion-duration) var(--motion-ease);
 }
 .stages [data-complete='true'] {
-  color: var(--color-nectarine);
+  color: var(--color-accent);
 }
 .mask {
   display: grid;
@@ -342,7 +342,7 @@
   height: var(--survey-grid-cell);
 }
 .mask [data-protected='true'] {
-  background: var(--color-nectarine);
+  background: var(--color-accent);
 }
 
 .welcome h1,
@@ -357,7 +357,7 @@
 .survey input:focus-visible,
 .survey select:focus-visible,
 .survey summary:focus-visible {
-  outline: var(--focus-width) solid var(--color-nectarine);
+  outline: var(--focus-width) solid var(--color-accent);
   outline-offset: var(--focus-offset);
 }
 .form input:not([type='checkbox']):not([type='radio']):not([type='range']),
@@ -380,8 +380,8 @@
 }
 .form label:has(input[type='radio']:checked),
 .form label:has(input[type='checkbox']:checked) {
-  background: var(--color-nectarine-soft);
-  border-color: var(--color-nectarine);
+  background: var(--color-selection);
+  border-color: var(--color-accent);
 }
 
 .art::after {

@@ -10,7 +10,7 @@ Follow [README.md](README.md) to install and start the app. Your records are loc
 
 ## Navigation and capture
 
-The left sidebar opens dedicated pages, as requested. At 360 px it becomes a navigation drawer. Browser Back returns to the preceding page. Light, dark, and system themes are available in the sidebar. Animations respect reduced motion.
+The left sidebar opens dedicated pages, as requested. At 360 px it becomes a navigation drawer. Browser Back returns to the preceding page. Light, dark, and system themes are available as a segmented control in the sidebar. Shared white/silver and graphite surfaces replace the earlier green palette; blue identifies selected controls and actions. Page and dialog entrances are short, finite transitions. Reduced motion removes movement and delays.
 
 **Cmd/Ctrl+K** searches saved notes, tasks, transactions, messages, recipes, and product records. Type normally; arrow keys choose a result, Enter opens it, Tab exposes secondary actions, and Escape restores focus. Try `receipts over $100 in October` or `unread from Maria` with your own data or explicit Sample data.
 
@@ -82,3 +82,7 @@ Transit settings separate asset availability, public mode preferences, and walki
 Sources and topic keywords prioritize imported reading. Digest time is your preferred review time, not an automatic background feed subscription. Pet care's next dates and intervals appear in the care rhythm: add one pending reminder, complete it, then add the next. No veterinary date is assumed.
 
 Survey JSON contains the validated profile, explicit defaults, skip markers, format and version. It is an export of answers, not a workspace backup or an automatic import. Sensitive financial values are included, so keep this file private. Existing Notes backups still export and restore the full workspace.
+
+## Survey transitions
+
+The original oasis/nectarine illustration stays beside a neutral survey. Begin, Back, Answer and Continue position their question immediately and reveal the inputs with a 250ms fade and rise. Wheel, touch and scrolling keys remain native, so interaction never waits for a moving document. Previous question heights are reserved so activation does not make the document jump. Saved answers and skip/review behavior are unchanged. Initialization still computes the financial preview, working-hour mask and local rules over the requested three-second stage before opening the app.

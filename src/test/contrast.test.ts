@@ -82,6 +82,7 @@ describe('UX-08 / UX-09 text token contrast', () => {
       ['color-survey-muted', 'color-parchment'],
       ['color-nectarine', 'color-parchment'],
       ['color-survey-ink', 'color-nectarine-soft'],
+      ['color-selection-text', 'color-selection'],
     ]) {
       it(`${theme}: survey ${foreground} on ${background} reaches 4.5:1`, () => {
         const fg = tokens[foreground!];
@@ -93,6 +94,24 @@ describe('UX-08 / UX-09 text token contrast', () => {
           (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
         ).toBeGreaterThanOrEqual(4.5);
       });
+    }
+    for (const foreground of [
+      'color-chart-baseline',
+      'color-chart-cart',
+      'color-chart-actual',
+    ]) {
+      for (const background of ['color-background', 'color-surface']) {
+        it(`${theme}: ${foreground} on ${background} reaches 3:1 for graph strokes`, () => {
+          const fg = tokens[foreground],
+            bg = tokens[background];
+          if (!fg || !bg) throw new Error('Missing graph contrast token.');
+          const a = luminance(fg),
+            b = luminance(bg);
+          expect(
+            (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
+          ).toBeGreaterThanOrEqual(3);
+        });
+      }
     }
     it(`${theme}: selected control text on accent reaches 4.5:1`, () => {
       const fg = tokens['color-accent-text'];

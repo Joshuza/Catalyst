@@ -56,7 +56,7 @@
 }
 .captureForm h2 {
   font: var(--weight-medium) var(--text-page-title) / var(--leading-heading)
-    var(--font-display);
+    var(--font-body);
   margin-top: var(--space-0);
 }
 .captureSaved {

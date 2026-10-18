@@ -31,7 +31,7 @@
   border-radius: var(--radius-medium);
   background: var(--color-accent);
   color: var(--color-accent-text);
-  font-family: var(--font-display);
+  font-family: var(--font-body);
 }
 .navGroup {
   display: grid;
@@ -122,9 +122,9 @@
   flex-wrap: wrap;
 }
 .titleRow h1 {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--text-page-title);
-  font-weight: var(--weight-normal);
+  font-weight: var(--weight-bold);
   letter-spacing: var(--tracking-display);
   line-height: var(--leading-heading);
   margin-block: var(--space-2);
@@ -137,17 +137,6 @@
 .page {
   max-width: var(--canvas-width);
   margin-inline: auto;
-  animation: page-in var(--motion-duration) var(--motion-ease);
-}
-@keyframes page-in {
-  from {
-    opacity: 0;
-    transform: translateY(var(--space-2));
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 .grid {
   display: grid;
@@ -232,7 +221,7 @@
   font-size: var(--text-sm);
 }
 .metric {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--text-xl);
   line-height: var(--leading-heading);
 }
@@ -285,7 +274,7 @@
   stroke: var(--color-line);
 }
 .chart .baseline {
-  stroke: var(--color-accent);
+  stroke: var(--color-chart-baseline);
 }
 .chart .cart {
   stroke: var(--color-chart-cart);
@@ -320,7 +309,7 @@
   width: var(--space-4);
   height: var(--space-1);
   margin-right: var(--space-2);
-  background: var(--color-accent);
+  background: var(--color-chart-baseline);
 }
 .legend span:nth-child(2)::before {
   background: var(--color-chart-cart);

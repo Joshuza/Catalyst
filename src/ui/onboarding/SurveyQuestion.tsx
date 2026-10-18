@@ -61,7 +61,7 @@ export function SurveyQuestion({
       </h1>
       <p className={s.description}>{question.description}</p>
       {active ? (
-        <>
+        <div data-survey-body>
           <nav className={s.chapterNav} aria-label="Survey chapters">
             {chapters.map((name, i) => (
               <span
@@ -119,7 +119,7 @@ export function SurveyQuestion({
             </div>
           </form>
           {preview}
-        </>
+        </div>
       ) : (
         <button type="button" disabled={busy} onClick={() => goTo(index)}>
           Answer this question <span aria-hidden="true">↓</span>

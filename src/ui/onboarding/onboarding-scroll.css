@@ -1,5 +1,7 @@
 .scrollJourney {
   align-items: start;
+  /* Active forms reserve their height; native anchoring would move the reader twice. */
+  overflow-anchor: none;
 }
 .scrollJourney .canvas {
   margin: var(--space-0) auto;

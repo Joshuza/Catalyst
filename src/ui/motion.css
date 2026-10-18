@@ -1,0 +1,91 @@
+/* Animate navigation/activation only; records and chart paths never loop. */
+[data-page] > section,
+[data-capture-form],
+[data-initialization],
+[data-survey-body],
+[data-survey-welcome] {
+  animation: catalyst-arrive var(--motion-duration) var(--motion-ease) both;
+}
+[data-briefing-sections] > section {
+  animation: catalyst-arrive var(--motion-duration) var(--motion-ease) both;
+}
+[data-briefing-sections] > section:nth-child(2) {
+  animation-delay: var(--motion-stagger);
+}
+[data-briefing-sections] > section:nth-child(n + 3) {
+  animation-delay: calc(var(--motion-stagger) * 2);
+}
+dialog[open] {
+  animation: catalyst-sheet var(--motion-duration) var(--motion-ease) both;
+}
+dialog[open]::backdrop {
+  animation: catalyst-fade var(--motion-duration) var(--motion-ease) both;
+  backdrop-filter: blur(var(--space-1));
+}
+button,
+input,
+textarea,
+select {
+  transition:
+    background-color var(--motion-control-duration) var(--motion-ease),
+    border-color var(--motion-control-duration) var(--motion-ease),
+    color var(--motion-control-duration) var(--motion-ease),
+    box-shadow var(--motion-control-duration) var(--motion-ease),
+    transform var(--motion-control-duration) var(--motion-ease);
+}
+button:active:not(:disabled) {
+  scale: var(--motion-press-scale);
+}
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  box-shadow: 0 0 0 var(--space-1) var(--color-selection);
+}
+progress::-webkit-progress-value {
+  transition: width var(--motion-duration) var(--motion-ease);
+}
+details[open] > :not(summary) {
+  animation: catalyst-arrive var(--motion-duration) var(--motion-ease) both;
+}
+@keyframes catalyst-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-distance));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes catalyst-sheet {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-distance))
+      scale(var(--motion-sheet-scale));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes catalyst-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: var(--motion-instant) !important;
+    animation-delay: var(--motion-instant) !important;
+    transition-duration: var(--motion-instant) !important;
+    transition-delay: var(--motion-instant) !important;
+  }
+  button:active:not(:disabled) {
+    scale: 1;
+  }
+}

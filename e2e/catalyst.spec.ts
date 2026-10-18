@@ -38,9 +38,7 @@ test('Catalyst: native survey scrolling draws plans, reveals the oasis and prese
   await expect
     .poll(async () => Number(await scene.getAttribute('data-scene-progress')))
     .toBeGreaterThan(initial + 0.2);
-  expect(
-    await painting.evaluate((node) => getComputedStyle(node).clipPath),
-  ).not.toBe('inset(100% 0px 0px)');
+  await expect(painting).not.toHaveCSS('clip-path', 'inset(100% 0px 0px)');
   await page
     .locator('[data-survey-stop="19"]')
     .evaluate((node) => node.scrollIntoView({ block: 'start' }));

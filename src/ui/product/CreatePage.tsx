@@ -156,6 +156,8 @@ export function CreatePage() {
           ))}
         </fieldset>
         <section
+          key={kind}
+          data-capture-form
           className={s.captureForm}
           aria-label={`New ${kind.toLowerCase()}`}
         >

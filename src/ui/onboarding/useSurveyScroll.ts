@@ -39,8 +39,11 @@ export function useSurveyScroll(
       const stops = Array.from(
         root.current?.querySelectorAll<HTMLElement>('[data-survey-stop]') ?? [],
       );
+      // Keep a long form active until the next question reaches the header.
+      const firstQuestion = stops[1] ?? stops[0];
+      if (!firstQuestion) return;
       const probe =
-        window.innerHeight * (window.innerWidth <= 600 ? 0.55 : 0.4);
+        (parseFloat(getComputedStyle(firstQuestion).scrollMarginTop) || 0) + 1;
       const visible =
         [...stops]
           .reverse()

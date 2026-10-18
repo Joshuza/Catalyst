@@ -14,9 +14,9 @@
   margin-bottom: var(--space-3);
 }
 .heading h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--text-xl);
-  font-weight: var(--weight-normal);
+  font-weight: var(--weight-bold);
 }
 .meta {
   color: var(--color-muted);
@@ -37,7 +37,8 @@
   margin-block: var(--space-5);
 }
 .workspace button,
-.modal button {
+.modal button,
+.toast button {
   min-height: var(--control-size);
   padding: var(--space-2) var(--space-4);
   border: var(--border-width) solid var(--color-line);
@@ -47,7 +48,8 @@
   font-size: var(--text-sm);
 }
 .workspace button:hover,
-.modal button:hover {
+.modal button:hover,
+.toast button:hover {
   background: var(--color-surface-soft);
 }
 .workspace button:disabled,
@@ -82,8 +84,8 @@
   margin-bottom: var(--space-6);
 }
 .modalHeader h2 {
-  font-family: var(--font-display);
-  font-weight: var(--weight-normal);
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
   font-size: var(--text-xl);
 }
 .form {

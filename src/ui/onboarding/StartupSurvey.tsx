@@ -177,6 +177,7 @@ export function StartupSurvey({ onDone }: { onDone: () => void }) {
             <section
               className={`${s.welcome} ${s.scrollStop}`}
               data-survey-stop={-1}
+              data-survey-welcome
             >
               <p className={s.micro}>
                 {baseProfile.completed

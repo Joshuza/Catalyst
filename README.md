@@ -16,16 +16,16 @@ Open the address printed in the terminal, usually **http://localhost:5173**. Kee
 
 ## Run from GitHub
 
-This implementation, including the squircle dashboard and event-based graph, is on `phase-2-squircle-dashboard`:
+This implementation, including the neutral Apple-inspired interface, animated survey and event-based graph, is on `phase-2-neutral-motion`:
 
 ```sh
-git clone --branch phase-2-squircle-dashboard https://github.com/Joshuza/Catalyst.git
+git clone --branch phase-2-neutral-motion https://github.com/Joshuza/Catalyst.git
 cd Catalyst
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-For an existing clone, run `git fetch origin` and `git switch phase-2-squircle-dashboard`, then the last two commands. Commit or stash your own edits before switching branches.
+For an existing clone, run `git fetch origin` and `git switch phase-2-neutral-motion`, then the last two commands. Commit or stash your own edits before switching branches.
 
 ## Start using it
 
@@ -91,3 +91,9 @@ Briefing starts with three soft squircle cards for money, the next three events 
 The graph holds balances flat between events and jumps on the actual date of an expected deposit, scheduled purchase/bill or recorded transaction. **Dotted blue** is the projected cart balance, including purchases not bought yet; the actual line changes only from recorded transactions. A wishlist item has no impact until planned. When bought, the item leaves the unbought count, its final cost remains in the projection, and its transaction affects actual once. Hover the graph, or focus it and press Left/Right, to read all three balances. Financial Core still supports dragging purchase markers and editing dates. Resizing changes the graph layout, not the balances.
 
 The visible product and downloaded filenames are now **Catalyst**. Existing database identifiers, theme keys and version-1 backup/survey format identifiers retain their legacy names so saved data and old backups remain usable.
+
+## Interface and motion
+
+Catalyst uses neutral white/silver and graphite surfaces with restrained blue controls across the app, survey and installed icon. Original line icons, system typography, rounded controls and squircle cards give all pages a consistent hierarchy. The original nectarine/oasis artwork remains in the survey.
+
+Begin, Back and Continue position the next question immediately, then reveal its content with a short fade and rise. Native wheel/touch/keyboard scrolling stays free, and the blueprint-to-painting scene follows your scroll. Pages, capture forms, dashboard cards and dialogs enter with short finite transitions. No animation loops on the financial graph: its three lines still hold between events and jump on event dates, with the unbought cart dotted blue. System reduced motion makes the new transitions immediate and removes stagger delays. The requested three-second initialization remains a processing stage.

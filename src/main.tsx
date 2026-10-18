@@ -5,6 +5,7 @@ import { App } from './ui/App';
 import { ErrorBoundary } from './ui/ErrorBoundary';
 import './ui/tokens.css';
 import './ui/global.css';
+import './ui/motion.css';
 import { configureProviders } from './engine/product/providers';
 import {
   ManualAiProvider,

@@ -1,0 +1,169 @@
+/* Shared chrome and controls. Artwork keeps its original editorial typography. */
+.sidebar {
+  background: var(--color-sidebar);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  scrollbar-width: thin;
+}
+.sidebarFoot > button {
+  min-height: var(--space-10);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: var(--border-width) solid var(--color-line);
+  border-radius: var(--radius-medium);
+}
+.logo {
+  corner-shape: squircle;
+  box-shadow: var(--shadow-control);
+}
+.navLabel,
+.eyebrow {
+  font-family: var(--font-body);
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: var(--weight-medium);
+}
+.navLink {
+  min-height: var(--space-10);
+  transition:
+    background-color var(--motion-control-duration) var(--motion-ease),
+    color var(--motion-control-duration) var(--motion-ease);
+}
+.navLink[aria-current='page'] {
+  background: var(--color-selection);
+  color: var(--color-selection-text);
+}
+.navIcon {
+  display: inline-flex;
+  align-items: center;
+}
+.navIcon svg {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+.topbar {
+  border-bottom: none;
+  padding-bottom: var(--space-0);
+}
+.topbar button {
+  background: var(--color-glass);
+  backdrop-filter: blur(var(--glass-blur));
+  border-radius: var(--radius-round-control);
+  box-shadow: var(--shadow-control);
+}
+.topbar kbd {
+  font: var(--text-xs) var(--font-body);
+  color: var(--color-muted);
+  margin-left: var(--space-2);
+}
+.panel {
+  corner-shape: squircle;
+  box-shadow: var(--shadow-widget);
+}
+.page .primary:hover {
+  background: var(--color-accent);
+}
+.page .chips button[aria-pressed='true'] {
+  background: var(--color-selection);
+  color: var(--color-selection-text);
+  border-color: var(--color-selection-text);
+}
+.theme {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-soft);
+}
+.theme legend {
+  margin-bottom: var(--space-2);
+}
+.theme label {
+  position: relative;
+  padding: var(--space-2) var(--space-1);
+  border-radius: var(--radius-small);
+  text-align: center;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: background-color var(--motion-control-duration) var(--motion-ease);
+}
+.theme label:has(input:checked) {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-control);
+}
+.theme input {
+  position: absolute;
+  width: var(--sr-size);
+  height: var(--sr-size);
+  opacity: 0;
+}
+.theme label:has(:focus-visible) {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+.captureKinds label {
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-medium);
+  transition:
+    background-color var(--motion-control-duration) var(--motion-ease),
+    border-color var(--motion-control-duration) var(--motion-ease);
+}
+.captureKinds label:has(input:checked) {
+  background: var(--color-selection);
+  color: var(--color-selection-text);
+}
+.captureForm h2 {
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-widget);
+  margin-bottom: var(--space-6);
+}
+.captureForm {
+  background: var(--color-surface);
+  border-radius: var(--radius-large);
+  padding: var(--space-6);
+}
+.page input[type='checkbox'],
+.page input[type='radio'],
+.page input[type='range'] {
+  accent-color: var(--color-accent);
+}
+@media (max-width: 40rem) {
+  .topbar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+  .topbar > .eyebrow,
+  .topbar kbd {
+    display: none;
+  }
+  .topbar .actions {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    margin: var(--space-0);
+  }
+  .topbar button {
+    font-size: var(--text-sm);
+    min-height: var(--space-10);
+    padding: var(--space-2) var(--space-3);
+    white-space: nowrap;
+  }
+  .sidebar[data-open='true'] {
+    animation: navigation-in var(--motion-duration) var(--motion-ease) both;
+  }
+  @keyframes navigation-in {
+    from {
+      opacity: 0;
+      transform: translateX(calc(-1 * var(--space-5)));
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  .captureForm {
+    padding: var(--space-5);
+  }
+}
