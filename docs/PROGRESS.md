@@ -2,6 +2,66 @@
 
 ## Current run
 
+PHASE: 2, neutral Apple-inspired interface and seamless survey/app motion, user-authorized presentation continuation.
+
+BRANCH: `phase-2-neutral-motion`, based on published squircle commit `7307f0b`. Main is unchanged.
+
+COMMITS: 2: `047f640` interface/theme/motion implementation; `docs: publish neutral interface verification and run guide` (this report's commit).
+
+STATUS: **COMPLETE for the requested neutral interface and motion update.** Broader external-service gaps remain documented in previous reports.
+
+REQUIREMENTS COVERED: user-requested removal of the green interface, consistent Apple-inspired web UI/UX and survey/app animations. Related UX-03/08/09 and ONB-01/02/04 presentation, keyboard focus and reduced-motion behavior. Existing FIN-01/02/03 event-based graph, dotted unbought cart and verified actual separation are preserved and regression-tested.
+
+REQUIREMENTS NOT COVERED: full human accessibility/usability audit; exact native squircle geometry on engines without support (rounded fallback remains). Earlier live-integration gaps remain outside this presentation request and documented below.
+
+CHECKS (actual results from this run):
+
+- typecheck: PASS, zero errors.
+- lint: PASS, zero warnings/errors.
+- unit tests: 176 passed, 0 failed/skipped, 24 files, including 14 additional selected-control/chart-contrast cases.
+- build: PASS, production bundle used by browser checks, no CSS import warning in final builds.
+- e2e: full production suite 33 passed, 0 failed, 5.0 minutes. Focused survey/interface verification also passed 4/4 before the final run.
+- Whitespace/file limits: PASS, source/test/CSS files at most 400 lines.
+- Performance: cold empty interactive load 359.4ms; 730-day/100-purchase projection 0.90ms; 50,000-record search queries 0.07–11.39ms, unchanged budgets. VM results, not hardware certification.
+
+REQUIREMENT TO TEST MAP:
+
+- Neutral survey, blue selected radios, intermediate reveal opacity/completion, saved-answer continuity, native wheel scrolling and startup focus -> `e2e/interface.spec.ts`, `UX / ONB: neutral survey reveals questions, preserves answers and follows native scrolling`.
+- Neutral sidebar/body, consistent icons, finite route/dialog entrances, focus restoration, dark mode, zero reduced-motion durations/delays, 360px capture/navigation -> `e2e/interface.spec.ts`, `UX: app uses neutral chrome, consistent icons and finite transitions, with instant reduced-motion navigation`.
+- UX-08/09 text/selected-state and graph-stroke contrast -> `src/test/contrast.test.ts`, both themes; native keyboard/offline behavior -> existing `e2e/foundation.spec.ts`.
+- ONB-01/02/04 detailed answers, live preview, JSON export, profile propagation, every startup, native validation and reduced-motion/offline art -> retained `e2e/onboarding.spec.ts` journeys. Scroll-driven blueprint/reveal and skipped-question preservation -> `e2e/catalyst.spec.ts`, native survey scrolling journey. The artwork assertion now waits for the same reveal target because it transitions over time.
+- FIN-01/02/03 preserved holds/jumps, dotted cart, pointer rescheduling, actual reconciliation once, persistence -> existing `e2e/dashboard.spec.ts` and `src/ui/product/chart-geometry.test.ts`. Storage/search/backup/OCR/undo/calendar and other module behavior remain in the full regression suite.
+
+FILES ADDED OR CHANGED OUTSIDE THE PHASE SCOPE: none. Shared tokens/controls and installed icon/metadata/cache version are part of consistent UI delivery; data formats and stored records are unchanged.
+
+DEPENDENCIES ADDED: none. No additional assets, fonts, services or migrations. Navigation SVGs are original line drawings.
+
+DECISIONS MADE: global white/silver/graphite palette with blue selections/actions; retain original oasis/nectarine art and editorial art captions; system typography for interface headings; consistent rounded/squircle controls, segmented theme control and compact mobile header; finite CSS entrances and press/focus feedback; native immediate question positioning followed by fade/rise; header-aligned question activation, reserved heights and scroll margins; smooth only the decorative scroll-driven reveal; reduced motion removes duration and stagger delays; keep financial steps unanimated; refresh installed shell assets. All recorded in `docs/DECISIONS.md`.
+
+DEFERRED: human accessibility/usability review and prior external-service integration gaps. This is an original Apple-inspired UI, with no Apple fonts or assets downloaded.
+
+FOUND ISSUES IN EARLIER PHASES: startup previously left focus outside the new main content; include boot completion in focus transfer. No unresolved new functional issue. Production CSS must import all shared styles before declarations; final build order is corrected. Animated document scrolling was rejected because native field focus could compete with it; native positioning plus content transitions passes the original detailed survey without relaxing its assertions or deadline.
+
+PROPOSED ADDITIONS: none beyond the user's request.
+
+QUESTIONS FOR THE HUMAN: none block running the update.
+
+HOW TO VERIFY BY HAND:
+
+1. Download/extract the source ZIP below. Install Node 22.12+ and pnpm 11.19.0; run `pnpm install --frozen-lockfile` and `pnpm dev` from the folder containing `package.json`. Open the printed localhost address.
+2. Begin the survey. Check white/graphite surfaces, blue selected controls and short question reveals; the oasis/nectarine artwork remains. Scroll to watch house outlines transition into the painting.
+3. Enter pay, savings and preferences. Continue/Back should retain answers and focus the current heading; native wheel/touch scrolling remains free. Export JSON and complete the three-second initialization.
+4. Inspect the neutral sidebar, original line icons, squircle cards and matching forms on Finance/Add new/Calendar. Switch pages, expand optional dashboard sections and change capture kinds to see finite entrances.
+5. Open Cmd/Ctrl+K and Cmd/Ctrl+J. Type, tab through controls, and close with Escape; keyboard focus should return to the opening control. Required purchase surveys retain their saved-answer closing rule.
+6. Add an unbought purchase. Its dotted blue line changes on its planned date while actual remains verified; record a due purchase and verify actual changes once. Theme/animation changes must not change financial data.
+7. Try light/dark/system themes, a 360px viewport and system reduced motion. The mobile header fits one row, inputs stay inside the viewport and reduced motion removes movement/stagger delays while retaining static finished art.
+
+SOURCE DELIVERY: https://github.com/Joshuza/Catalyst/archive/refs/heads/phase-2-neutral-motion.zip . Complete source, lockfile, tests and run instructions are included. Delivery uses the repository archive; no hosted deployment is claimed.
+
+---
+
+## Previous squircle dashboard run
+
 PHASE: 2, squircle dashboard and event-based financial graph, user-authorized presentation continuation.
 
 BRANCH: `phase-2-squircle-dashboard`, based on published Catalyst commit `ba408d4`. Main is unchanged.
