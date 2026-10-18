@@ -2,7 +2,9 @@
 
 The guide's filename is retained for existing links. The product is named Catalyst.
 
-**Add new** in the sidebar provides a focused capture form for purchases, tasks, events, notes, research and subscriptions. Briefing shows three core sections by default; **More for today** reveals the rest, and **Customize dashboard** reveals pin/hide controls. Urgent and pinned sections remain visible.
+**Add new** in the sidebar provides a focused capture form for purchases, tasks, events, notes, research and subscriptions. Briefing shows three squircle widgets by default; **More for today** reveals the rest, and **Customize dashboard** reveals pin/hide controls. Urgent and pinned sections remain visible. The money widget shows available cash and the next 30 days' unbought cart beside a visible graph.
+
+Financial graphs use horizontal holds and vertical jumps on event dates. Dotted blue represents the cart projection; purchases remain unbought until reconciled, and adding them never changes actual cash. Actual follows recorded transactions. Completing a purchase removes its pending-cart count and keeps its final cost in the projection without counting its transaction twice. Graphs can overlap when balances match. Hover or focus the graph and use Left/Right to inspect a date. Clock ticks and unrelated notes do not change plotted balances.
 
 Follow [README.md](README.md) to install and start the app. Your records are local to this browser and origin; development and production addresses may have different data stores.
 

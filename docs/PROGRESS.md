@@ -2,6 +2,64 @@
 
 ## Current run
 
+PHASE: 2, squircle dashboard and event-based financial graph, user-authorized presentation continuation.
+
+BRANCH: `phase-2-squircle-dashboard`, based on published Catalyst commit `ba408d4`. Main is unchanged.
+
+COMMITS: 2: `80ab3a8` dashboard and event-step implementation; `docs: publish squircle dashboard guide and verification` (this report's commit).
+
+STATUS: **COMPLETE for the requested dashboard and graph update.** Broader live-service gaps remain documented in earlier reports.
+
+REQUIREMENTS COVERED: user-requested Apple-inspired squircle widgets and easier dashboard; FIN-01/02/03 event-date presentation, dotted unbought cart and actual separation; FIN-04 pointer/keyboard graph interaction; FIN-09 step-aligned irregular band; FIN-10 current position sentence; related BRF-02/04 and UX-02/08/09 presentation with existing quiet defaults, pinning, urgency and deep work preserved.
+
+REQUIREMENTS NOT COVERED: full human WCAG/usability audit; exact squircle geometry on older engines (rounded fallback provided); live account integrations remain outside this request. Other earlier specification gaps remain in the retained reports below.
+
+CHECKS (actual results from this run):
+
+- typecheck: PASS, zero errors.
+- lint: PASS, zero warnings/errors.
+- unit tests: 162 passed, 0 failed/skipped, 24 files; final serial run.
+- build: PASS, production build used by browser tests.
+- e2e: full suite 31 passed, 0 failed, 4.4 minutes; the final enhanced pointer/details and mobile journeys also passed 2/2 after the last refinements.
+- Whitespace/file limits: PASS, source/test/CSS files at most 400 lines.
+
+REQUIREMENT TO TEST MAP:
+
+- Event-date holds/jumps, flat/negative/empty curves, reverse band, planned-to-bought math -> `src/ui/product/chart-geometry.test.ts`, FIN-01/02/03 cases.
+- Squircle styling, dotted cart, unchanged actual for a plan, clock/unrelated-note stability, pointer rescheduling, actual reconciliation once and persistence -> `e2e/dashboard.spec.ts`, FIN/BRF workflow.
+- Money expansion, dark mode, 360px/reduced motion/disclosure -> dashboard browser journeys; text contrast -> eight new pairs in `src/test/contrast.test.ts`.
+- Existing survey previews -> `e2e/onboarding.spec.ts`, same expense-change assertion with explicit cart-series selection.
+- Pinning/urgency/focus -> existing Catalyst/evolution browser flows and briefing unit tests. Storage, backups, search, receipts, calendar and other local modules -> retained full regression suite.
+
+FILES ADDED OR CHANGED OUTSIDE THE PHASE SCOPE: none. Shared chart rendering affects its existing financial/onboarding callers; additive Page/Panel props scope dashboard styling without changing stored contracts.
+
+DEPENDENCIES ADDED: none. No new fonts, image assets, services or schema migrations.
+
+DECISIONS MADE: retain finance calculations; render exact event steps without path morphing; draw dotted blue cart last; show available cash and a separate pending-cart total; memoize stable inputs; responsive compact geometry and inverse screen-coordinate pointer mapping; keyboard balance inspection; scoped light/dark squircle styling with rounded fallback; keep optional sections and real customization controls. Recorded in `docs/DECISIONS.md`.
+
+DEFERRED: normal human accessibility/usability review and prior external-integration gaps. The visual direction is Apple-inspired original UI, not a copied Apple asset set.
+
+FOUND ISSUES IN EARLIER PHASES: hover guide could intercept pointer clicks on purchase markers; fixed within the graph request and covered by the new pointer journey. Search timing remains machine-load sensitive; one concurrent run exceeded 50ms by 1.98ms, then the unchanged serial check passed. No unresolved new functional issue.
+
+PROPOSED ADDITIONS: none beyond the user's request.
+
+QUESTIONS FOR THE HUMAN: none block running the implementation.
+
+HOW TO VERIFY BY HAND:
+
+1. Download/extract the source ZIP below. With Node 22.12+ and pnpm 11.19.0, run `pnpm install --frozen-lockfile` and `pnpm dev`; open the printed localhost address.
+2. Complete/continue startup. Inspect the three squircle widgets, visible graph, available balance and separate next-30-days cart count/total.
+3. Configure income/pay dates, then plan a future purchase through Add new. Confirm the blue dotted line drops on that date while actual cash stays unchanged. Quiet days should be flat.
+4. Hover or focus the graph and use Left/Right to read all three balances. Open Financial Core and drag a marker or edit its date; verify its dip moves to the new date.
+5. Reconcile a due purchase with its final cost. Its unbought count should disappear and actual cash should reflect the saved transaction once. Reload to verify persistence.
+6. Try Customize dashboard, More/Less detail, pinning, More for today, dark theme and a 360px viewport. Unrelated notes and clock ticks should not change financial values. Existing offline use still requires one production visit after building/previewing.
+
+SOURCE DELIVERY: https://github.com/Joshuza/Catalyst/archive/refs/heads/phase-2-squircle-dashboard.zip . Complete source, lockfile, tests and run instructions are included. Delivery uses the repository archive because the projectless output directory is unavailable here.
+
+---
+
+## Previous Catalyst scrolling run
+
 PHASE: 2, Catalyst scrolling survey, unified capture and quieter dashboard; user-authorized design continuation.
 
 BRANCH: `phase-2-catalyst-scroll-journey`, based on published onboarding commit `2b20f3d`. Main is unchanged.

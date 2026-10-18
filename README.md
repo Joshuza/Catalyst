@@ -16,16 +16,16 @@ Open the address printed in the terminal, usually **http://localhost:5173**. Kee
 
 ## Run from GitHub
 
-This implementation, including the startup redesign, is on `phase-2-catalyst-scroll-journey`:
+This implementation, including the squircle dashboard and event-based graph, is on `phase-2-squircle-dashboard`:
 
 ```sh
-git clone --branch phase-2-catalyst-scroll-journey https://github.com/Joshuza/Catalyst.git
+git clone --branch phase-2-squircle-dashboard https://github.com/Joshuza/Catalyst.git
 cd Catalyst
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-For an existing clone, run `git fetch origin` and `git switch phase-2-catalyst-scroll-journey`, then the last two commands. Commit or stash your own edits before switching branches.
+For an existing clone, run `git fetch origin` and `git switch phase-2-squircle-dashboard`, then the last two commands. Commit or stash your own edits before switching branches.
 
 ## Start using it
 
@@ -86,6 +86,8 @@ The supplied pear.no HTML informed the chapter rail, fine ruled frame, corner or
 
 **Add new** is a dedicated sidebar page for purchases, tasks, events, notes, research and subscriptions. Save one entry at a time, then open it in its destination page. Purchases show the receipt animation and update the simulated cart; they do not send money. Events respect protected working hours. Other creation tools, including recipes, receipts, goals, contacts and trips, are linked under **Add something else**.
 
-Briefing starts with money, the next three events and inbox counts. Open **View financial projection** for the graph, **More for today** for reading/tasks/weekend sections, and **Customize dashboard** for pin/hide/detail controls. Urgent alerts, catch-up and pinned sections remain visible. Deep work still suppresses reading and promotions.
+Briefing starts with three soft squircle cards for money, the next three events and inbox counts. Its money card shows your available balance, unbought cart total for the next 30 days and a visible graph. Use **More for today** for reading/tasks/weekend sections and **Customize dashboard** for pin/hide/detail controls. Urgent alerts, catch-up and pinned sections remain visible. Deep work still suppresses reading and promotions.
+
+The graph holds balances flat between events and jumps on the actual date of an expected deposit, scheduled purchase/bill or recorded transaction. **Dotted blue** is the projected cart balance, including purchases not bought yet; the actual line changes only from recorded transactions. A wishlist item has no impact until planned. When bought, the item leaves the unbought count, its final cost remains in the projection, and its transaction affects actual once. Hover the graph, or focus it and press Left/Right, to read all three balances. Financial Core still supports dragging purchase markers and editing dates. Resizing changes the graph layout, not the balances.
 
 The visible product and downloaded filenames are now **Catalyst**. Existing database identifiers, theme keys and version-1 backup/survey format identifiers retain their legacy names so saved data and old backups remain usable.

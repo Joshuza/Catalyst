@@ -1,5 +1,13 @@
 # Changelog
 
+## Phase 2: Squircle dashboard and event-based financial graph
+
+- Style the main briefing with soft squircle cards, a neutral light/dark palette, clearer system typography and compact summary figures.
+- Show the graph and the next 30 days' unbought cart in the money widget; retain optional sections, pinning and urgency controls.
+- Draw balances as steps: hold between financial events and jump on their dates. Keep the cart dotted blue and actual based on recorded transactions.
+- Use event-aligned boundaries for irregular-income bands, responsive compact chart geometry, correct pointer/date mapping and keyboard balance inspection.
+- Preserve existing financial calculations, purchase reconciliation, data formats and offline behavior.
+
 ## Phase 2: Catalyst scrolling journey and quieter capture
 
 - Rename visible branding, install metadata, icon and downloaded files to Catalyst while retaining existing data/backup identifiers.
