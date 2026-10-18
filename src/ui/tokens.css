@@ -133,8 +133,12 @@
   --sidebar-width: 15rem;
   --sidebar-small-width: 12rem;
   --text-page-title: clamp(2rem, 3vw, 3rem);
-  --color-chart-cart: #80613c;
-  --color-chart-actual: #376c80;
+  --color-chart-cart: #0071e3;
+  --color-chart-actual: #283b46;
+  --color-chart-warning: #f8edda;
+  --chart-legend-stroke: 3px;
+  --chart-legend-dot: 3px;
+  --chart-legend-gap: 6px;
   --chart-ratio: 2.6;
   --chart-label-size: 11px;
   --chart-stroke: 2.5px;
@@ -150,8 +154,9 @@
   --drop-height: 12rem;
 }
 :root[data-theme='dark'] {
-  --color-chart-cart: #d9bc83;
-  --color-chart-actual: #9dcddd;
+  --color-chart-cart: #73b4ff;
+  --color-chart-actual: #eff2f5;
+  --color-chart-warning: #463b27;
 }
 
 :root {
@@ -201,4 +206,42 @@
   --color-survey-ink: #f4ecd9;
   --color-survey-muted: #c9c1ae;
   --color-survey-line: #535444;
+}
+
+:root {
+  --color-dashboard-background: #f5f5f7;
+  --color-dashboard-surface: #ffffff;
+  --color-dashboard-text: #1d1d1f;
+  --color-dashboard-muted: #63636a;
+  --color-dashboard-line: #e5e5ea;
+  --color-dashboard-border: #ececef;
+  --color-widget-blue: #0066cc;
+  --color-widget-blue-soft: #eaf2ff;
+  --radius-widget: 2rem;
+  --radius-widget-small: 1.5rem;
+  --radius-icon: 0.65rem;
+  --radius-round-control: 1.25rem;
+  --shadow-widget: 0 0.25rem 1.5rem #1d1d1f05;
+  --dashboard-width: 68rem;
+  --dashboard-small-height: 17rem;
+  --dashboard-small-mobile-height: 14rem;
+  --dashboard-chart-height: 10rem;
+  --dashboard-chart-mobile-height: 8rem;
+  --dashboard-title-size: clamp(1.75rem, 3vw, 2.5rem);
+  --dashboard-balance-size: clamp(2.25rem, 4vw, 3.25rem);
+  --dashboard-balance-mobile-size: clamp(1.5rem, 7vw, 2rem);
+  --dashboard-cart-mobile-width: 8rem;
+  --dashboard-count-size: 2.25rem;
+  --tracking-widget: -0.02em;
+}
+:root[data-theme='dark'] {
+  --color-dashboard-background: #141416;
+  --color-dashboard-surface: #222225;
+  --color-dashboard-text: #f5f5f7;
+  --color-dashboard-muted: #b0b0b8;
+  --color-dashboard-line: #38383d;
+  --color-dashboard-border: #2e2e33;
+  --color-widget-blue: #82bdff;
+  --color-widget-blue-soft: #243548;
+  --shadow-widget: none;
 }

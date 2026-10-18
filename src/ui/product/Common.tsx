@@ -16,15 +16,17 @@ export function Page({
   subtitle,
   children,
   action,
+  className = '',
 }: {
   title: string;
   subtitle: string;
   children: ReactNode;
   action?: ReactNode;
+  className?: string;
 }) {
   return (
     <section
-      className={s.page}
+      className={`${s.page} ${className}`}
       onClickCapture={(e) => {
         const button = (e.target as HTMLElement).closest('button');
         const form = button?.closest(`form,.${s.form}`);
@@ -56,14 +58,19 @@ export function Panel({
   title,
   children,
   wide = false,
+  icon,
 }: {
   title: string;
   children: ReactNode;
   wide?: boolean;
+  icon?: ReactNode;
 }) {
   return (
     <section className={`${s.panel} ${wide ? s.wide : ''}`}>
-      <h2>{title}</h2>
+      <h2>
+        {icon}
+        {title}
+      </h2>
       {children}
     </section>
   );

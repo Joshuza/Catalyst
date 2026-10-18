@@ -32,6 +32,26 @@ describe('UX-08 / UX-09 text token contrast', () => {
   for (const [theme, block] of Object.entries(blocks)) {
     const tokens = parseTokens(block);
     for (const foreground of [
+      'color-dashboard-text',
+      'color-dashboard-muted',
+    ]) {
+      for (const background of [
+        'color-dashboard-background',
+        'color-dashboard-surface',
+      ]) {
+        it(`${theme}: dashboard ${foreground} on ${background} reaches 4.5:1`, () => {
+          const fg = tokens[foreground],
+            bg = tokens[background];
+          if (!fg || !bg) throw new Error('Missing dashboard contrast token.');
+          const a = luminance(fg),
+            b = luminance(bg);
+          expect(
+            (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
+          ).toBeGreaterThanOrEqual(4.5);
+        });
+      }
+    }
+    for (const foreground of [
       'color-text',
       'color-muted',
       'color-focus',

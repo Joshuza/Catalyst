@@ -22,8 +22,7 @@ test('ONB art direction: detailed survey drives finance, calendar, role, pet car
   await page.getByLabel('Current liquid savings').fill('12000');
   await next(page);
   const before = await page
-    .locator('svg[aria-label^="Financial projection"] path')
-    .nth(1)
+    .locator('svg[aria-label^="Financial projection"] path[data-series="cart"]')
     .getAttribute('d');
   await page
     .getByRole('button', { name: 'Rent/Mortgage', exact: true })
@@ -32,8 +31,9 @@ test('ONB art direction: detailed survey drives finance, calendar, role, pet car
   await expect
     .poll(() =>
       page
-        .locator('svg[aria-label^="Financial projection"] path')
-        .nth(1)
+        .locator(
+          'svg[aria-label^="Financial projection"] path[data-series="cart"]',
+        )
         .getAttribute('d'),
     )
     .not.toBe(before);

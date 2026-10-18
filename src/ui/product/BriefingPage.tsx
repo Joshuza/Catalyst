@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { personalizedReading } from '../../domain/product/reading-preferences';
 import { trialHours } from '../../domain/product/evolution';
-import { project } from '../../domain/product/finance';
 import { daysBetween, weekday, timeLabel } from '../../domain/product/dates';
 import {
   briefingSections,
@@ -9,9 +8,10 @@ import {
 } from '../../engine/product/briefing';
 import type { UserRecord } from '../../domain/records';
 import { workspace } from '../local/runtime';
-import { FinancialChart } from './Chart';
+import { MoneyWidget } from './MoneyWidget';
+import { WidgetIcon } from './WidgetIcon';
 import { Page, Panel } from './Common';
-import { useProduct, entities, navigate, run, money } from './state';
+import { useProduct, entities, navigate, run } from './state';
 import {
   BriefingControls,
   DeepWorkSetup,
@@ -91,20 +91,6 @@ export function BriefingPage() {
   const reading = personalizedReading(entities('news'), today, profile)
     .filter((n) => !n.data.read)
     .slice(0, 3);
-  const tx = records.filter(
-    (r): r is Extract<UserRecord, { kind: 'transaction' }> =>
-      r.kind === 'transaction' && !r.deletedAt,
-  );
-  const points = project(
-    profile,
-    today,
-    30,
-    entities('purchase').map((p) => p.data),
-    tx,
-    'Main',
-    entities('subscription').map((v) => v.data),
-  );
-  const delta = (points[0]?.actual ?? 0) - (points[0]?.baseline ?? 0);
   const toggleDeep = () => {
     if (deep && preferences)
       run(
@@ -129,6 +115,7 @@ export function BriefingPage() {
     ) : null;
   return (
     <Page
+      className={s.dashboard}
       title={deep ? 'Room for focused work.' : 'A little clarity for your day.'}
       subtitle={`${new Intl.DateTimeFormat(workspace.locale, { weekday: 'long', month: 'long', day: 'numeric' }).format(workspace.clock.now())}. ${deep ? 'Promotions and reading are quiet while you focus.' : 'Your important signals, together in one morning review.'}`}
       action={
@@ -195,33 +182,17 @@ export function BriefingPage() {
               ))}
             </Panel>
           ) : id === 'finance' ? (
-            <Panel key={id} title="Financial velocity" wide>
-              <div className={s.row}>
-                <p className={s.metric}>
-                  {money(Math.abs(delta))} {delta >= 0 ? 'ahead of' : 'behind'}{' '}
-                  baseline today
-                </p>
-                <button type="button" onClick={() => navigate('finance')}>
-                  Open Financial Core
-                </button>
-              </div>
-              <details className={s.quietDetails} open={expanded.includes(id)}>
-                <summary>View financial projection</summary>
-                <FinancialChart
-                  points={points}
-                  compact={!expanded.includes(id)}
-                />
-              </details>
-              <p className={s.muted}>
-                Verified cash flow against your pay-date projection.{' '}
-                {profile.pay.amountCents === 0
-                  ? 'Add your income in Profile to establish a baseline.'
-                  : ''}
-              </p>
-              {controls(id)}
-            </Panel>
+            <MoneyWidget
+              key={id}
+              controls={controls(id)}
+              expanded={expanded.includes(id)}
+            />
           ) : id === 'schedule' ? (
-            <Panel key={id} title="Today, next three">
+            <Panel
+              key={id}
+              title="Today, next three"
+              icon={<WidgetIcon kind="schedule" />}
+            >
               {schedule.map((e) => (
                 <div className={s.row} key={e.id}>
                   <span className={s.badge}>{timeLabel(e.data.start)}</span>
@@ -247,7 +218,11 @@ export function BriefingPage() {
               {controls(id)}
             </Panel>
           ) : id === 'inbox' ? (
-            <Panel key={id} title={deep ? 'Inbox, quietly' : 'Tri-fold inbox'}>
+            <Panel
+              key={id}
+              title={deep ? 'Inbox, quietly' : 'Tri-fold inbox'}
+              icon={<WidgetIcon kind="inbox" />}
+            >
               <div className={s.row}>
                 {deep ? (
                   <p>

@@ -1,0 +1,31 @@
+.financialPlot {
+  min-width: 0;
+}
+.chart path {
+  /* Balances jump on event dates; morphing path geometry invents interim values. */
+  transition: none;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.financialPlot .legend {
+  margin-top: var(--space-2);
+  gap: var(--space-4);
+  line-height: var(--leading-body);
+}
+.legend span::before {
+  height: var(--chart-legend-stroke);
+  vertical-align: middle;
+  border-radius: var(--radius-small);
+}
+.legend span:nth-child(2)::before {
+  background: repeating-linear-gradient(
+    to right,
+    var(--color-chart-cart) 0 var(--chart-legend-dot),
+    transparent var(--chart-legend-dot) var(--chart-legend-gap)
+  );
+}
+.chart:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-medium);
+}
