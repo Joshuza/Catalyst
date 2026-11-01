@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Point } from '../../domain/product/finance';
 import { addDays, daysBetween, formatDate } from '../../domain/product/dates';
 import type { Entity } from './state';
@@ -10,7 +10,6 @@ export function FinancialChart({
   items = [],
   onMove,
   compact = false,
-  measureBeforePaint = false,
 }: {
   points: Point[];
   items?: Entity<'purchase'>[];
@@ -20,18 +19,11 @@ export function FinancialChart({
     phase: 'preview' | 'commit' | 'cancel',
   ) => void;
   compact?: boolean;
-  measureBeforePaint?: boolean;
 }) {
   const ref = useRef<SVGSVGElement>(null);
   const [drag, setDrag] = useState<string | null>(null);
   const [hover, setHover] = useState<number | null>(null);
   const [compactWidth, setCompactWidth] = useState(760);
-  useLayoutEffect(() => {
-    if (!compact || !measureBeforePaint || !ref.current) return;
-    setCompactWidth(
-      Math.max(300, Math.min(760, Math.round(ref.current.clientWidth))),
-    );
-  }, [compact, measureBeforePaint, points.length]);
   useEffect(() => {
     if (!compact || !ref.current) return;
     const svg = ref.current;

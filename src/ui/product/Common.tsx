@@ -11,9 +11,6 @@ import { HoldToConfirmButton } from '../local/HoldToConfirmButton';
 import type { UserRecord } from '../../domain/records';
 import { run } from './state';
 import s from './product.module.css';
-import { WidgetGlyph } from './WidgetGlyph';
-import type { WidgetId, WidgetSize } from '../../domain/product/widgets';
-import { openWidget, widgetLabel } from './widget-catalog';
 export function Page({
   title,
   subtitle,
@@ -62,44 +59,14 @@ export function Panel({
   children,
   wide = false,
   icon,
-  widget,
-  size = 'medium',
 }: {
   title: string;
   children: ReactNode;
   wide?: boolean;
   icon?: ReactNode;
-  widget?: WidgetId;
-  size?: WidgetSize;
 }) {
   return (
-    <section
-      className={`${s.panel} ${wide ? s.wide : ''}`}
-      data-widget-id={widget}
-      data-widget-size={widget ? size : undefined}
-      aria-label={widget ? `${widgetLabel(widget)} widget` : undefined}
-      onClick={(event) => {
-        if (
-          widget &&
-          window.getSelection()?.isCollapsed !== false &&
-          event.target instanceof Element &&
-          !event.target.closest(
-            'button,a,input,select,textarea,summary,svg,[role="slider"]',
-          )
-        )
-          openWidget(widget);
-      }}
-    >
-      {widget && (
-        <button
-          type="button"
-          className={s.widgetExpand}
-          aria-label={`Open ${widgetLabel(widget)} widget`}
-          onClick={() => openWidget(widget)}
-        >
-          <WidgetGlyph />
-        </button>
-      )}
+    <section className={`${s.panel} ${wide ? s.wide : ''}`}>
       <h2>
         {icon}
         {title}

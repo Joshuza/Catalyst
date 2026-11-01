@@ -28,6 +28,10 @@ test('Catalyst: native survey scrolling draws plans, reveals the oasis and prese
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
   await page.getByLabel('Net income per pay period after taxes').fill('2500');
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
+  // Continue persists asynchronously. Verify its destination before exercising
+  // a separate native-scroll action, so pending navigation cannot overwrite it.
+  await expect(page.getByLabel('Next deposit date')).toBeVisible();
+  await expect(page.locator('[data-survey-stop="2"] h1')).toBeFocused();
   await page
     .locator('[data-survey-stop="9"]')
     .evaluate((node) => node.scrollIntoView({ block: 'start' }));

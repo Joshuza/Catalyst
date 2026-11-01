@@ -89,7 +89,3 @@ details[open] > :not(summary) {
     scale: 1;
   }
 }
-
-[data-widget-canvas] > [data-widget-id] {
-  animation: catalyst-arrive var(--motion-duration) var(--motion-ease) both;
-}

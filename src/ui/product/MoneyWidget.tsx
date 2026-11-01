@@ -5,19 +5,15 @@ import type { Transaction } from '../../domain/records';
 import { Panel } from './Common';
 import { FinancialChart } from './Chart';
 import { WidgetIcon } from './WidgetIcon';
-import { useProduct, entities, money } from './state';
+import { useProduct, entities, money, navigate } from './state';
 import s from './product.module.css';
-import { openWidget } from './widget-catalog';
-import type { WidgetSize } from '../../domain/product/widgets';
 
 export function MoneyWidget({
   controls,
   expanded = false,
-  size = 'large',
 }: {
   controls: ReactNode;
   expanded?: boolean;
-  size?: WidgetSize;
 }) {
   const { profile, today, records } = useProduct();
   const purchases = entities('purchase').map((p) => p.data);
@@ -61,13 +57,7 @@ export function MoneyWidget({
   const current = points[0]!;
   const delta = current.actual - current.baseline;
   return (
-    <Panel
-      title="Financial velocity"
-      wide
-      widget="finance"
-      size={size}
-      icon={<WidgetIcon kind="money" />}
-    >
+    <Panel title="Financial velocity" wide icon={<WidgetIcon kind="money" />}>
       <div className={s.moneyOverview}>
         <div>
           <span className={s.widgetLabel}>Available now</span>
@@ -88,11 +78,7 @@ export function MoneyWidget({
         </div>
       </div>
       <div data-money-expanded={expanded}>
-        <FinancialChart
-          points={points}
-          compact={!expanded}
-          measureBeforePaint
-        />
+        <FinancialChart points={points} compact={!expanded} />
       </div>
       {expanded && (
         <p className={s.widgetNote}>
@@ -110,7 +96,7 @@ export function MoneyWidget({
           {money(Math.abs(delta))} {delta >= 0 ? 'ahead of' : 'behind'} baseline
           today
         </span>
-        <button type="button" onClick={() => openWidget('finance')}>
+        <button type="button" onClick={() => navigate('finance')}>
           Open Financial Core <span aria-hidden="true">↗</span>
         </button>
       </div>

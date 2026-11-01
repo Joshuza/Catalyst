@@ -4,8 +4,6 @@
 @import './product-dashboard.css';
 @import './product-chart.css';
 @import './product-apple.css';
-@import './product-widgets.css';
-@import './product-widget-shell.css';
 
 .calendar[data-single='true'] {
   grid-template-columns: 1fr;

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, Suspense } from 'react';
-import { useTheme } from './theme';
+import { useTheme, type Theme } from './theme';
 import { workspace } from './local/runtime';
 import { LocalWorkspace } from './local/LocalWorkspace';
 import { useProduct, entities, navigate, type Entity } from './product/state';
@@ -34,9 +34,7 @@ import { Page } from './product/Common';
 import s from './product/product.module.css';
 import { StartupSurvey } from './onboarding/StartupSurvey';
 import { navigation, allPages } from './product/navigation';
-import { Sidebar } from './Sidebar';
-import { WidgetWindow } from './product/WidgetWindow';
-import { widgetLabel } from './product/widget-catalog';
+import { NavIcon } from './product/NavIcon';
 function currentPage() {
   const hash = window.location.hash.slice(1);
   return allPages.has(hash) ? hash : 'briefing';
@@ -48,7 +46,6 @@ export function App() {
     [bootDone, setBootDone] = useState(false),
     [mobile, setMobile] = useState(false),
     [terminal, setTerminal] = useState(false),
-    [maximized, setMaximized] = useState(false),
     [survey, setSurvey] = useState<Entity<'purchase'> | null>(null);
   const main = useRef<HTMLElement>(null),
     visited = useRef(false);
@@ -71,26 +68,12 @@ export function App() {
     const hash = () => {
       setPage(currentPage());
       setMobile(false);
-      setMaximized(false);
     };
     const change = (e: Event) => {
       const destination = (e as CustomEvent<string>).detail;
       if (allPages.has(destination)) window.location.hash = destination;
     };
     const key = (e: KeyboardEvent) => {
-      if (
-        e.key === 'Escape' &&
-        currentPage() !== 'briefing' &&
-        !document.querySelector('dialog[open], [data-startup-survey]') &&
-        !(
-          e.target instanceof HTMLElement &&
-          e.target.matches('input, textarea, select, [contenteditable="true"]')
-        )
-      ) {
-        e.preventDefault();
-        navigate('briefing');
-        return;
-      }
       if (
         document.querySelector(
           'dialog[data-required="true"][open], [data-startup-survey]',
@@ -129,7 +112,6 @@ export function App() {
   useEffect(() => {
     document.title = `${navigation.flatMap((g) => g.links).find((l) => l[0] === page)?.[1] ?? 'Briefing'} · Catalyst`;
     main.current?.focus({ preventScroll: true });
-    if (page !== 'briefing') window.scrollTo({ top: 0, behavior: 'instant' });
   }, [page, bootDone]);
   const displayPage =
     page === 'pet' && !state.profile.petEnabled ? 'profile' : page;
@@ -137,7 +119,6 @@ export function App() {
     create: () => <CreatePage />,
     briefing: () =>
       !state.profile.completed ? <ProfilePage /> : <BriefingPage />,
-    'briefing-detail': () => <BriefingPage widgets={false} />,
     profile: () => <ProfilePage />,
     finance: () => <FinancePage />,
     receipts: () => <ReceiptsPage />,
@@ -194,16 +175,77 @@ export function App() {
       >
         Skip to content
       </a>
-      <Sidebar
-        mobile={mobile}
-        petEnabled={state.profile.petEnabled}
-        deep={state.deep}
-        displayPage={displayPage}
-        theme={theme}
-        setTheme={setTheme}
-        onClose={() => setMobile(false)}
-      />
-      <div className={`${s.content} ${maximized ? s.windowMaximized : ''}`}>
+      <aside
+        className={s.sidebar}
+        data-open={mobile}
+        aria-label="Workspace sidebar"
+      >
+        <a className={s.brand} href="#briefing">
+          <span className={s.logo}>C</span>Catalyst
+        </a>
+        <nav aria-label="Catalyst pages">
+          {navigation.map((group) => (
+            <div className={s.navGroup} key={group.group}>
+              <p className={s.navLabel}>{group.group}</p>
+              {group.links
+                .filter((l) => l[0] !== 'pet' || state.profile.petEnabled)
+                .map(([id, label]) => (
+                  <a
+                    key={id}
+                    href={`#${id}`}
+                    className={s.navLink}
+                    data-dim={
+                      state.deep &&
+                      ![
+                        'briefing',
+                        'tasks',
+                        'calendar',
+                        'records',
+                        'profile',
+                      ].includes(id ?? '')
+                    }
+                    aria-current={displayPage === id ? 'page' : undefined}
+                    onClick={() => setMobile(false)}
+                  >
+                    <span className={s.navIcon} aria-hidden="true">
+                      <NavIcon page={id ?? 'briefing'} />
+                    </span>
+                    {label}
+                  </a>
+                ))}
+            </div>
+          ))}
+        </nav>
+        <div className={s.sidebarFoot}>
+          <p>LOCAL / PRIVATE / YOURS</p>
+          <fieldset className={s.theme}>
+            <legend>Theme</legend>
+            {(['system', 'light', 'dark'] as Theme[]).map((value) => (
+              <label key={value}>
+                <input
+                  type="radio"
+                  name="theme"
+                  checked={theme === value}
+                  onChange={() => setTheme(value)}
+                />
+                <span className={s.srOnly}>
+                  {value.charAt(0).toUpperCase() + value.slice(1)} theme
+                </span>
+                <span aria-hidden="true">{value}</span>
+              </label>
+            ))}
+          </fieldset>
+          <p>Your records stay on this device.</p>
+          <button
+            type="button"
+            className={s.mobileMenu}
+            onClick={() => setMobile(false)}
+          >
+            Close navigation
+          </button>
+        </div>
+      </aside>
+      <div className={s.content}>
         <header className={s.topbar}>
           <button
             type="button"
@@ -241,23 +283,7 @@ export function App() {
           ref={main}
           tabIndex={-1}
           data-page={displayPage}
-          aria-label={
-            displayPage === 'briefing'
-              ? 'Widget dashboard'
-              : `${widgetLabel(displayPage === 'briefing-detail' ? 'briefing' : displayPage)} workspace window`
-          }
-          className={displayPage === 'briefing' ? undefined : s.moduleWindow}
-          data-module-window={
-            displayPage === 'briefing' ? undefined : displayPage
-          }
         >
-          {displayPage !== 'briefing' && (
-            <WidgetWindow
-              page={displayPage}
-              maximized={maximized}
-              onMaximize={() => setMaximized((value) => !value)}
-            />
-          )}
           <Suspense
             key={displayPage}
             fallback={<p role="status">Opening this page.</p>}

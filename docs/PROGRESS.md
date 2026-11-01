@@ -2,53 +2,29 @@
 
 ## Current run
 
-PHASE: 2, expandable summary widgets and calmer workspace windows, user-authorized presentation/navigation continuation.
+PHASE: 2, restore the previous iteration at the user's request. BRANCH: `phase-2-expandable-widgets` (the same delivered branch). COMMITS: 1, `revert: restore the previous Catalyst interface` (this report's commit). STATUS: COMPLETE for the requested rollback; existing intermittent survey-test behavior is documented below. Main is unchanged.
 
-BRANCH: `phase-2-expandable-widgets`, based on published neutral-interface commit `743d298`. Main is unchanged. COMMITS: 2: `dfadbee` widget/window implementation; `docs: publish expandable widget verification and run guide` (this report's commit). STATUS: **COMPLETE for the requested widget/window update.** Earlier live-service gaps remain documented below.
+REQUIREMENTS COVERED: revert the rejected widget iteration; restore the full sidebar, original neutral dashboard and module pages. Retain earlier UX-03/07/08/09 and FIN-01/02/03/04 behavior. REQUIREMENTS NOT COVERED: no new product features; prior external-service gaps and human accessibility review remain outside this rollback.
 
-REQUIREMENTS COVERED: the user's requested mixed-size Apple-inspired widgets, a summary for every left-menu section, expanded windows, less visible detail and better fit. Related UX-01/02/03/05/07/08/09 and BRF-02/04 presentation/navigation; preserve FIN-01/02/03/04 event steps, dotted unbought cart and actual reconciliation. This is a bounded UI continuation, not completion of earlier live-service integrations.
+CHECKS: typecheck PASS; lint PASS, zero warnings/errors; unit tests 179 passed, 0 failed/skipped, 25 files; production build PASS. Full browser run: 33 passed, 1 failed (intermittent detailed-survey radio actionability timeout), 6.7 minutes. The unchanged failed test then passed alone via `pnpm e2e --last-failed` (1 passed, 0 failed, 40.5 seconds). Every one of the 34 browser cases passed across these runs; the full run was not uniformly green. The new rollback compatibility journey passed in the full run. UI source comparison: `git diff --exit-code 743d298 -- src/ui` PASS, no differences. Whitespace, formatting and source file limits PASS. VM benchmarks: cold load 775.6ms; 730-day/100-purchase finance 1.94ms; 50,000-record search 0.17–31.18ms, unchanged budgets.
 
-REQUIREMENTS NOT COVERED: full human accessibility/usability audit; exact native squircle geometry on engines without support (rounded fallback remains); earlier external-service integration gaps retained in previous reports.
+REQUIREMENT TO TEST MAP: UX-07 widget-era encrypted records, strict validation, editing, undo and backup compatibility -> `src/test/rollback-compatibility.test.ts`; restore sidebar/dashboard and retain imported task/preferences after reload/export -> `e2e/rollback.spec.ts`, "Rollback: original sidebar and dashboard load widget-era preferences without losing records". Existing foundation/interface/dashboard browser journeys retain navigation, motion and financial coverage.
 
-CHECKS (actual results from this run):
+FILES ADDED OR CHANGED OUTSIDE THE PHASE SCOPE: none. DEPENDENCIES ADDED: none. DECISIONS MADE: restore the exact prior UI source; retain passive validated layout metadata so existing records remain readable; preserve history with a revert on the delivered branch; refresh static shell assets only. See `docs/DECISIONS.md`.
 
-- typecheck: PASS, zero errors.
-- lint: PASS, zero warnings/errors.
-- unit tests: 182 passed, 0 failed/skipped, 25 files, including six new widget cases.
-- build: PASS, production bundle used by browser checks.
-- e2e: final complete production suite 36 passed, 0 failed/skipped, 6.5 minutes, including all three new widget journeys. The prior run had 35 passes and one finance reload initialization failure after a coalesced fake-clock jump; the final run executes every timer across the same 31-second quiet interval and retains all assertions/timeouts.
-- Whitespace/format/file limits: PASS; new/changed code formatting checked, production source/test/CSS files at most 400 lines.
-- Performance: final cold empty interactive load 738.1ms; 730-day/100-purchase projection 2.00ms; 50,000-record searches 0.15–32.22ms. Existing budgets unchanged. VM results, not hardware certification.
+DEFERRED: prior live-service integration gaps, human accessibility review and the unchanged previous UI's intermittent survey-radio actionability behavior observed in one full browser run. FOUND ISSUES IN EARLIER PHASES: a literal schema downgrade would reject widget-era briefing records; keep the optional field and validate backward compatibility instead. The native-scroll test also raced Continue's asynchronous save/navigation; add next-input visibility and heading-focus assertions before its independent scroll. Retain every prior assertion, timeout and budget. The separate detailed-survey timeout passed unchanged on focused recheck; no unrelated survey implementation fix is included. The rejected iteration's report remains in Git history at `adaef61`.
 
-REQUIREMENT TO TEST MAP:
-
-- UX-01/02/03 and the user-requested menu/widget coverage -> `src/test/widgets.test.ts`, exhaustive menu IDs, six defaults, real-record summaries and disabled-pet filtering; `e2e/widgets.spec.ts`, every enabled module opens a larger workspace window (23 with pet disabled).
-- UX-05/07 saved layout and reversibility -> widget unit cases for legacy metadata, invalid/duplicate IDs, immutable resizing, encrypted save/reload and command undo; widget browser journey for sizes, Add/Remove, undo, reload, real task summaries and focus restoration.
-- UX-08/09 responsive, keyboard and reduced-motion behavior -> widget mobile browser journey, library Escape, maximize/restore and 360px fit; retained `e2e/foundation.spec.ts` and `e2e/interface.spec.ts` for focus/history, offline startup, themes and finite/instant motion.
-- BRF-02/04 and UX-02 existing urgency, pinning, optional sections and focus suppression -> retained `e2e/catalyst.spec.ts` and `e2e/evolution.spec.ts` briefing journeys; summary unit cases retain diet/focus filtering and honest manual-adapter labels.
-- FIN-01/02/03/04 -> retained `e2e/dashboard.spec.ts` event-only/dotted-cart/pointer/reconciliation workflow and `src/ui/product/chart-geometry.test.ts`; widget unit case verifies planned and foreign-currency purchases do not become actual funds. Existing finance/property tests remain in the full unit suite.
-
-FILES ADDED OR CHANGED OUTSIDE THE PHASE SCOPE: none. Sidebar/reading extraction keeps source below 400 lines; chart sizing, optional layout validation and the shell cache version support the requested UI. DEPENDENCIES ADDED: none. No new fonts, external assets, services or data migration.
-
-DECISIONS MADE: six useful widgets by default with a searchable complete library; small/medium/large sizes and compact desktop launcher; existing labels in the mobile drawer; actual local summaries and explicit sample labeling; optional unique validated layout metadata saved through encrypted undoable commands; retain urgent/pinned sections and enabled-module/diet/focus rules; reuse full modules in nonmodal windows with Close/Maximize and inner native dialogs; restore widget focus/scroll on return; money-widget-only measurement before paint; retain event-step and dotted-cart calculations; refresh only the offline shell cache. See `docs/DECISIONS.md`.
-
-DEFERRED: human accessibility/usability review, older-engine squircle fallback, and prior live-service integrations. These are not presented as connected accounts or completed work.
-
-FOUND ISSUES IN EARLIER PHASES: finance regression encountered intermittent reload initialization after a coalesced fake-clock jump; timer-by-timer quiet-interval and reload verification pass in the final full run, without changing the application clock. During this change, a compact graph initially used its old full-width geometry for one paint; scope the corrected measurement to the MoneyWidget. A native search field consumed the first Escape; the widget library now closes explicitly. The survey reveal test now awaits the same final opacity rather than assuming 24 frames equal a fixed wall-clock duration; intermediate opacity and 250ms duration remain checked. No budgets, assertions or existing timeouts are loosened. No unresolved new functional issue was observed in the final suite.
-
-PROPOSED ADDITIONS: none beyond the requested widget/window experience. QUESTIONS FOR THE HUMAN: none block running this update.
+PROPOSED ADDITIONS: none. QUESTIONS FOR THE HUMAN: none.
 
 HOW TO VERIFY BY HAND:
 
-1. Download/extract the branch source ZIP below. With Node 22.12+ and pnpm 11.19.0 installed, run `pnpm install --frozen-lockfile` and `pnpm dev` from the folder containing `package.json`; open the printed localhost address.
-2. Complete setup or continue with saved answers. Confirm six mixed-size cards, neutral surfaces, the compact left launcher and the large money graph.
-3. Choose Browse widgets. Search for any menu section, read its current summary and add it in Small, Medium or Large. Pet Tracker should appear only when enabled in Preferences.
-4. Use Customize dashboard to resize/remove a card, then Undo. Reload and continue with saved answers; selections, sizes and existing records should remain.
-5. Open a widget. Check its larger workspace and summary header, create/edit a real entry, maximize/restore, then Close. Its summary updates and keyboard focus returns to the launching card. Try Escape outside a text field and browser Back.
-6. Add a future purchase. Only its dotted cart projection should change on that date; verified actual stays based on cleared records. Reconcile a due purchase and verify actual changes once.
-7. At 360px, check paired small cards, full-width larger cards, the labeled Pages drawer and no horizontal scrolling. Try dark mode, reduced motion, keyboard-only library search/Escape, and offline reload after the first visit.
+1. Download the updated branch ZIP below, or run `git pull --ff-only` on `phase-2-expandable-widgets`. Keep your own edits before updating.
+2. Run `pnpm install --frozen-lockfile` and `pnpm dev`; open the printed localhost address and continue with saved survey answers.
+3. Confirm the original full labeled left sidebar and dashboard. The widget library, size selectors and workspace windows are removed.
+4. Open Calendar, Tasks and Financial Core from the sidebar. Existing records remain, and unbought purchases still use the dotted cart line.
+5. Check saved preferences, backup import/export, mobile navigation, dark mode and offline reload after the first production visit.
 
-SOURCE DELIVERY: https://github.com/Joshuza/Catalyst/archive/refs/heads/phase-2-expandable-widgets.zip . Complete source, lockfile, tests and run instructions are included. No hosted deployment is claimed.
+SOURCE DELIVERY: https://github.com/Joshuza/Catalyst/archive/refs/heads/phase-2-expandable-widgets.zip . This is the restored source; no hosted deployment is claimed.
 
 ---
 

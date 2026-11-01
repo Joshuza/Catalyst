@@ -18,12 +18,7 @@ import {
   DashboardTools,
 } from './BriefingPreferences';
 import s from './product.module.css';
-import { BriefingReading } from './BriefingReading';
-import { openWidget } from './widget-catalog';
-import { WidgetBoard } from './WidgetBoard';
-import { useWidgetBoard } from './useWidgetBoard';
-export function BriefingPage({ widgets = true }: { widgets?: boolean }) {
-  const { sizeOf } = useWidgetBoard();
+export function BriefingPage() {
   const { profile, today, records, deep } = useProduct();
   const [expanded, setExpanded] = useState<string[]>([]);
   const preferences = entities('briefing')[0];
@@ -138,223 +133,209 @@ export function BriefingPage({ widgets = true }: { widgets?: boolean }) {
         </div>
       )}
       <DashboardTools
-        widgets={widgets}
         customizing={customizing}
         toggle={() => setCustomizing((v) => !v)}
       />
-      <WidgetBoard
-        enabled={widgets}
-        customizing={customizing}
-        sections={visibleSections}
-      >
-        <div className={s.grid} data-briefing-sections>
-          {visibleSections.map((id) =>
-            id === 'catchup' ? (
-              <Panel key={id} title="Welcome back" wide>
-                <p>
-                  {away} days since your last saved visit. Review{' '}
-                  {urgent.length} urgent subscriptions,{' '}
-                  {
-                    entities('purchase').filter(
-                      (p) =>
-                        p.data.status === 'planned' && p.data.date <= today,
-                    ).length
-                  }{' '}
-                  due purchase surveys, and {tasks.length} open tasks.
-                </p>
-                <button
-                  type="button"
-                  onClick={() =>
-                    preferences &&
-                    run(
-                      workspace.save({
-                        ...preferences,
-                        data: { ...preferences.data, previousVisit: today },
-                      }),
-                    )
-                  }
-                >
-                  Catch-up reviewed
-                </button>
-              </Panel>
-            ) : id === 'sentinel' ? (
-              <Panel key={id} title="A deadline needs your attention" wide>
-                {urgent.map((v) => (
-                  <div className={s.row} key={v.id}>
-                    <p>
-                      {v.title} ·{' '}
-                      {v.data.trialEnd
-                        ? `Trial ends ${v.data.trialEnd}`
-                        : 'Bill due today'}
-                    </p>
-                    <button type="button" onClick={() => openWidget('finance')}>
-                      Review billing
-                    </button>
-                  </div>
-                ))}
-              </Panel>
-            ) : id === 'finance' ? (
-              <MoneyWidget
-                key={id}
-                controls={controls(id)}
-                expanded={expanded.includes(id)}
-                size={sizeOf('finance')}
-              />
-            ) : id === 'schedule' ? (
-              <Panel
-                key={id}
-                title="Today, next three"
-                widget="calendar"
-                size={sizeOf('calendar')}
-                icon={<WidgetIcon kind="schedule" />}
+      <div className={s.grid} data-briefing-sections>
+        {visibleSections.map((id) =>
+          id === 'catchup' ? (
+            <Panel key={id} title="Welcome back" wide>
+              <p>
+                {away} days since your last saved visit. Review {urgent.length}{' '}
+                urgent subscriptions,{' '}
+                {
+                  entities('purchase').filter(
+                    (p) => p.data.status === 'planned' && p.data.date <= today,
+                  ).length
+                }{' '}
+                due purchase surveys, and {tasks.length} open tasks.
+              </p>
+              <button
+                type="button"
+                onClick={() =>
+                  preferences &&
+                  run(
+                    workspace.save({
+                      ...preferences,
+                      data: { ...preferences.data, previousVisit: today },
+                    }),
+                  )
+                }
               >
-                {schedule.map((e) => (
-                  <div className={s.row} key={e.id}>
-                    <span className={s.badge}>{timeLabel(e.data.start)}</span>
-                    <div>
-                      <strong>{e.title}</strong>
-                      <p className={s.muted}>
-                        {e.data.date}
-                        {e.data.travelMinutes
-                          ? ` · ${e.data.travelMinutes} min travel`
-                          : ''}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-                {!schedule.length && (
-                  <p className={s.empty}>
-                    Your schedule is clear. Add a time block in Calendar.
+                Catch-up reviewed
+              </button>
+            </Panel>
+          ) : id === 'sentinel' ? (
+            <Panel key={id} title="A deadline needs your attention" wide>
+              {urgent.map((v) => (
+                <div className={s.row} key={v.id}>
+                  <p>
+                    {v.title} ·{' '}
+                    {v.data.trialEnd
+                      ? `Trial ends ${v.data.trialEnd}`
+                      : 'Bill due today'}
                   </p>
-                )}
-                <button type="button" onClick={() => openWidget('calendar')}>
-                  Open Calendar
-                </button>
-                {controls(id)}
-              </Panel>
-            ) : id === 'inbox' ? (
-              <Panel
-                key={id}
-                title={deep ? 'Inbox, quietly' : 'Tri-fold inbox'}
-                widget="inbox"
-                size={sizeOf('inbox')}
-                icon={<WidgetIcon kind="inbox" />}
-              >
-                <div className={s.row}>
-                  {deep ? (
-                    <p>
-                      {
-                        messages.filter((m) => m.stream !== 'promotional')
-                          .length
-                      }{' '}
-                      important unread messages
+                  <button type="button" onClick={() => navigate('finance')}>
+                    Review billing
+                  </button>
+                </div>
+              ))}
+            </Panel>
+          ) : id === 'finance' ? (
+            <MoneyWidget
+              key={id}
+              controls={controls(id)}
+              expanded={expanded.includes(id)}
+            />
+          ) : id === 'schedule' ? (
+            <Panel
+              key={id}
+              title="Today, next three"
+              icon={<WidgetIcon kind="schedule" />}
+            >
+              {schedule.map((e) => (
+                <div className={s.row} key={e.id}>
+                  <span className={s.badge}>{timeLabel(e.data.start)}</span>
+                  <div>
+                    <strong>{e.title}</strong>
+                    <p className={s.muted}>
+                      {e.data.date}
+                      {e.data.travelMinutes
+                        ? ` · ${e.data.travelMinutes} min travel`
+                        : ''}
                     </p>
-                  ) : (
-                    ['work', 'personal', 'promotional'].map((stream) => (
-                      <div
-                        key={stream}
-                        className={stream === 'promotional' ? s.dim : ''}
-                      >
-                        <p className={s.metric}>
-                          {messages.filter((m) => m.stream === stream).length}
-                        </p>
-                        <span>
-                          {stream === 'promotional' ? 'Promo' : stream}
-                        </span>
-                      </div>
-                    ))
+                  </div>
+                </div>
+              ))}
+              {!schedule.length && (
+                <p className={s.empty}>
+                  Your schedule is clear. Add a time block in Calendar.
+                </p>
+              )}
+              <button type="button" onClick={() => navigate('calendar')}>
+                Open Calendar
+              </button>
+              {controls(id)}
+            </Panel>
+          ) : id === 'inbox' ? (
+            <Panel
+              key={id}
+              title={deep ? 'Inbox, quietly' : 'Tri-fold inbox'}
+              icon={<WidgetIcon kind="inbox" />}
+            >
+              <div className={s.row}>
+                {deep ? (
+                  <p>
+                    {messages.filter((m) => m.stream !== 'promotional').length}{' '}
+                    important unread messages
+                  </p>
+                ) : (
+                  ['work', 'personal', 'promotional'].map((stream) => (
+                    <div
+                      key={stream}
+                      className={stream === 'promotional' ? s.dim : ''}
+                    >
+                      <p className={s.metric}>
+                        {messages.filter((m) => m.stream === stream).length}
+                      </p>
+                      <span>{stream === 'promotional' ? 'Promo' : stream}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+              <button type="button" onClick={() => navigate('inbox')}>
+                Open Inbox
+              </button>
+              {controls(id)}
+            </Panel>
+          ) : id === 'reading' ? (
+            <Panel key={id} title="Three things to read">
+              {reading.map((n) => (
+                <div className={s.row} key={n.id}>
+                  <div>
+                    <a
+                      href={n.data.url || undefined}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {n.title}
+                    </a>
+                    <p className={s.reading}>
+                      {n.data.source} · {n.data.minutes} min read
+                    </p>
+                  </div>
+                </div>
+              ))}
+              {!reading.length && (
+                <p className={s.empty}>
+                  Your reading queue is clear. Add a source or article in
+                  Reading.
+                </p>
+              )}
+              <button type="button" onClick={() => navigate('reading')}>
+                Open Reading
+              </button>
+              {controls(id)}
+            </Panel>
+          ) : id === 'tasks' ? (
+            <Panel key={id} title="Next small steps">
+              {tasks.slice(0, expanded.includes(id) ? 10 : 3).map((t) => (
+                <div className={s.row} key={t.id}>
+                  <span>{t.title}</span>
+                  {t.kind === 'task' && (
+                    <span className={s.muted}>
+                      {t.details?.deadline ?? 'No deadline'}
+                    </span>
                   )}
                 </div>
-                <button type="button" onClick={() => openWidget('inbox')}>
-                  Open Inbox
-                </button>
-                {controls(id)}
-              </Panel>
-            ) : id === 'reading' ? (
-              <BriefingReading
-                key={id}
-                reading={reading}
-                size={sizeOf('reading')}
-                controls={controls(id)}
-              />
-            ) : id === 'tasks' ? (
-              <Panel
-                key={id}
-                title="Next small steps"
-                widget="tasks"
-                size={sizeOf('tasks')}
-              >
-                {tasks.slice(0, expanded.includes(id) ? 10 : 3).map((t) => (
-                  <div className={s.row} key={t.id}>
-                    <span>{t.title}</span>
-                    {t.kind === 'task' && (
-                      <span className={s.muted}>
-                        {t.details?.deadline ?? 'No deadline'}
-                      </span>
-                    )}
-                  </div>
+              ))}
+              {!tasks.length && (
+                <p className={s.empty}>
+                  No open tasks. Capture a deliverable when it comes to mind.
+                </p>
+              )}
+              <button type="button" onClick={() => navigate('tasks')}>
+                Open Tasks
+              </button>
+              {controls(id)}
+            </Panel>
+          ) : id === 'outdoors' ? (
+            <Panel key={id} title="Weekend outlook">
+              <h3>Household plans</h3>
+              {tasks
+                .filter(
+                  (t) => t.kind === 'task' && t.details?.role === 'personal',
+                )
+                .slice(0, 3)
+                .map((t) => (
+                  <p key={t.id}>{t.title}</p>
                 ))}
-                {!tasks.length && (
-                  <p className={s.empty}>
-                    No open tasks. Capture a deliverable when it comes to mind.
-                  </p>
-                )}
-                <button type="button" onClick={() => openWidget('tasks')}>
-                  Open Tasks
-                </button>
-                {controls(id)}
-              </Panel>
-            ) : id === 'outdoors' ? (
-              <Panel
-                key={id}
-                title="Weekend outlook"
-                widget="outdoors"
-                size={sizeOf('outdoors')}
-              >
-                <h3>Household plans</h3>
-                {tasks
-                  .filter(
-                    (t) => t.kind === 'task' && t.details?.role === 'personal',
-                  )
-                  .slice(0, 3)
-                  .map((t) => (
-                    <p key={t.id}>{t.title}</p>
-                  ))}
-                <p>
-                  {
-                    entities('outing').filter((o) => o.data.date >= today)
-                      .length
-                  }{' '}
-                  outings planned.{' '}
-                  {entities('activity')
-                    .filter((a) => daysBetween(a.data.date, today) <= 7)
-                    .reduce((sum, a) => sum + a.data.miles, 0)
-                    .toFixed(1)}{' '}
-                  miles logged this week.
-                </p>
-                <button type="button" onClick={() => openWidget('outdoors')}>
-                  Plan an outing
-                </button>
-              </Panel>
-            ) : id === 'reset' ? (
-              <Panel
-                key={id}
-                title="Your weekly reset"
-                widget="reset"
-                size={sizeOf('reset')}
-              >
-                <p>
-                  Clear messages, audit purchases, and align next week in three
-                  focused steps.
-                </p>
-                <button type="button" onClick={() => openWidget('reset')}>
-                  Begin weekly reset
-                </button>
-              </Panel>
-            ) : null,
-          )}
-        </div>
-      </WidgetBoard>
+              <p>
+                {entities('outing').filter((o) => o.data.date >= today).length}{' '}
+                outings planned.{' '}
+                {entities('activity')
+                  .filter((a) => daysBetween(a.data.date, today) <= 7)
+                  .reduce((sum, a) => sum + a.data.miles, 0)
+                  .toFixed(1)}{' '}
+                miles logged this week.
+              </p>
+              <button type="button" onClick={() => navigate('outdoors')}>
+                Plan an outing
+              </button>
+            </Panel>
+          ) : id === 'reset' ? (
+            <Panel key={id} title="Your weekly reset">
+              <p>
+                Clear messages, audit purchases, and align next week in three
+                focused steps.
+              </p>
+              <button type="button" onClick={() => navigate('reset')}>
+                Begin weekly reset
+              </button>
+            </Panel>
+          ) : null,
+        )}
+      </div>
       {(more || visibleSections.length < sections.length) && (
         <button
           className={s.moreForToday}
