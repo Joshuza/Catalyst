@@ -270,3 +270,15 @@
   --color-chart-baseline: #9898a2;
   --shadow-control: none;
 }
+
+:root {
+  --sidebar-width: 7rem;
+  --sidebar-small-width: 7rem;
+  --widget-row-height: 12rem;
+  --widget-money-size: 2.25rem;
+  --widget-library-width: 64rem;
+  --widget-window-width: 80rem;
+  --widget-window-offset: 10rem;
+  --widget-drawer-width: 15rem;
+  --widget-mobile-summary-width: 11rem;
+}

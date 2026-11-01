@@ -28,6 +28,9 @@ async function paths(page: Page) {
 test('FIN / BRF: squircle dashboard shows an event-only graph, keeps an unbought cart dotted, and reconciles a purchase once', async ({
   page,
 }) => {
+  // Exercise the complete ledger flow without waiting on decorative entrances;
+  // normal-motion transitions are covered separately in interface.spec.ts.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await setup(page);
@@ -60,7 +63,15 @@ test('FIN / BRF: squircle dashboard shows an event-only graph, keeps an unbought
   expect(after[0]).toBe(before[0]);
   expect(after[2]).toBe(before[2]);
   expect(after[1]).not.toBe(before[1]);
-  expect(after[1]).toContain(' H261.03 V'); // Jan 10, not an earlier interpolation.
+  const eventX = await page
+    .getByRole('img', { name: /Financial projection/ })
+    .evaluate((node) =>
+      (
+        50 +
+        (9 / 29) * ((node as SVGSVGElement).viewBox.baseVal.width - 80)
+      ).toFixed(2),
+    );
+  expect(after[1]).toContain(` H${eventX} V`); // Jan 10 at the current widget size, not an earlier interpolation.
   await expect(series(page, 'cart')).toHaveCSS('stroke-dasharray', '5px, 5px');
   await expect(series(page, 'cart')).toHaveCSS('transition-duration', '0s');
   const chart = page.getByRole('img', { name: /Financial projection/ });
@@ -69,7 +80,9 @@ test('FIN / BRF: squircle dashboard shows an event-only graph, keeps an unbought
   await expect(
     page.getByRole('status').filter({ hasText: /baseline.*cart.*actual/ }),
   ).toBeVisible();
-  await page.clock.fastForward(31000);
+  // Run each timer across the quiet interval, including the 30-second refresh,
+  // rather than coalescing callbacks as if this tab had been suspended.
+  await page.clock.runFor(31000);
   expect(await paths(page)).toEqual(after);
   await page.getByRole('link', { name: 'Add new', exact: true }).click();
   await page.getByRole('radio', { name: 'Note', exact: true }).check();

@@ -47,3 +47,4 @@ export const navigation = [
 export const allPages = new Set(
   navigation.flatMap((g) => g.links.map((l) => l[0])),
 );
+allPages.add('briefing-detail');

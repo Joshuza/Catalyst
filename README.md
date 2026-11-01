@@ -1,6 +1,6 @@
 # Catalyst
 
-A local-first life planner with **left-side pages** for money, calendar, tasks, research, recipes, transit, outdoors, and life maintenance. It evolves the existing Phase 1 app using the supplied PDF, ZIP specifications, Gemini transcript, and animation fragments.
+A local-first life planner with **expandable summary widgets** for money, calendar, tasks, research, recipes, transit, outdoors, and life maintenance. It evolves the existing Phase 1 app using the supplied PDF, ZIP specifications, Gemini transcript, and animation fragments.
 
 ## Run the downloaded source
 
@@ -16,16 +16,16 @@ Open the address printed in the terminal, usually **http://localhost:5173**. Kee
 
 ## Run from GitHub
 
-This implementation, including the neutral Apple-inspired interface, animated survey and event-based graph, is on `phase-2-neutral-motion`:
+This implementation, including mixed-size widgets, larger workspace windows, the animated survey and event-based graph, is on `phase-2-expandable-widgets`:
 
 ```sh
-git clone --branch phase-2-neutral-motion https://github.com/Joshuza/Catalyst.git
+git clone --branch phase-2-expandable-widgets https://github.com/Joshuza/Catalyst.git
 cd Catalyst
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-For an existing clone, run `git fetch origin` and `git switch phase-2-neutral-motion`, then the last two commands. Commit or stash your own edits before switching branches.
+For an existing clone, run `git fetch origin` and `git switch phase-2-expandable-widgets`, then the last two commands. Commit or stash your own edits before switching branches.
 
 ## Start using it
 
@@ -86,7 +86,7 @@ The supplied pear.no HTML informed the chapter rail, fine ruled frame, corner or
 
 **Add new** is a dedicated sidebar page for purchases, tasks, events, notes, research and subscriptions. Save one entry at a time, then open it in its destination page. Purchases show the receipt animation and update the simulated cart; they do not send money. Events respect protected working hours. Other creation tools, including recipes, receipts, goals, contacts and trips, are linked under **Add something else**.
 
-Briefing starts with three soft squircle cards for money, the next three events and inbox counts. Its money card shows your available balance, unbought cart total for the next 30 days and a visible graph. Use **More for today** for reading/tasks/weekend sections and **Customize dashboard** for pin/hide/detail controls. Urgent alerts, catch-up and pinned sections remain visible. Deep work still suppresses reading and promotions.
+Briefing starts with six mixed-size squircle widgets for money, schedule, inbox, tasks, capture and research. Its money card shows your available balance, unbought cart total for the next 30 days and a visible graph. Use **More for today** for reading/tasks/weekend sections and **Customize dashboard** for pin/hide/detail controls. Urgent alerts, catch-up and pinned sections remain visible. Deep work still suppresses reading and promotions.
 
 The graph holds balances flat between events and jumps on the actual date of an expected deposit, scheduled purchase/bill or recorded transaction. **Dotted blue** is the projected cart balance, including purchases not bought yet; the actual line changes only from recorded transactions. A wishlist item has no impact until planned. When bought, the item leaves the unbought count, its final cost remains in the projection, and its transaction affects actual once. Hover the graph, or focus it and press Left/Right, to read all three balances. Financial Core still supports dragging purchase markers and editing dates. Resizing changes the graph layout, not the balances.
 
@@ -97,3 +97,11 @@ The visible product and downloaded filenames are now **Catalyst**. Existing data
 Catalyst uses neutral white/silver and graphite surfaces with restrained blue controls across the app, survey and installed icon. Original line icons, system typography, rounded controls and squircle cards give all pages a consistent hierarchy. The original nectarine/oasis artwork remains in the survey.
 
 Begin, Back and Continue position the next question immediately, then reveal its content with a short fade and rise. Native wheel/touch/keyboard scrolling stays free, and the blueprint-to-painting scene follows your scroll. Pages, capture forms, dashboard cards and dialogs enter with short finite transitions. No animation loops on the financial graph: its three lines still hold between events and jump on event dates, with the unbought cart dotted blue. System reduced motion makes the new transitions immediate and removes stagger delays. The requested three-second initialization remains a processing stage.
+
+## Widget dashboard and workspace windows
+
+The dashboard starts with six small, medium and large widgets. Money keeps its event-based graph and dotted unbought cart; other summaries come from your actual local records. **Browse widgets** offers every section from the left menu with a live summary, a size choice and Add/Remove controls. Pet Tracker appears only when enabled in Preferences. Sample workspaces are labeled.
+
+Use **Customize dashboard** to resize or remove widgets. Choices are stored with existing encrypted briefing preferences, survive reload/backups and use the same undoable command bus as other records. Existing pinned sections and urgent alerts remain visible. Older backups without widget choices keep working with the six-widget defaults.
+
+Select a widget, its expand control or a compact left launcher to open a larger workspace window. Its header includes a live summary, Close and Maximize/Restore controls. Close or Escape returns to the dashboard; a launched widget regains keyboard focus and its scroll position. Inner dialogs retain their own keyboard behavior. The large workspace is nonmodal so you can switch modules from the launcher; the searchable widget library is a focus-trapped modal. On phones the launcher opens from Pages, small cards pair side by side and larger cards span the available width without horizontal scrolling, and the window uses the full content width. Small/medium money widgets summarize balances; Large and the full Financial Core keep the graph visible.

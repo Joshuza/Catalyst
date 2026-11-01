@@ -1,0 +1,305 @@
+.widgetBoardTools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+.widgetCanvas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: row dense;
+  grid-auto-rows: minmax(var(--widget-row-height), auto);
+  gap: var(--space-5);
+}
+.widgetCanvas > [data-briefing-sections] {
+  display: contents;
+}
+.widgetCanvas .panel,
+.widgetCard {
+  position: relative;
+  min-width: 0;
+  grid-column: span 2;
+  border: var(--border-width) solid var(--color-dashboard-border);
+  border-radius: var(--radius-widget);
+  corner-shape: squircle;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-widget);
+}
+.widgetCanvas .panel {
+  padding: var(--space-5);
+  overflow: hidden;
+  cursor: pointer;
+}
+.widgetCanvas .panel:not(.wide) {
+  min-height: 0;
+}
+.widgetCanvas .wide {
+  grid-column: 1 / -1;
+}
+.widgetCanvas [data-widget-size='small'] {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+.widgetCanvas [data-widget-size='medium'] {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+.widgetCanvas [data-widget-size='large'] {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.widgetCanvas .panel > h2 {
+  margin-bottom: var(--space-4);
+  padding-right: var(--space-8);
+  font-size: var(--text-sm);
+}
+.widgetCanvas .widgetExpand {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: var(--space-8);
+  min-height: var(--space-8);
+  padding: var(--space-1);
+  margin: var(--space-0);
+}
+.widgetCanvas .panel .row {
+  padding-block: var(--space-2);
+}
+.widgetCanvas .panel .metric {
+  font-size: var(--text-xl);
+}
+.widgetCanvas .panel[data-widget-id='inbox'] .row {
+  flex-wrap: nowrap;
+  font-size: var(--text-xs);
+  gap: var(--space-2);
+}
+.widgetCanvas .balanceNumber {
+  font-size: var(--widget-money-size);
+}
+.widgetCanvas .cartSummary {
+  padding-left: var(--space-3);
+}
+.widgetCanvas .cartSummary strong {
+  font-size: var(--text-lg);
+}
+.widgetCanvas .moneyOverview {
+  gap: var(--space-3);
+}
+.widgetCanvas .chart {
+  max-height: var(--dashboard-chart-mobile-height);
+}
+.widgetCanvas [data-money-expanded='true'] .chart {
+  max-height: none;
+}
+.widgetCanvas .widgetFooter {
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+}
+.widgetCanvas [data-widget-id='finance'] > .widgetNote {
+  display: none;
+}
+.widgetCanvas
+  [data-widget-id='finance']:not([data-widget-size='large'])
+  .financialPlot {
+  display: none;
+}
+.widgetCanvas
+  [data-widget-id='finance'][data-widget-size='small']
+  .cartSummary {
+  border: none;
+  padding-left: var(--space-0);
+}
+.widgetCanvas
+  [data-widget-id='finance'][data-widget-size='small']
+  .widgetFooter {
+  display: none;
+}
+.widgetCard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.dashboard .widgetCard > .widgetLaunch {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  border: none;
+  border-radius: inherit;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  text-align: left;
+  white-space: normal;
+}
+.dashboard .widgetLaunch:hover {
+  background: var(--color-surface-soft);
+}
+.widgetHeading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--weight-bold);
+}
+.widgetArrow {
+  margin-left: auto;
+  color: var(--color-muted);
+}
+.widgetValue {
+  font: var(--weight-bold) var(--text-xl) / var(--leading-heading)
+    var(--font-body);
+  letter-spacing: var(--tracking-widget);
+  overflow-wrap: anywhere;
+}
+.widgetSummary {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.widgetHint {
+  margin-top: auto;
+  font-size: var(--text-xs);
+  color: var(--color-widget-blue);
+}
+.widgetEdit,
+.coreSizes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+}
+.coreSizes {
+  margin-top: var(--space-4);
+}
+.widgetSizeControl {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+}
+.widgetSizeControl select {
+  width: auto;
+  min-width: 0;
+  color: var(--color-text);
+  background: var(--color-surface-soft);
+  border: var(--border-width) solid var(--color-line);
+  border-radius: var(--radius-small);
+  padding: var(--space-2);
+}
+dialog:has(.widgetLibrary) {
+  width: min(var(--widget-library-width), calc(100% - var(--space-8)));
+}
+.widgetLibrary > .field {
+  margin-block: var(--space-5);
+}
+.libraryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+.libraryCard {
+  min-width: 0;
+  padding: var(--space-5);
+  border: var(--border-width) solid var(--color-line);
+  border-radius: var(--radius-large);
+  display: grid;
+  gap: var(--space-3);
+}
+.libraryCard h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-base);
+  margin: var(--space-0);
+}
+.libraryCard .actions {
+  margin: var(--space-0);
+}
+@media (max-width: 70rem) {
+  .widgetCanvas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 40rem) {
+  .widgetCanvas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+  .widgetCanvas [data-widget-size] {
+    grid-column: span 2;
+    grid-row: auto;
+  }
+  .widgetCanvas [data-widget-size='small'] {
+    grid-column: span 1;
+  }
+  .widgetCanvas [data-widget-size='small'] .widgetLaunch,
+  .widgetCanvas .panel[data-widget-size='small'] {
+    padding: var(--space-3);
+  }
+  .widgetCanvas [data-widget-size='small'] .widgetValue {
+    font-size: var(--text-lg);
+  }
+  .widgetCanvas [data-widget-size='small'] .widgetHeading {
+    font-size: var(--text-xs);
+    gap: var(--space-1);
+  }
+  .widgetCanvas [data-widget-size='small'] .widgetSummary {
+    font-size: var(--text-xs);
+  }
+  .widgetCanvas [data-widget-size='small'] .widgetIcon {
+    width: var(--space-6);
+    height: var(--space-6);
+  }
+  .widgetCanvas [data-widget-size='small'] .widgetArrow {
+    display: none;
+  }
+  .widgetCanvas
+    [data-widget-id='finance'][data-widget-size='small']
+    .cartSummary
+    > strong,
+  .widgetCanvas
+    [data-widget-id='finance'][data-widget-size='small']
+    .cartSummary
+    > .widgetLabel,
+  .widgetCanvas
+    [data-widget-id='finance'][data-widget-size='small']
+    .moneyOverview
+    > div
+    > .widgetNote {
+    display: none;
+  }
+  .widgetCanvas .panel {
+    border-radius: var(--radius-widget-small);
+  }
+  .widgetCanvas .panel[data-widget-id='inbox'] {
+    min-height: var(--widget-row-height);
+  }
+  .libraryGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.widgetArrow svg {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+.widgetHint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.widgetHint svg {
+  width: var(--space-3);
+  height: var(--space-3);
+}

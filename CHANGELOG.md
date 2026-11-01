@@ -1,5 +1,14 @@
 # Changelog
 
+## Phase 2: Expandable summary widgets and workspace windows
+
+- Give every menu section a real local summary widget and an expanded workspace window with Close, Maximize/Restore and keyboard return.
+- Start with six small, medium and large cards; use a searchable widget library for everything else and a compact icon launcher on desktop.
+- Save widget sizes/selections in optional validated briefing metadata, using existing encrypted storage and undo; preserve old records and backups.
+- Keep urgent/pinned sections, disabled-pet filtering, dietary checks, focus mode and the event-only financial graph with its dotted unbought cart.
+- Measure compact graphs before paint so a returning/resized widget starts with its actual geometry; retain motion and reduced-motion behavior.
+- Refresh the offline shell cache for the new widget assets.
+
 ## Phase 2: Neutral interface and seamless motion
 
 - Replace green shared surfaces with white, silver and graphite, plus accessible blue controls and selections in light/dark modes.

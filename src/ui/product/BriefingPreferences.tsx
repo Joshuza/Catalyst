@@ -7,15 +7,26 @@ import s from './product.module.css';
 export function DashboardTools({
   customizing,
   toggle,
+  widgets = true,
 }: {
+  widgets?: boolean;
   customizing: boolean;
   toggle: () => void;
 }) {
   return (
     <div className={s.briefingTools}>
-      <button type="button" onClick={() => navigate('create')}>
-        Add new <span aria-hidden="true">+</span>
-      </button>
+      {widgets ? (
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event('catalyst:widgets'))}
+        >
+          Browse widgets
+        </button>
+      ) : (
+        <button type="button" onClick={() => navigate('create')}>
+          Add new
+        </button>
+      )}
       <button type="button" aria-pressed={customizing} onClick={toggle}>
         {customizing ? 'Finish customizing' : 'Customize dashboard'}
       </button>

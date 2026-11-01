@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { forecastSchema } from './weather';
 import { extendedSchemas } from './extended';
+import { widgetLayoutSchema } from './widgets';
 import {
   date,
   cents,
@@ -286,6 +287,7 @@ export const moduleSchema = z.discriminatedUnion('type', [
       hidden: z.array(short).max(20),
       pinned: z.array(short).max(20),
       expanded: z.array(short).max(20),
+      widgetLayout: widgetLayoutSchema.optional(),
     })
     .strict(),
 ]);

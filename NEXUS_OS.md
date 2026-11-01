@@ -2,7 +2,7 @@
 
 The guide's filename is retained for existing links. The product is named Catalyst.
 
-**Add new** in the sidebar provides a focused capture form for purchases, tasks, events, notes, research and subscriptions. Briefing shows three squircle widgets by default; **More for today** reveals the rest, and **Customize dashboard** reveals pin/hide controls. Urgent and pinned sections remain visible. The money widget shows available cash and the next 30 days' unbought cart beside a visible graph.
+**Add new** in the sidebar provides a focused capture form for purchases, tasks, events, notes, research and subscriptions. Briefing shows six mixed-size squircle widgets by default; **More for today** reveals the rest, and **Customize dashboard** reveals sizing and pin/hide controls. **Browse widgets** offers a summary and Add/Remove controls for every menu section. Urgent and pinned sections remain visible. The money widget shows available cash and the next 30 days' unbought cart beside a visible graph.
 
 Financial graphs use horizontal holds and vertical jumps on event dates. Dotted blue represents the cart projection; purchases remain unbought until reconciled, and adding them never changes actual cash. Actual follows recorded transactions. Completing a purchase removes its pending-cart count and keeps its final cost in the projection without counting its transaction twice. Graphs can overlap when balances match. Hover or focus the graph and use Left/Right to inspect a date. Clock ticks and unrelated notes do not change plotted balances.
 
@@ -10,7 +10,7 @@ Follow [README.md](README.md) to install and start the app. Your records are loc
 
 ## Navigation and capture
 
-The left sidebar opens dedicated pages, as requested. At 360 px it becomes a navigation drawer. Browser Back returns to the preceding page. Light, dark, and system themes are available as a segmented control in the sidebar. Shared white/silver and graphite surfaces replace the earlier green palette; blue identifies selected controls and actions. Page and dialog entrances are short, finite transitions. Reduced motion removes movement and delays.
+Summary widgets and compact left launchers open larger workspace windows with live summaries. Close or Escape returns to the dashboard; Maximize/Restore adjusts the window. At 360 px it becomes a navigation drawer. Browser Back returns to the preceding page. Light, dark, and system themes are available as a segmented control in the sidebar. Shared white/silver and graphite surfaces replace the earlier green palette; blue identifies selected controls and actions. Page and dialog entrances are short, finite transitions. Reduced motion removes movement and delays.
 
 **Cmd/Ctrl+K** searches saved notes, tasks, transactions, messages, recipes, and product records. Type normally; arrow keys choose a result, Enter opens it, Tab exposes secondary actions, and Escape restores focus. Try `receipts over $100 in October` or `unread from Maria` with your own data or explicit Sample data.
 

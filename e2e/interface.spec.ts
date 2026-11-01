@@ -25,7 +25,9 @@ test('UX / ONB: neutral survey reveals questions, preserves answers and follows 
     return opacity;
   });
   expect(frames.some((value) => value > 0 && value < 1)).toBe(true);
-  expect(frames.at(-1)).toBe(1);
+  // Displays can deliver more than 60 frames per second; await the same final
+  // opacity instead of treating a fixed frame count as a wall-clock duration.
+  await expect(page.locator('[data-survey-body]')).toHaveCSS('opacity', '1');
   await expect(page.locator('[data-survey-active="true"]')).toHaveCount(1);
   await expect(page.locator('[data-survey-active="true"] h1')).toBeFocused();
   await page.getByRole('radio', { name: 'Monthly', exact: true }).check();
